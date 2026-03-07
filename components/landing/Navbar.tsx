@@ -1,36 +1,55 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import LogoNavbar from "@/src/assets/icons/logo-navbar.svg";
 import ChevronDown from "@/src/assets/icons/chevron-down.svg";
-import { Menu, X, LayoutGrid, Car, Anchor, Home, Plane } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 
 const navLinks = [
   { label: "About Us", href: "/about" },
-  { label: "Coupon", href: "#" },
+  { label: "Coupon", href: "/coupon" },
   { label: "Make a Claim", href: "#" },
   { label: "Resources", href: "/resources" },
   { label: "FAQs", href: "/faq" },
-  { label: "Contact Us", href: "#" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
 const insuredSubItems = [
-  { label: "Overview", href: "/insured", Icon: '/dashboard.svg' },
-  { label: "Home", href: "/home-insurance", Icon: '/home.svg' },
-  { label: "Motor", href: "/motor-insurance", Icon: '/motor.svg' },
-  { label: "Marine", href: "/marine-insurance", Icon: '/marine.svg' },
-  { label: "Travel", href: "/travel-insurance", Icon: '/travel.svg' },
+  { label: "Overview", href: "/insured", Icon: "/dashboard.svg" },
+  { label: "Home", href: "/home-insurance", Icon: "/home.svg" },
+  { label: "Motor", href: "/motor-insurance", Icon: "/motor.svg" },
+  { label: "Marine", href: "/marine-insurance", Icon: "/marine.svg" },
+  { label: "Travel", href: "/travel-insurance", Icon: "/travel.svg" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [insuredDropdownOpen, setInsuredDropdownOpen] = useState(false);
+  const [mobileInsuredOpen, setMobileInsuredOpen] = useState(false);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setMobileOpen(false);
+    setMobileInsuredOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [mobileOpen]);
 
   // Check if a link is active
   const isActive = (href: string) => {
@@ -127,12 +146,16 @@ export default function Navbar() {
                         className="flex flex-col items-center gap-2 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors group min-w-[80px]"
                       >
                         <div className="w-25 h-22 rounded-xl border border-gray-200 bg-[#FBFBFB] flex flex-col gap-2 items-center justify-center group-hover:border-brand-red group-hover:text-brand-red transition-colors text-[#161616]">
-                          <Image alt={label} width={40} height={40} src={Icon}/>
-                            <span className="text-xs text-[#161616] group-hover:text-brand-red transition-colors font-medium whitespace-nowrap">
-                          {label}
-                        </span>
+                          <Image
+                            alt={label}
+                            width={40}
+                            height={40}
+                            src={Icon}
+                          />
+                          <span className="text-xs text-[#161616] group-hover:text-brand-red transition-colors font-medium whitespace-nowrap">
+                            {label}
+                          </span>
                         </div>
-                      
                       </Link>
                     ))}
                   </div>
@@ -158,12 +181,14 @@ export default function Navbar() {
 
         {/* Sign In */}
         <div className="hidden lg:flex">
-          <Button
-            variant="outline"
-            className="rounded-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white transition-colors"
-          >
-            Sign In
-          </Button>
+          <Link href={"/login"}>
+            <Button
+              variant="outline"
+              className="rounded-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white transition-colors"
+            >
+              Sign In
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile toggle */}
@@ -179,63 +204,114 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="lg:hidden bg-white border-t border-card-border px-5 py-6 flex flex-col gap-4 overflow-hidden"
-          >
-            <Link
-              href="/about"
-              className={`text-base transition-colors ${
-                isActive("/about")
-                  ? "text-brand-red font-medium"
-                  : "text-nav-text hover:text-brand-red"
-              }`}
-            >
-              About Us
-            </Link>
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              onClick={() => setMobileOpen(false)}
+            />
 
-            {/* Mobile Get Insured with sub-items */}
-            <div className="flex flex-col gap-2">
-              <span className="text-base text-nav-text font-medium">
-                Get Insured
-              </span>
-              <div className="flex gap-3 pl-2 flex-wrap">
-                {insuredSubItems.map(({ label, href, Icon }) => (
-                  <Link
-                    key={label}
-                    href={href}
-                    className="flex flex-col items-center gap-1 p-2 rounded-lg border border-gray-200 hover:border-brand-red hover:text-brand-red transition-colors text-gray-600 min-w-[60px]"
+            {/* Mobile Menu Panel */}
+            <motion.div
+              initial={{ opacity: 0, x: "100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "100%" }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="fixed top-16 lg:top-20 right-0 bottom-0 w-[280px] lg:w-[320px] bg-white z-50 lg:hidden shadow-2xl overflow-y-auto"
+            >
+              <div className="px-5 py-6 flex flex-col gap-5">
+                <Link
+                  href="/about"
+                  className={`text-base py-2 transition-colors ${
+                    isActive("/about")
+                      ? "text-brand-red font-medium"
+                      : "text-nav-text hover:text-brand-red"
+                  }`}
+                >
+                  About Us
+                </Link>
+
+                {/* Mobile Get Insured with collapsible sub-items */}
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => setMobileInsuredOpen(!mobileInsuredOpen)}
+                    className="flex items-center justify-between text-base text-nav-text font-medium py-2"
                   >
-                    <Image alt={label} width={40} height={40} src={Icon}/>
-                    <span className="text-xs font-medium">{label}</span>
+                    <span>Get Insured</span>
+                    <ChevronDown
+                      width={14}
+                      height={8}
+                      className={`text-nav-text transition-transform duration-200 ${
+                        mobileInsuredOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {mobileInsuredOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="flex gap-2 py-2 flex-wrap">
+                          {insuredSubItems.map(({ label, href, Icon }) => (
+                            <Link
+                              key={label}
+                              href={href}
+                              className="flex flex-col items-center gap-1 p-2 rounded-lg border border-gray-200 hover:border-brand-red hover:text-brand-red transition-colors text-gray-600 min-w-[70px] flex-1 sm:flex-none sm:min-w-[80px]"
+                            >
+                              <Image
+                                alt={label}
+                                width={32}
+                                height={32}
+                                src={Icon}
+                                className="sm:w-10 sm:h-10"
+                              />
+                              <span className="text-xs font-medium">
+                                {label}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {navLinks.slice(1).map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className={`text-base py-2 transition-colors ${
+                      isActive(link.href)
+                        ? "text-brand-red font-medium"
+                        : "text-nav-text hover:text-brand-red"
+                    }`}
+                  >
+                    {link.label}
                   </Link>
                 ))}
-              </div>
-            </div>
 
-            {navLinks.slice(1).map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={`text-base transition-colors ${
-                  isActive(link.href)
-                    ? "text-brand-red font-medium"
-                    : "text-nav-text hover:text-brand-red"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <Button
-              variant="outline"
-              className="w-fit rounded-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white"
-            >
-              Sign In
-            </Button>
-          </motion.div>
+                <div className="pt-2">
+                  <Link href={"/login"}>
+                    <Button
+                      variant="outline"
+                      className="w-full rounded-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white"
+                    >
+                      Sign In
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>

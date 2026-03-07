@@ -223,10 +223,10 @@ const Faqs: React.FC = () => {
                       setActiveTab(tab);
                       setOpenIndex(0);
                     }}
-                    className={`tab-btn flex-1 text-left lg:px-3 py-2 md:py-3 text-sm font-medium whitespace-nowrap ${
+                    className={`tab-btn flex-1 text-left lg:px-3 py-2 md:py-3 text-sm font-medium whitespace-nowrap cursor-pointer ${
                       activeTab === tab
-                        ? "text-primary lg:border-b-2 lg:border-primary"
-                        : "text-gray-600 lg:border-b-2 lg:border-gray-100 hover:bg-gray-50"
+                        ? "text-primary font-semibold lg:border-b-2 lg:border-primary"
+                        : "text-[#4B5563] lg:border-b-2 lg:border-gray-100 hover:bg-gray-50"
                     }`}
                     style={{
                       animationDelay: `${idx * 50}ms`,
@@ -254,7 +254,7 @@ const Faqs: React.FC = () => {
                   }}
                 >
                   <div className="flex items-center justify-between px-4 md:px-6 py-4 md:py-5">
-                    <h3 className="text-sm md:text-base font-bold leading-[22px] md:leading-[28px] text-[#374151] pr-2">
+                    <h3 className="text-sm md:text-base font-bold leading-[22px] md:leading-[28px] text-[#161616] pr-2">
                       {faq.question}
                     </h3>
                     <span className="text-xl flex-shrink-0">
@@ -281,7 +281,7 @@ const Faqs: React.FC = () => {
                     </span>
                   </div>
                   {openIndex === i && faq.answer && (
-                    <div className="accordion-content px-4 md:px-6 pb-4 md:pb-6 text-sm leading-[22px] md:leading-[24px] text-[#685C5C] overflow-hidden">
+                    <div className="accordion-content px-4 md:px-6 pb-4 md:pb-6 text-sm leading-[22px] md:leading-[24px] text-[#4B5563] overflow-hidden">
                       {faq.answer}
                     </div>
                   )}

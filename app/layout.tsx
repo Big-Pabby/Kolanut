@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
-import { Merriweather } from "next/font/google";
+import { Merriweather, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "./providers/react-query-provider";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
+import ConditionalWrapper from "@/components/layout/ConditionalWrapper";
 import localFont from 'next/font/local'
 
 const merriweather = Merriweather({
   weight: ["300", "400", "700", "900"],
   subsets: ["latin"],
   variable: "--font-merriweather",
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta-sans",
 });
 const myFont = localFont({
   src: '../public/helvetica-neue-5/HelveticaNeueRoman.otf',
@@ -29,13 +34,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${merriweather.variable} ${myFont.variable} antialiased font-body`}
-       
+        className={`${merriweather.variable} ${myFont.variable} ${plusJakartaSans.variable} antialiased font-body`}
       >
         <ReactQueryProvider>
-          <Navbar />
-          <div className="py-20">{children}</div>
-          <Footer />
+          <ConditionalWrapper>{children}</ConditionalWrapper>
         </ReactQueryProvider>
       </body>
     </html>

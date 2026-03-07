@@ -150,6 +150,7 @@
   --color-product-card-text: var(--product-card-text);
   --font-body: var(--font-helvetical);
   --font-heading: var(--font-merriweather);
+  --font-jakarta: var(--font-plus-jakarta-sans);
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);

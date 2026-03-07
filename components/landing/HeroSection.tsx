@@ -42,7 +42,7 @@ export default function HeroSection() {
 
   return (
     <section
-      className="relative flex items-end min-h-screen w-full"
+      className="flex w-full md:items-end items-center min-h-screen"
       style={{
         background: `linear-gradient(0deg, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.60) 100%), url('/images/hero-bg.jpg') center/cover no-repeat`,
       }}

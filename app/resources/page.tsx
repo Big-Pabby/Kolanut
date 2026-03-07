@@ -320,7 +320,7 @@ const Resources: React.FC = () => {
               <button
                 key={label}
                 onClick={() => setActiveResource(label)}
-                className={`filter-btn flex gap-2 items-center justify-between h-[45px] px-3 rounded-md border transition whitespace-nowrap ${
+                className={`filter-btn flex gap-2 items-center justify-between h-[45px] px-3 rounded-full border transition whitespace-nowrap ${
                   activeResource === label
                     ? "bg-red-600 text-white border-red-600"
                     : "bg-white text-gray-500 border-gray-300 hover:border-gray-400 hover:bg-gray-50"
@@ -338,23 +338,9 @@ const Resources: React.FC = () => {
               </button>
             ))}
           </div>
-          <div className="relative w-full sm:max-w-[180px] md:max-w-[200px] text-sm mt-3 lg:mt-0 flex-shrink-0">
-            <select
-              value={mediaFilter}
-              style={{ padding: "12px" }}
-              onChange={(e) => setMediaFilter(e.target.value)}
-              className="appearance-none w-full border px-3 py-2 pr-8 rounded text-sm bg-white text-gray-700 border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent cursor-pointer"
-            >
-              <option value="All Media">All Media</option>
-              <option value="Image">Blog Post</option>
-              <option value="Video">Videos</option>
-            </select>
-
-            <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500 w-4 h-4" />
-          </div>
         </div>
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
             {[...Array(8)].map((_, i) => (
               <div
                 key={i}
@@ -373,7 +359,7 @@ const Resources: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 justify-items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
             {" "}
             {displayResources.length === 0 ? (
               <div className="col-span-full text-center py-10">
@@ -389,7 +375,7 @@ const Resources: React.FC = () => {
               paginatedData.map((user: any, index) => (
                 <div
                   key={index}
-                  className="h-[400px] flex flex-col border rounded-xl overflow-hidden bg-white card-hover w-full max-w-[350px]"
+                  className="h-[400px] flex flex-col border rounded-xl overflow-hidden bg-white card-hover w-full"
                   style={{
                     animationDelay: `${index * 50}ms`,
                     opacity: isVisible ? 1 : 0,
@@ -426,9 +412,13 @@ const Resources: React.FC = () => {
                     <div className="flex justify-between items-center gap-3 mt-2">
                       <div className="flex justify-between items-center text-sm text-[#5B5B5B]">
                         <p className="flex items-center gap-2 ">
-                          <Clock5 size={18} />
                           {new Date(user.updated_at).toLocaleDateString(
-                            "en-US",
+                            "en-GB",
+                            {
+                              day: "2-digit",
+                              month: "long",
+                              year: "numeric",
+                            },
                           )}
                         </p>
                       </div>
