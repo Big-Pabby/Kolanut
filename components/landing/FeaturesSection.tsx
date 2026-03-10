@@ -60,7 +60,7 @@ export default function FeaturesSection() {
   };
 
   return (
-    <section className="relative m-2 lg:m-4 rounded-[20px] bg-[#AF060D] py-10 lg:py-16 min-h-auto lg:h-[480px]">
+    <section className="relative m-2 lg:m-4 rounded-[20px] bg-[#AF060D] py-4 lg:py-16 min-h-auto lg:h-[480px]">
       {/* Decorative pattern */}
       <div className="pointer-events-none absolute inset-0">
         <FeaturesPattern
@@ -95,7 +95,7 @@ export default function FeaturesSection() {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 -mb-8 lg:-mb-16 gap-3 lg:gap-5 rounded-[20px] border border-[#FFDFDF] bg-[#FFFFFF] p-3 lg:p-5 sm:grid-cols-2"
+          className="grid grid-cols-1  lg:-mb-16 gap-3 lg:gap-5 rounded-[20px] border border-[#FFDFDF] bg-[#FFFFFF] p-3 lg:p-5 sm:grid-cols-2"
         >
           {features.map(({ Icon, title, desc }) => (
             <motion.div

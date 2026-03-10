@@ -13,8 +13,9 @@ export default function ConditionalWrapper({
 }) {
   const pathname = usePathname();
   const isAuthRoute = AUTH_ROUTES.includes(pathname);
+  const isAdminRoute = pathname.startsWith("/admin");
 
-  if (isAuthRoute) {
+  if (isAuthRoute || isAdminRoute) {
     return <>{children}</>;
   }
 
