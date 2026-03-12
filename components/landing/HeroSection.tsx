@@ -41,7 +41,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="bg-black/60 bg-[url('/images/background.jpg')] md:bg-[linear-gradient(to_bottom,rgba(0,0,0,0.7),rgba(0,0,0,0.5)),url('/images/hero-bg.jpg')] bg-center bg-cover bg-no-repeat flex w-full items-center min-h-screen">
+    <section className="bg-black/60 bg-[url('/images/Background.svg')] md:bg-[linear-gradient(to_bottom,rgba(0,0,0,0.7),rgba(0,0,0,0.5)),url('/images/hero-bg.jpg')] bg-center bg-cover bg-no-repeat flex w-full items-center min-h-screen">
       <div className="mx-auto w-full max-w-[1440px] px-4 pb-12 lg:px-20 lg:pb-20">
         <motion.div
           ref={ref}
