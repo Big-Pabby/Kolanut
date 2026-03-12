@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import ShieldNaicom from "@/src/assets/icons/shield-naicom.svg";
 import { motion, useInView, useAnimation } from "framer-motion";
 import { useRef as useRefReact } from "react";
+import Link from "next/link";
 
 export default function HeroSection() {
   const ref = useRefReact(null);
@@ -52,7 +53,7 @@ export default function HeroSection() {
           {/* NAICOM badge */}
           <motion.div
             variants={itemVariants}
-            className="mb-6 flex w-fit items-center gap-2 rounded-full bg-[#FFFFFF] border border-brand-red px-3 lg:px-4 py-1.5 lg:py-2 backdrop-blur-sm"
+            className="mb-6 flex w-fit md:mx-0 mx-auto items-center gap-2 rounded-full bg-[#FFFFFF] border border-brand-red px-3 lg:px-4 py-1.5 lg:py-2 backdrop-blur-sm"
           >
             <ShieldNaicom
               width={13}
@@ -67,7 +68,7 @@ export default function HeroSection() {
 
           {/* Headline */}
           <div className="flex flex-col gap-4 lg:gap-6">
-            <div className="flex flex-col gap-3 lg:gap-4">
+            <div className="flex flex-col md:text-left text-center gap-3 lg:gap-4">
               <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-bold capitalize leading-tight text-white max-w-[774px]">
                 Insurance Made Simple, Fast And Truly African
               </h1>
@@ -81,14 +82,18 @@ export default function HeroSection() {
             {/* CTAs */}
             <motion.div
               variants={itemVariants}
-              className="flex flex-wrap items-center gap-3 lg:gap-6 mt-2"
+              className="flex flex-wrap md:justify-start justify-center items-center gap-3 lg:gap-6 mt-2"
             >
+              <Link href='/insured'>
               <Button className="rounded-full bg-brand-red !py-3 h-auto !px-8 text-sm lg:text-base font-medium text-white !hover:bg-brand-red/90 flex items-center justify-center">
                 Get Insured Now
               </Button>
+              </Link>
+              <Link href='/about'>
               <Button className="rounded-full border border-white bg-transparent !py-3 !px-8 text-sm lg:text-base font-medium text-white !hover:bg-white/10 h-auto flex  items-center justify-center">
                 Learn More
               </Button>
+              </Link>
             </motion.div>
           </div>
         </motion.div>

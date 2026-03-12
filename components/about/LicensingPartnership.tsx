@@ -42,7 +42,7 @@ export default function LicensingPartnership() {
           </h2>
 
           {/* Partner logos */}
-          <div className="flex justify-center items-center gap-6 flex-wrap">
+          <div className="flex justify-center items-center gap-12 flex-wrap">
             <img src="/images/logo/novarick.svg" alt="Novarick Logo" />
             <img src="/images/logo/finebricks.svg" alt="Finebricks Logo" />
             <img src="/images/logo/SELLERRAND.svg" alt="SELLERRAND Logo" />
