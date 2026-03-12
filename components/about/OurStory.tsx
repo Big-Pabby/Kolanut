@@ -100,9 +100,9 @@ export default function OurStory() {
             className="w-full lg:w-[55%]"
           >
             <img
-              src="/images/about-story.png"
+              src="/images/honor.svg"
               alt="Happy African family celebrating together"
-              className="h-[300px] w-full rounded-xl object-cover md:h-[400px] lg:h-[490px]"
+              className=" w-full rounded-xl object-cover "
               style={{ border: "1px solid rgba(175, 6, 13, 0.20)" }}
             />
           </motion.div>

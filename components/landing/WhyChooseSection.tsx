@@ -79,7 +79,7 @@ export default function WhyChooseSection() {
         {/* Image */}
         <motion.div variants={itemVariants} className="w-full lg:w-[50%]">
           <img
-            src="/images/umbrella.jpg"
+            src="/images/about-story.png"
             alt="Red umbrella standing out among grey umbrellas"
             className="h-[250px] sm:h-[350px] lg:h-full lg:max-h-[553px] w-full rounded-xl object-cover"
           />
