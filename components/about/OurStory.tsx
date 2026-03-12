@@ -103,7 +103,7 @@ export default function OurStory() {
               src="/images/honor.svg"
               alt="Happy African family celebrating together"
               className=" w-full rounded-xl object-cover "
-              style={{ border: "1px solid rgba(175, 6, 13, 0.20)" }}
+             
             />
           </motion.div>
         </div>
