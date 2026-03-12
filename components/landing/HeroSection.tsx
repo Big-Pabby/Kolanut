@@ -69,7 +69,7 @@ export default function HeroSection() {
           {/* Headline */}
           <div className="flex flex-col gap-4 lg:gap-6">
             <div className="flex flex-col md:text-left text-center gap-3 lg:gap-4">
-              <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-bold capitalize leading-tight text-white max-w-[774px]">
+              <h1 className="font-heading text-5xl lg:text-[60px] font-bold capitalize leading-tight text-white max-w-[774px]">
                 Insurance Made Simple, Fast And Truly African
               </h1>
               <p className="text-base lg:text-xl font-normal leading-relaxed text-white max-w-[700px]">
