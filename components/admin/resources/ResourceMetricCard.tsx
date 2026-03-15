@@ -1,9 +1,15 @@
 interface ResourceMetricCardProps {
   label: string;
-  count: number | string;
+  count?: number | string;
+  isLoading?: boolean;
 }
 
-export default function ResourceMetricCard({ label, count }: ResourceMetricCardProps) {
+export default function ResourceMetricCard({
+  label,
+  count,
+  isLoading,
+}: ResourceMetricCardProps) {
+  const displayCount = isLoading ? "-" : (count ?? 0);
   return (
     <div
       className="flex items-center gap-4 flex-1"
@@ -21,11 +27,15 @@ export default function ResourceMetricCard({ label, count }: ResourceMetricCardP
         style={{
           width: 40,
           height: 40,
-          
+
           borderRadius: 8,
         }}
       >
-        <img src="/icons/admin/document.svg" alt="document" style={{ width: 18, height: 22 }} />
+        <img
+          src="/icons/admin/document.svg"
+          alt="document"
+          style={{ width: 18, height: 22 }}
+        />
       </div>
 
       {/* Label + Count */}
@@ -35,7 +45,6 @@ export default function ResourceMetricCard({ label, count }: ResourceMetricCardP
             color: "#4b5563",
             fontSize: 16,
             fontWeight: 400,
-            
           }}
         >
           {label}
@@ -45,10 +54,9 @@ export default function ResourceMetricCard({ label, count }: ResourceMetricCardP
             color: "#111827",
             fontSize: 24,
             fontWeight: 400,
-            
           }}
         >
-          {count}
+          {displayCount}
         </span>
       </div>
     </div>

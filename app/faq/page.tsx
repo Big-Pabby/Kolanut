@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useFaqs } from "./hooks/useFaqs";
 
 // Animation keyframes style
 const animationStyles = `
@@ -77,79 +78,16 @@ const animationStyles = `
 `;
 
 const Faqs: React.FC = () => {
-  const [faqs, setFaqs] = useState([
-    {
-      id: 1,
-      question: "What is Kolanut Insurance?",
-      answer:
-        "Kolanut Insurance is a digital insurance platform that makes it easy to purchase and manage insurance policies. We partner with licensed insurance companies to provide comprehensive coverage options.",
-      category: "general",
-    },
-    {
-      id: 2,
-      question: "How do I purchase insurance?",
-      answer:
-        "You can purchase insurance through our website by selecting your desired coverage type, filling out the necessary information, and making payment. Our process is completely digital and takes just a few minutes.",
-      category: "general",
-    },
-    {
-      id: 3,
-      question: "Is my information secure?",
-      answer:
-        "Yes, we take data security seriously. All your personal information is encrypted and stored securely. We comply with all relevant data protection regulations.",
-      category: "general",
-    },
-    {
-      id: 4,
-      question: "What payment methods do you accept?",
-      answer:
-        "We accept various payment methods including credit/debit cards, bank transfers, and mobile money. All payments are processed securely through our payment partners.",
-      category: "payment",
-    },
-    {
-      id: 5,
-      question: "When will I receive my policy documents?",
-      answer:
-        "Once your payment is confirmed, you will receive your policy documents via email within 24 hours. You can also download them directly from your account dashboard.",
-      category: "payment",
-    },
-    {
-      id: 6,
-      question: "Can I get a refund if I cancel my policy?",
-      answer:
-        "Yes, you can cancel your policy within the cooling-off period (usually 14 days) for a full refund. After this period, refunds are calculated based on the unused portion of your policy.",
-      category: "payment",
-    },
-    {
-      id: 7,
-      question: "What does my policy cover?",
-      answer:
-        "Coverage varies depending on the type of policy you purchase. Each policy document contains detailed information about what's covered and any exclusions. You can also contact our support team for clarification.",
-      category: "policy",
-    },
-    {
-      id: 8,
-      question: "How do I file a claim?",
-      answer:
-        "To file a claim, log into your account, navigate to the claims section, and fill out the claim form with all required details. Our claims team will review and get back to you within the specified timeframe.",
-      category: "policy",
-    },
-    {
-      id: 9,
-      question: "How long does it take to process a claim?",
-      answer:
-        "Claims processing typically takes 5-7 business days from the time all required documents are submitted. Complex claims may take longer, but we strive to resolve all claims as quickly as possible.",
-      category: "claims",
-    },
-    {
-      id: 10,
-      question: "What documents do I need for a claim?",
-      answer:
-        "Required documents vary by claim type but typically include: policy certificate, incident report, photos of damage, police report (if applicable), and any other supporting documentation. Our claims team will provide a complete list.",
-      category: "claims",
-    },
-  ]);
-  const [activeTab, setActiveTab] = useState("general");
+  const { data: faqsFromApi, isLoading, error } = useFaqs();
+  const [faqs, setFaqs] = useState<any[]>([]);
+
+  // Set FAQs from API when data is available
+  useEffect(() => {
+    if (faqsFromApi && faqsFromApi.length > 0) {
+      setFaqs(faqsFromApi);
+    }
+  }, [faqsFromApi]);
+  const [activeTab, setActiveTab] = useState("General");
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -207,7 +145,21 @@ const Faqs: React.FC = () => {
           </div>
         </div>
 
-        {faqs.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-gray-500">Loading FAQs...</p>
+            </div>
+          </div>
+        ) : error ? (
+          <div className="flex justify-center py-20">
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-red-500">Failed to load FAQs.</p>
+              <p className="text-gray-500 text-sm">Please try again later.</p>
+            </div>
+          </div>
+        ) : faqs.length === 0 ? (
           <div className="flex justify-center py-20">
             <p className="text-gray-500">No FAQs available at the moment.</p>
           </div>

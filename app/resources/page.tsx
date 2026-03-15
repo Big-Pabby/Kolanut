@@ -1,16 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  ArrowRight,
-  Book,
-  BookOpen,
-  Calculator,
-  ChevronDown,
-  Clock5,
-  Shield,
-} from "lucide-react";
+import { ArrowRight, Book, BookOpen, Calculator, Shield } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { usePublicResources, PublicResource } from "./hooks/usePublicResources";
 
 // Animation keyframes style
 const animationStyles = `
@@ -95,189 +88,53 @@ const Loader = () => (
   </div>
 );
 
+const CATEGORIES = [
+  { label: "All Resources", icon: <BookOpen size={18} /> },
+  { label: "Claims", icon: <Shield size={18} /> },
+  { label: "Premiums", icon: <Calculator size={18} /> },
+  { label: "Regulatory", icon: <Book size={18} /> },
+];
+
 const Resources: React.FC = () => {
-  const [resources, setResources] = useState<any[]>([]);
+  const router = useRouter();
   const [activeResource, setActiveResource] = useState("All Resources");
-  const [mediaFilter, setMediaFilter] = useState("All Media");
-  const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
-
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 12;
+  const pageSize = 12;
 
-  // Dummy data for resources
-  const dummyResources = [
-    {
-      id: 1,
-      title: "Understanding Your Insurance Policy",
-      content:
-        "Learn the fundamentals of insurance policies, including coverage types, deductibles, and premiums. This comprehensive guide will help you make informed decisions about your insurance needs.",
-      category: "Regulatory",
-      media_type: "Blog Post",
-      image_url:
-        "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400",
-      updated_at: "2024-01-15T10:00:00Z",
-    },
-    {
-      id: 2,
-      title: "How to File a Claim Successfully",
-      content:
-        "A step-by-step guide to filing insurance claims. Learn what documentation you need, common mistakes to avoid, and tips to speed up your claim approval process.",
-      category: "Claims",
-      media_type: "Blog Post",
-      image_url:
-        "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400",
-      updated_at: "2024-02-20T14:30:00Z",
-    },
-    {
-      id: 3,
-      title: "Tips for Lowering Your Premiums",
-      content:
-        "Discover proven strategies to reduce your insurance premiums without sacrificing coverage. Includes tips on bundling, increasing deductibles, and maintaining a good credit score.",
-      category: "Premiums",
-      media_type: "Videos",
-      image_url:
-        "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400",
-      updated_at: "2024-03-10T09:15:00Z",
-    },
-    {
-      id: 4,
-      title: "NAICOM Regulations Explained",
-      content:
-        "Understanding the National Insurance Commission of Nigeria regulations and how they protect consumers. Stay informed about your rights and the regulatory framework.",
-      category: "Regulatory",
-      media_type: "Blog Post",
-      image_url:
-        "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400",
-      updated_at: "2024-01-25T11:45:00Z",
-    },
-    {
-      id: 5,
-      title: "The Claims Process Explained",
-      content:
-        "A detailed look at how insurance claims are processed from submission to settlement. Understand what to expect and how to navigate any challenges.",
-      category: "Claims",
-      media_type: "Blog Post",
-      image_url:
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400",
-      updated_at: "2024-02-05T16:20:00Z",
-    },
-    {
-      id: 6,
-      title: "Understanding Premium Calculations",
-      content:
-        "Learn how insurance companies calculate premiums, including risk factors, coverage limits, and market conditions. Make smarter choices about your coverage.",
-      category: "Premiums",
-      media_type: "Videos",
-      image_url:
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400",
-      updated_at: "2024-03-01T08:00:00Z",
-    },
-    {
-      id: 7,
-      title: "Insurance Fraud Prevention",
-      content:
-        "Protect yourself from insurance fraud with these essential tips. Learn how to identify suspicious activities and safeguard your policy.",
-      category: "Claims",
-      media_type: "Blog Post",
-      image_url:
-        "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400",
-      updated_at: "2024-02-28T13:10:00Z",
-    },
-    {
-      id: 8,
-      title: "Digital Insurance Trends 2024",
-      content:
-        "Explore the latest digital transformations in the insurance industry, from AI-powered claims processing to mobile-first customer experiences.",
-      category: "Regulatory",
-      media_type: "Videos",
-      image_url:
-        "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400",
-      updated_at: "2024-03-15T10:30:00Z",
-    },
-    {
-      id: 9,
-      title: "Choosing the Right Coverage",
-      content:
-        "A comprehensive guide to selecting the right insurance coverage for your needs. Compare different policy types and find the best fit.",
-      category: "Premiums",
-      media_type: "Blog Post",
-      image_url:
-        "https://images.unsplash.com/photo-1460317442991-0ec209397118?w=400",
-      updated_at: "2024-01-20T15:45:00Z",
-    },
-    {
-      id: 10,
-      title: "Motor Insurance Basics",
-      content:
-        "Everything you need to know about motor insurance in Nigeria. From comprehensive to third-party coverage, make informed decisions about your vehicle protection.",
-      category: "Regulatory",
-      media_type: "Blog Post",
-      image_url:
-        "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400",
-      updated_at: "2024-02-10T09:00:00Z",
-    },
-    {
-      id: 11,
-      title: "Home Insurance Guide",
-      content:
-        "Protect your home with the right insurance policy. Learn about coverage options, exclusions, and how to file claims for home insurance.",
-      category: "Claims",
-      media_type: "Videos",
-      image_url:
-        "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400",
-      updated_at: "2024-03-05T14:20:00Z",
-    },
-    {
-      id: 12,
-      title: "Health Insurance Benefits",
-      content:
-        "Understand the benefits of health insurance and how it can protect you and your family from unexpected medical expenses.",
-      category: "Premiums",
-      media_type: "Blog Post",
-      image_url:
-        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=400",
-      updated_at: "2024-01-30T11:30:00Z",
-    },
-  ];
+  // Map UI category to API tag
+  const getTagFromCategory = (category: string): string | undefined => {
+    if (category === "All Resources") return undefined;
+    return category;
+  };
 
-  // Filter resources based on active category and media type
-  const filteredResources = dummyResources.filter((resource) => {
-    const categoryMatch =
-      activeResource === "All Resources" ||
-      (activeResource === "Claims" && resource.category === "Claims") ||
-      (activeResource === "Premiums" && resource.category === "Premiums") ||
-      (activeResource === "Regulatory" && resource.category === "Regulatory");
-
-    const mediaMatch =
-      mediaFilter === "All Media" ||
-      (mediaFilter === "Image" && resource.media_type === "Blog Post") ||
-      (mediaFilter === "Video" && resource.media_type === "Videos");
-
-    return categoryMatch && mediaMatch;
+  // Fetch resources from API
+  const {
+    data: resourcesData,
+    isLoading,
+    error,
+  } = usePublicResources({
+    tag: getTagFromCategory(activeResource),
+    page: currentPage,
+    page_size: pageSize,
   });
 
-  // Initialize router
-  const router = useRouter();
+  const resources: PublicResource[] = resourcesData?.results || [];
+  const totalPages = resourcesData?.total_pages || 1;
+  const totalCount = resourcesData?.count || 0;
 
-  // Use filtered resources directly for rendering
-  const displayResources =
-    filteredResources.length > 0 ? filteredResources : dummyResources;
+  // Reset to page 1 when category changes
+  const handleCategoryChange = (category: string) => {
+    setActiveResource(category);
+    setCurrentPage(1);
+  };
 
-  // Paginated data
-  const paginatedData = displayResources.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
-  );
-
-  // Set loading to false since we have dummy data
+  // Initialize animation on mount
   useEffect(() => {
-    setLoading(false);
-    // Trigger animation on mount
     setTimeout(() => setIsVisible(true), 100);
   }, []);
 
-  const handleCardClick = (resource: any) => {
+  const handleCardClick = (resource: PublicResource) => {
     router.push(`/resources/resource-detail/${resource.id}`);
   };
 
@@ -311,15 +168,10 @@ const Resources: React.FC = () => {
       <div className="px-6 md:px-12 lg:px-24 flex flex-col gap-4 py-4 my-5">
         <div className="lg:flex gap-4 items-center lg:my-5 lg:overflow-visible overflow-x-auto pb-2">
           <div className="flex gap-2 md:gap-4 items-center min-w-0">
-            {[
-              { label: "All Resources", icon: <BookOpen size={18} /> },
-              { label: "Claims", icon: <Shield size={18} /> },
-              { label: "Premiums", icon: <Calculator size={18} /> },
-              { label: "Regulatory", icon: <Book size={18} /> },
-            ].map(({ label, icon }, idx) => (
+            {CATEGORIES.map(({ label, icon }, idx) => (
               <button
                 key={label}
-                onClick={() => setActiveResource(label)}
+                onClick={() => handleCategoryChange(label)}
                 className={`filter-btn flex gap-2 items-center justify-between h-[45px] px-3 rounded-full border transition whitespace-nowrap ${
                   activeResource === label
                     ? "bg-red-600 text-white border-red-600"
@@ -339,9 +191,23 @@ const Resources: React.FC = () => {
             ))}
           </div>
         </div>
-        {loading ? (
+
+        {/* Error State */}
+        {error && (
+          <div className="col-span-full text-center py-10">
+            <h2 className="text-xl font-semibold text-red-600">
+              Failed to load resources
+            </h2>
+            <p className="text-gray-500 mt-2">
+              {error.message || "Please try again later."}
+            </p>
+          </div>
+        )}
+
+        {/* Loading State */}
+        {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-            {[...Array(8)].map((_, i) => (
+            {[...Array(6)].map((_, i) => (
               <div
                 key={i}
                 className="h-[400px] w-full max-w-[350px] flex flex-col border rounded-xl overflow-hidden bg-white"
@@ -361,7 +227,7 @@ const Resources: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
             {" "}
-            {displayResources.length === 0 ? (
+            {resources.length === 0 ? (
               <div className="col-span-full text-center py-10">
                 <h2 className="text-xl font-semibold text-gray-700">
                   No resources found
@@ -372,9 +238,9 @@ const Resources: React.FC = () => {
                 </p>
               </div>
             ) : (
-              paginatedData.map((user: any, index) => (
+              resources.map((resource, index) => (
                 <div
-                  key={index}
+                  key={resource.id}
                   className="h-[400px] flex flex-col border rounded-xl overflow-hidden bg-white card-hover w-full"
                   style={{
                     animationDelay: `${index * 50}ms`,
@@ -386,8 +252,8 @@ const Resources: React.FC = () => {
                   {/* Image Section */}
                   <figure className="w-full h-[200px] overflow-hidden">
                     <img
-                      src={user.image_url}
-                      alt="product"
+                      src={resource.cover_image}
+                      alt={resource.title}
                       className="w-full h-full object-cover rounded-t-xl image-hover"
                     />
                   </figure>
@@ -396,15 +262,19 @@ const Resources: React.FC = () => {
                   <div className="flex flex-col justify-between p-4">
                     <div className="flex flex-col gap-2">
                       <p className="w-fit font-semibold px-2.5 py-0.5 rounded-full text-[#005AAD] bg-[#F0F8FF] border border-[#B3DAFF] text-left text-sm">
-                        {user?.category}
+                        {resource.tag}
                       </p>
 
                       <p className="text-left font-semibold text-lg text-[#1C1C1C] line-clamp-2">
-                        {user.title}
+                        {resource.title}
                       </p>
 
                       <p className="text-left text-sm text-[#5B5B5B] leading-relaxed line-clamp-3">
-                        {user.content}
+                        {resource.description ||
+                          resource.content
+                            ?.replace(/<[^>]*>/g, "")
+                            .substring(0, 150) ||
+                          "No description available"}
                       </p>
                     </div>
 
@@ -412,7 +282,7 @@ const Resources: React.FC = () => {
                     <div className="flex justify-between items-center gap-3 mt-2">
                       <div className="flex justify-between items-center text-sm text-[#5B5B5B]">
                         <p className="flex items-center gap-2 ">
-                          {new Date(user.updated_at).toLocaleDateString(
+                          {new Date(resource.updated_at).toLocaleDateString(
                             "en-GB",
                             {
                               day: "2-digit",
@@ -424,7 +294,7 @@ const Resources: React.FC = () => {
                       </div>
 
                       <button
-                        onClick={() => handleCardClick(user)}
+                        onClick={() => handleCardClick(resource)}
                         className="w-fit flex gap-1 items-center border-b-2 border-primary text-primary font-semibold text-sm hover:underline transition-colors duration-200 hover:text-red-600 hover:border-red-600"
                       >
                         Read More
@@ -441,17 +311,18 @@ const Resources: React.FC = () => {
           </div>
         )}
 
-        <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-primary text-white rounded disabled:bg-gray-300 transition-colors duration-200 hover:bg-red-700 disabled:hover:bg-gray-300"
-          >
-            Previous
-          </button>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-primary text-white rounded disabled:bg-gray-300 transition-colors duration-200 hover:bg-red-700 disabled:hover:bg-gray-300"
+            >
+              Previous
+            </button>
 
-          {[...Array(Math.ceil(displayResources.length / ITEMS_PER_PAGE))].map(
-            (_, i) => (
+            {Array.from({ length: totalPages }, (_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentPage(i + 1)}
@@ -463,27 +334,19 @@ const Resources: React.FC = () => {
               >
                 {i + 1}
               </button>
-            ),
-          )}
+            ))}
 
-          <button
-            onClick={() =>
-              setCurrentPage((prev) =>
-                Math.min(
-                  prev + 1,
-                  Math.ceil(displayResources.length / ITEMS_PER_PAGE),
-                ),
-              )
-            }
-            disabled={
-              currentPage ===
-              Math.ceil(displayResources.length / ITEMS_PER_PAGE)
-            }
-            className="px-4 py-2 bg-primary text-white rounded disabled:bg-gray-300 transition-colors duration-200 hover:bg-red-700 disabled:hover:bg-gray-300"
-          >
-            Next
-          </button>
-        </div>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+              }
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-primary text-white rounded disabled:bg-gray-300 transition-colors duration-200 hover:bg-red-700 disabled:hover:bg-gray-300"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

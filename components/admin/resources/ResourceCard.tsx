@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MoreVertical } from "lucide-react";
+import { BlogPost } from "@/app/admin/resources/hooks/useResources";
 
 export interface ResourceItem {
   id: number;
@@ -12,10 +13,10 @@ export interface ResourceItem {
 }
 
 interface ResourceCardProps {
-  resource: ResourceItem;
-  onViewPost?: (resource: ResourceItem) => void;
-  onEdit?: (resource: ResourceItem) => void;
-  onDelete?: (resource: ResourceItem) => void;
+  resource: BlogPost;
+  onViewPost?: (resource: BlogPost) => void;
+  onEdit?: (resource: BlogPost) => void;
+  onDelete?: (resource: BlogPost) => void;
 }
 
 export default function ResourceCard({ resource, onViewPost, onEdit, onDelete }: ResourceCardProps) {
@@ -33,7 +34,7 @@ export default function ResourceCard({ resource, onViewPost, onEdit, onDelete }:
       {/* Article image */}
       <div className="overflow-hidden" style={{ height: 200 }}>
         <img
-          src={resource.imageUrl}
+          src={resource.cover_image}
           alt={resource.title}
           className="w-full h-full object-cover"
         />
@@ -63,7 +64,7 @@ export default function ResourceCard({ resource, onViewPost, onEdit, onDelete }:
               padding: "2px 10px",
             }}
           >
-            {resource.category}
+            {resource.tag}
           </span>
 
           {/* Three-dot menu */}
@@ -131,7 +132,7 @@ export default function ResourceCard({ resource, onViewPost, onEdit, onDelete }:
               fontFamily: "HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
             }}
           >
-            {resource.description}
+            {resource.content}
           </p>
         </div>
 
