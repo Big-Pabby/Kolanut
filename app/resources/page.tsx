@@ -250,7 +250,7 @@ const Resources: React.FC = () => {
                   }}
                 >
                   {/* Image Section */}
-                  <figure className="w-full h-[200px] overflow-hidden">
+                  <figure className="w-full h-[250px] overflow-hidden">
                     <img
                       src={resource.cover_image}
                       alt={resource.title}

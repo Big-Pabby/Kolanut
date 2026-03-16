@@ -93,7 +93,7 @@ const ResourceDetail: React.FC = () => {
         <div className="flex flex-col justify-start items-start text-left z-10 max-w-4xl">
           <button
             onClick={handleGoBack}
-            className="flex items-center gap-2 text-white/80 hover:text-white mb-4 transition-colors"
+            className="flex items-center gap-2 text-white/80 hover:text-white mb-20 transition-colors"
           >
             <ArrowLeft size={20} />
             Back to Resources
