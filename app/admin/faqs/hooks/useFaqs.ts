@@ -96,7 +96,7 @@ export const useUpdateFaq = () => {
 
   return useMutation({
     mutationFn: async ({ id, payload }: UpdateFaqParams) => {
-      const response = await admin.put<ApiFaqItem>(`/faqs/${id}`, payload);
+      const response = await admin.patch<ApiFaqItem>(`/faqs/${id}`, payload);
       return response;
     },
     onSuccess: () => {
