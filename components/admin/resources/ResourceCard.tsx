@@ -32,7 +32,7 @@ export default function ResourceCard({ resource, onViewPost, onEdit, onDelete }:
       }}
     >
       {/* Article image */}
-      <div className="overflow-hidden" style={{ height: 250 }}>
+      <div className="overflow-hidden" style={{ height: 300 }}>
         <img
           src={resource.cover_image}
           alt={resource.title}

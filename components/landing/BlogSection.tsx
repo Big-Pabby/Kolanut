@@ -98,21 +98,25 @@ export default function BlogSection() {
                 {/* Article content */}
                 <div className="flex flex-col gap-3 lg:gap-4 border-b border-l border-r border-card-border rounded-b-lg p-3 lg:p-4">
                   <div className="flex flex-col gap-3 lg:gap-4">
-                    <Badge className="w-fit rounded-full border border-category-blue bg-[#F0F8FF] px-2.5 py-0.5 text-xs font-medium text-[#005AAD]">
+                    <Badge className="w-fit rounded-full border border-category-blue bg-[#F0F8FF] px-2.5 py-0.5 text-xs font-semibold text-[#005AAD]">
                       {article.tag || "Blog"}
                     </Badge>
                     <div className="flex flex-col gap-2">
-                      <h3 className="text-lg lg:text-xl font-medium text-dark-text">
+                      <h3 className="text-lg lg:text-xl font-semibold text-dark-text">
                         {article.title}
                       </h3>
                       <p className="text-sm lg:text-base leading-[25.76px] text-body-text line-clamp-2">
-                        {article.description}
+                        {article.description ||
+                          article.content
+                            ?.replace(/<[^>]*>/g, "")
+                            .substring(0, 150) ||
+                          "No description available"}
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() =>
-                      router.push(`/resources/resource-detail/${article.slug}`)
+                      router.push(`/resources/resource-detail/${article.id}`)
                     }
                     className="flex items-center gap-2 text-sm lg:text-base font-medium text-brand-red hover:opacity-80 transition-opacity text-left"
                   >

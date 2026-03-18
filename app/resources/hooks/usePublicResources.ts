@@ -14,8 +14,8 @@ export interface PublicResource {
   tag: string;
   cover_image: string;
   status: "published" | "draft";
-  created_at: string;
-  updated_at: string;
+  date_created: string;
+  date_updated: string;
   published_at?: string;
 }
 

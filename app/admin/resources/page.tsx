@@ -96,7 +96,7 @@ export default function AdminResourcesPage() {
   const draftsCount = blogStats?.draft ?? 0;
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-6">
       {/* Page header + metrics */}
       <div
         className="flex flex-col gap-4 p-4"

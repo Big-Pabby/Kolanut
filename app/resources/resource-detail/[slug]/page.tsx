@@ -117,7 +117,7 @@ const ResourceDetail: React.FC = () => {
 
             <p className="text-white/80 text-sm">
               Updated{" "}
-              {new Date(resource.updated_at).toLocaleDateString("en-GB", {
+              {new Date(resource.date_updated).toLocaleDateString("en-GB", {
                 day: "2-digit",
                 month: "long",
                 year: "numeric",
@@ -130,7 +130,7 @@ const ResourceDetail: React.FC = () => {
       {/* Content Section */}
       <div className="px-6 md:px-12 lg:px-24 py-8 md:py-12">
         <div
-          className="max-w-4xl mx-auto"
+          className="max-w-5xl mx-auto"
           style={{
             opacity: isVisible ? 1 : 0,
             transition: "opacity 0.5s ease-out 0.3s",

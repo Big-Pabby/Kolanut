@@ -10,7 +10,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="flex flex-col flex-1" style={{ marginLeft: 210 }}>
         <AdminHeader />
         <main className="flex-1 overflow-y-auto" style={{ paddingTop: 64 }}>
-          {children}
+          <div className="p-10">
+ {children}
+          </div>
+         
         </main>
       </div>
     </div>

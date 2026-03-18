@@ -241,7 +241,7 @@ const Resources: React.FC = () => {
               resources.map((resource, index) => (
                 <div
                   key={resource.id}
-                  className="h-[400px] flex flex-col border rounded-xl overflow-hidden bg-white card-hover w-full"
+                  className=" flex flex-col border rounded-xl overflow-hidden bg-white card-hover w-full"
                   style={{
                     animationDelay: `${index * 50}ms`,
                     opacity: isVisible ? 1 : 0,
@@ -250,7 +250,7 @@ const Resources: React.FC = () => {
                   }}
                 >
                   {/* Image Section */}
-                  <figure className="w-full h-[250px] overflow-hidden">
+                  <figure className="w-full h-[300px] overflow-hidden">
                     <img
                       src={resource.cover_image}
                       alt={resource.title}
@@ -282,7 +282,7 @@ const Resources: React.FC = () => {
                     <div className="flex justify-between items-center gap-3 mt-2">
                       <div className="flex justify-between items-center text-sm text-[#5B5B5B]">
                         <p className="flex items-center gap-2 ">
-                          {new Date(resource.updated_at).toLocaleDateString(
+                          {new Date(resource.date_updated).toLocaleDateString(
                             "en-GB",
                             {
                               day: "2-digit",
