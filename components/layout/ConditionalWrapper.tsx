@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 
-const AUTH_ROUTES = ["/login", "/register", "/forgot-password"];
+const AUTH_ROUTES = ["/login", "/register", "/forgot-password", "/verify-code"];
 
 export default function ConditionalWrapper({
   children,

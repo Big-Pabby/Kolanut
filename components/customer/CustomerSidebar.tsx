@@ -135,7 +135,7 @@ export default function CustomerSidebar() {
 
             <div className="my-2 border-t border-white/20 mx-4" />
 
-            <Link
+            {/* <Link
               href="/customer/profile"
               onClick={handleNavClick}
               className="flex items-center gap-3 px-4 h-12 transition-colors"
@@ -143,9 +143,9 @@ export default function CustomerSidebar() {
             >
               <User />
               Account
-            </Link>
+            </Link> */}
 
-            <Link
+            {/* <Link
               href="/customer/help"
               onClick={handleNavClick}
               className="flex items-center gap-3 px-4 h-12 transition-colors"
@@ -153,7 +153,7 @@ export default function CustomerSidebar() {
             >
               <HelpCircle />
               Help & Support
-            </Link>
+            </Link> */}
 
             <Link
               href="/customer/settings"
@@ -271,7 +271,7 @@ export default function CustomerSidebar() {
         <div className="my-2 border-t border-white/20" />
 
         {/* Profile */}
-        <Link
+        {/* <Link
           href="/customer/profile"
           className="flex items-center gap-2 px-3 py-3 rounded-lg transition-colors"
           style={{
@@ -287,10 +287,10 @@ export default function CustomerSidebar() {
             <User />
           </span>
           Account
-        </Link>
+        </Link> */}
 
         {/* Help */}
-        <Link
+        {/* <Link
           href="/customer/help"
           className="flex items-center gap-2 px-3 py-3 rounded-lg transition-colors"
           style={{
@@ -306,7 +306,7 @@ export default function CustomerSidebar() {
             <HelpCircle />
           </span>
           Help & Support
-        </Link>
+        </Link> */}
 
         {/* Settings */}
         <Link
