@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -9,45 +9,20 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { motion, useInView, type Variants } from "framer-motion";
-
-const faqs = [
-  {
-    question: "How do I get started with your product?",
-    answer:
-      "Sign up on our website, explore features, customize your profile, and start using our product. We're here to help!",
-    defaultOpen: true,
-  },
-  {
-    question: "Is there a free trial available?",
-    answer: "",
-    defaultOpen: false,
-  },
-  {
-    question: "How do I get started with your product?",
-    answer:
-      "Sign up on our website, explore features, customize your profile, and start using our product. We're here to help!",
-    defaultOpen: true,
-  },
-  {
-    question: "Is there a free trial available?",
-    answer: "",
-    defaultOpen: false,
-  },
-  {
-    question: "Is there a free trial available?",
-    answer: "",
-    defaultOpen: false,
-  },
-  {
-    question: "Is there a free trial available?",
-    answer: "",
-    defaultOpen: false,
-  },
-];
+import { useFaqs } from "@/app/faq/hooks/useFaqs";
 
 export default function FAQSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { data: faqsFromApi, isLoading, error } = useFaqs();
+
+  const faqs = useMemo(
+    () =>
+      (faqsFromApi ?? []).filter(
+        (faq) => faq.category?.toLowerCase() === "general",
+      ),
+    [faqsFromApi],
+  );
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -103,28 +78,47 @@ export default function FAQSection() {
 
           {/* Right accordion */}
           <motion.div variants={itemVariants} className="w-full lg:w-[55%]">
-            <Accordion
-              type="multiple"
-              defaultValue={["item-0", "item-2"]}
-              className="flex flex-col gap-0"
-            >
-              {faqs.map((faq, i) => (
-                <AccordionItem
-                  key={i}
-                  value={`item-${i}`}
-                  className="border-t border-faq-border py-2"
-                >
-                  <AccordionTrigger className="text-base lg:text-lg font-semibold text-dark-text hover:no-underline">
-                    {faq.question}
-                  </AccordionTrigger>
-                  {faq.answer && (
-                    <AccordionContent className="text-sm lg:text-base leading-6 text-body-text">
-                      {faq.answer}
-                    </AccordionContent>
-                  )}
-                </AccordionItem>
-              ))}
-            </Accordion>
+            {isLoading ? (
+              <div className="flex flex-col gap-3">
+                {[0, 1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="h-14 w-full animate-pulse rounded-md bg-gray-100 border-t border-faq-border"
+                  />
+                ))}
+              </div>
+            ) : error ? (
+              <p className="text-sm text-red-500">
+                Failed to load FAQs. Please try again later.
+              </p>
+            ) : faqs.length === 0 ? (
+              <p className="text-sm text-body-text">
+                No FAQs available at the moment.
+              </p>
+            ) : (
+              <Accordion
+                type="multiple"
+                defaultValue={["item-0", "item-2"]}
+                className="flex flex-col gap-0"
+              >
+                {faqs.map((faq, i) => (
+                  <AccordionItem
+                    key={faq.id}
+                    value={`item-${i}`}
+                    className="border-t border-faq-border py-2"
+                  >
+                    <AccordionTrigger className="text-base lg:text-lg font-semibold text-dark-text hover:no-underline">
+                      {faq.question}
+                    </AccordionTrigger>
+                    {faq.answer && (
+                      <AccordionContent className="text-sm lg:text-base leading-6 text-body-text">
+                        {faq.answer}
+                      </AccordionContent>
+                    )}
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            )}
           </motion.div>
         </motion.div>
       </div>

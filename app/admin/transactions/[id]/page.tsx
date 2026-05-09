@@ -100,7 +100,7 @@ export default function TransactionDetailsPage({
             <p className="text-sm text-stone-500 mt-1">
               Transaction ID:{" "}
               <span className="text-[#AF060D] font-semibold tracking-wide">
-                {params.id}
+                KA-09795170
               </span>
             </p>
           </div>
@@ -121,63 +121,24 @@ export default function TransactionDetailsPage({
           {/* Left Column */}
           <div className="space-y-4 bg-white border border-[#F3F4F6] p-4 rounded-[10px]">
             {/* Customer Details */}
-            <AccordionSection title="Customer Details">
+             <AccordionSection title="Personal Details">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
-                <FieldPair label="Customer Name" value="Mauteen Adeleke" />
+                <FieldPair label="First Name" value="Mauteen" />
+                <FieldPair label="Last Name" value="Adeleke" />
                 <FieldPair label="Email Address" value="Mauteen11@gmail.com" />
-                <FieldPair label="NIN Number" value="1234567890" />
+                
                 <FieldPair label="Phone Number" value="1234567890" />
                 <FieldPair label="State" value="Lagos" />
-                <FieldPair label="Country" value="Nigeria" />
+                <FieldPair label="City/LGA" value="Ikeja" />
+                <FieldPair label="Date of Birth" value="01/01/1990" />
+                <FieldPair label="NIN Number" value="1234567890" />
                 <FieldPair label="Street" value="45 Motunde street, Odo road" />
               </div>
             </AccordionSection>
 
-            {/* Policy Type */}
-            <AccordionSection title="Policy Type">
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 pb-4 border-b border-stone-100 last:border-0 last:pb-0"
-                  >
-                    <FieldPair
-                      label="Insurance Type"
-                      value="International Travel Insurance"
-                    />
-                    <FieldPair label="Premium Paid" value="$5,110" />
-                  </div>
-                ))}
-              </div>
-            </AccordionSection>
+         
 
-            {/* Company Information */}
-            <AccordionSection title="Company Information">
-              <div className="space-y-5">
-                <div>
-                  <span className="text-xs font-medium text-stone-400 uppercase tracking-widest block mb-1.5">
-                    Description
-                  </span>
-                  <p className="text-sm text-stone-700 leading-relaxed bg-stone-50 rounded-xl p-4 border border-stone-100">
-                    e.g. A duplex of standard construction consisting of 6
-                    bedrooms including 2-bedroom Boys-Quarters, gates, fence,
-                    which is situated at No. 1 Goodman Street, Lagos, Nigeria
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
-                  <FieldPair
-                    label="Name of Company"
-                    value="International Travel Insurance"
-                  />
-                  <FieldPair label="NIN Number" value="$5,110" />
-                  <FieldPair
-                    label="Email Address"
-                    value="International Travel Insurance"
-                  />
-                  <FieldPair label="Phone Number" value="$5,110" />
-                </div>
-              </div>
-            </AccordionSection>
+          
           </div>
 
           {/* Right Column — Transaction Overview */}
@@ -187,12 +148,12 @@ export default function TransactionDetailsPage({
                 <FieldPair label="Policy Holder:" value="Mauteen Adeleke" />
                 <FieldPair
                   label="Insurance Type:"
-                  value="Mauteen11@gmail.com"
+                  value="Home & Property Insurance"
                 />
-                <FieldPair label="Product:" value="1234567890" />
-                <FieldPair label="Premium Amount:" value="1234567890" />
-                <FieldPair label="Date Purchased:" value="Lagos" />
-                <FieldPair label="Coverage Period:" value="Nigeria" />
+                <FieldPair label="Product:" value="Tenant Policy " />
+                <FieldPair label="Premium Amount:" value="N10,000" />
+                <FieldPair label="Date Purchased:" value="12/8/2025" />
+                <FieldPair label="Coverage Period:" value="12 Months" />
               </div>
             </AccordionSection>
           </div>

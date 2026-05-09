@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import PropertyCategoryIcon from "@/src/assets/icons/property-category.svg";
 import TravelCategoryIcon from "@/src/assets/icons/travel-category.svg";
@@ -12,41 +13,37 @@ const categories = [
     label: "Property Insurance",
     Icon: PropertyCategoryIcon,
     href: "/property-insurance",
-    active: true,
   },
   {
     label: "Travel Insurance",
     Icon: TravelCategoryIcon,
-    href: "#",
-    active: false,
+    href: "/travel-insurance",
   },
   {
     label: "Motor Insurance",
     Icon: MotorCategoryIcon,
-    href: "#",
-    active: false,
+    href: "/motor-insurance",
   },
   {
     label: "Marine Insurance",
     Icon: MarineCategoryIcon,
     href: "/marine-insurance",
-    active: false,
   },
   {
     label: "Life Insurance",
     Icon: PropertyCategoryIcon,
     href: "/life-and-family-insurance",
-    active: false,
   },
   {
     label: "Group Insurance",
     Icon: PropertyCategoryIcon,
-    href: "#",
-    active: false,
+    href: "/group-insurance",
   },
 ];
 
 export default function OtherInsuranceCategories() {
+  const pathname = usePathname();
+
   return (
     <section className="bg-[#fffafa] py-10 lg:py-16">
       <div className="mx-auto max-w-[1440px] px-4 lg:px-20">
@@ -63,7 +60,9 @@ export default function OtherInsuranceCategories() {
 
         {/* Category cards */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 lg:gap-6">
-          {categories.map(({ label, Icon, href, active }, index) => (
+          {categories.map(({ label, Icon, href }, index) => {
+            const active = pathname === href;
+            return (
             <motion.div
               key={label}
               initial={{ opacity: 0, y: 20 }}
@@ -101,7 +100,8 @@ export default function OtherInsuranceCategories() {
                 </span>
               </Link>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
