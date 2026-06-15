@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/select";
 import FormInput from "@/components/home-insurance/FormInput";
 import StepNavigation from "@/components/insurance/StepNavigation";
+import CouponGeneratorDetails from "@/components/coupon/CouponGeneratorDetails";
+import CustomerPersonalDetailsHeading from "@/components/coupon/CustomerPersonalDetailsHeading";
 import { States } from "@/utils/states";
 import type { LifeInsuranceFormData } from "@/lib/store/lifeInsuranceStore";
 
@@ -75,6 +77,10 @@ export default function PersonalProtectionStep1({
       </div>
 
       <div className="flex flex-col gap-6">
+        {/* Coupon Generator Details — only shown when arriving via the coupon flow */}
+        <CouponGeneratorDetails />
+        <CustomerPersonalDetailsHeading />
+
         {/* Cover Type + Cover Frequency */}
         <div className="grid gap-5 grid-cols-1 lg:grid-cols-2">
           <div className="flex flex-col gap-2">

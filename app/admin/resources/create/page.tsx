@@ -12,7 +12,9 @@ export default function CreateResourcePage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState<ResourceFormData>({
+    media: "image",
     category: "",
+    videoLink: "",
     title: "",
     content: "",
     coverImageUrl: null,
@@ -62,6 +64,8 @@ export default function CreateResourcePage() {
         title: formData.title,
         content: formData.content,
         cover_image: coverImageUrl,
+        media: formData.media,
+        video_link: formData.media === "video" ? formData.videoLink : "",
         status: "draft",
       });
 
@@ -83,6 +87,11 @@ export default function CreateResourcePage() {
       return;
     }
 
+    if (formData.media === "video" && !formData.videoLink.trim()) {
+      setErrorMessage("Please provide the video link for a video post");
+      return;
+    }
+
     try {
       setIsUploading(true);
       let coverImageUrl = formData.coverImageUrl || "";
@@ -100,6 +109,8 @@ export default function CreateResourcePage() {
         title: formData.title,
         content: formData.content,
         cover_image: coverImageUrl,
+        media: formData.media,
+        video_link: formData.media === "video" ? formData.videoLink : "",
         status: "published",
       });
 

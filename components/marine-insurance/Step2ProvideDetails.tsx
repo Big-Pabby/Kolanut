@@ -12,6 +12,8 @@ import {
 import PlusRed from '@/src/assets/icons/plus-red.svg';
 import Trash from '@/src/assets/icons/trash.svg';
 import { Button } from '@/components/ui/button';
+import CouponGeneratorDetails from '@/components/coupon/CouponGeneratorDetails';
+import CustomerPersonalDetailsHeading from '@/components/coupon/CustomerPersonalDetailsHeading';
 import { States } from '@/utils/states';
 
 /* ─── Option lists ──────────────────────────────────────────────────────────── */
@@ -236,6 +238,10 @@ export default function MarineStep2ProvideDetails({ onContinue, onBack }: Step2P
       </div>
 
       <div className="flex flex-col gap-8">
+
+        {/* Coupon Generator Details — only shown when arriving via the coupon flow */}
+        <CouponGeneratorDetails />
+        <CustomerPersonalDetailsHeading />
 
         {/* ── 1. Policy Type ───────────────────────────────────────────────── */}
         <div className="flex flex-col gap-4">

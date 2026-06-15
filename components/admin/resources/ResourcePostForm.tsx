@@ -11,8 +11,15 @@ const CATEGORIES = [
   "Premium",
 ];
 
+const MEDIA_OPTIONS = [
+  { label: "Image", value: "image" },
+  { label: "Video", value: "video" },
+];
+
 export interface ResourceFormData {
+  media: string;
   category: string;
+  videoLink: string;
   title: string;
   content: string;
   coverImageUrl: string | null;
@@ -29,20 +36,25 @@ export default function ResourcePostForm({
   onChange,
 }: ResourcePostFormProps) {
   const [formData, setFormData] = useState<ResourceFormData>({
+    media: initialData?.media ?? "image",
     category: initialData?.category ?? "",
+    videoLink: initialData?.videoLink ?? "",
     title: initialData?.title ?? "",
     content: initialData?.content ?? "",
     coverImageUrl: initialData?.coverImageUrl ?? null,
     coverImageFile: null,
   });
   const [categoryOpen, setCategoryOpen] = useState(false);
+  const [mediaOpen, setMediaOpen] = useState(false);
   const coverInputRef = useRef<HTMLInputElement>(null);
 
   // Update form data when initialData changes
   useEffect(() => {
     if (initialData) {
       setFormData({
+        media: initialData.media ?? "image",
         category: initialData.category ?? "",
+        videoLink: initialData.videoLink ?? "",
         title: initialData.title ?? "",
         content: initialData.content ?? "",
         coverImageUrl: initialData.coverImageUrl ?? null,
@@ -135,6 +147,92 @@ export default function ResourcePostForm({
       {/* ── Post Details ── */}
       <div className="flex flex-col" style={{ gap: 16 }}>
         <div className="flex flex-col" style={{ gap: 16 }}>
+          {/* Media */}
+          <div className="flex flex-col" style={{ gap: 8 }}>
+            <label
+              style={{
+                color: "#374151",
+                fontSize: 14,
+                fontWeight: 500,
+                fontFamily:
+                  "HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
+              }}
+            >
+              Media
+            </label>
+
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setMediaOpen((p) => !p)}
+                className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors"
+                style={{
+                  border: "1px solid #d1d5db",
+                  borderRadius: 10,
+                  boxShadow: "0px 1px 2px rgba(18, 26, 43, 0.05)",
+                  backgroundColor: "#ffffff",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#111827",
+                    fontSize: 16,
+                    fontWeight: 400,
+                    fontFamily:
+                      "HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
+                  }}
+                >
+                  {MEDIA_OPTIONS.find((m) => m.value === formData.media)
+                    ?.label || "Select"}
+                </span>
+                <img
+                  src="/icons/admin/chevron-down-dark.svg"
+                  alt=""
+                  style={{ width: 12, height: 7 }}
+                />
+              </button>
+
+              {mediaOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setMediaOpen(false)}
+                  />
+                  <div
+                    className="absolute left-0 top-full z-20 mt-1 w-full overflow-hidden"
+                    style={{
+                      backgroundColor: "#ffffff",
+                      border: "1px solid #d1d5db",
+                      borderRadius: 8,
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                    }}
+                  >
+                    {MEDIA_OPTIONS.map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        className="w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors"
+                        style={{
+                          color: "#111827",
+                          fontSize: 16,
+                          fontWeight: formData.media === opt.value ? 500 : 400,
+                          fontFamily:
+                            "HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
+                        }}
+                        onClick={() => {
+                          update({ media: opt.value });
+                          setMediaOpen(false);
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
           {/* Post Category */}
           <div className="flex flex-col" style={{ gap: 8 }}>
             <label
@@ -219,6 +317,44 @@ export default function ResourcePostForm({
               )}
             </div>
           </div>
+
+          {/* Video Link — only when media is video */}
+          {formData.media === "video" && (
+            <div className="flex flex-col" style={{ gap: 8 }}>
+              <label
+                style={{
+                  color: "#374151",
+                  fontSize: 14,
+                  fontWeight: 500,
+                  fontFamily:
+                    "HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
+                }}
+              >
+                Video Link{" "}
+                <span style={{ color: "#9ca3af", fontWeight: 400 }}>
+                  (Youtube link)
+                </span>
+              </label>
+              <input
+                type="url"
+                placeholder="Enter"
+                value={formData.videoLink}
+                onChange={(e) => update({ videoLink: e.target.value })}
+                className="w-full px-4 py-3 outline-none focus:ring-1 focus:ring-gray-300 transition-shadow"
+                style={{
+                  border: "1px solid #d1d5db",
+                  borderRadius: 10,
+                  boxShadow: "0px 1px 2px rgba(18, 26, 43, 0.05)",
+                  color: "#111827",
+                  fontSize: 16,
+                  fontWeight: 400,
+                  fontFamily:
+                    "HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
+                  backgroundColor: "#ffffff",
+                }}
+              />
+            </div>
+          )}
 
           {/* Post Title */}
           <div className="flex flex-col" style={{ gap: 8 }}>

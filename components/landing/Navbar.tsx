@@ -20,10 +20,16 @@ const navLinks = [
 
 const insuredSubItems = [
   { label: "Overview", href: "/insured", Icon: "/dashboard.svg" },
-  { label: "Home", href: "/property-insurance", Icon: "/home.svg" },
-  { label: "Motor", href: "/motor-insurance", Icon: "/motor.svg" },
-  { label: "Marine", href: "/marine-insurance", Icon: "/marine.svg" },
+  { label: "Property", href: "/property-insurance", Icon: "/home.svg" },
   { label: "Travel", href: "/travel-insurance", Icon: "/travel.svg" },
+  { label: "Motor", href: "/motor-insurance", Icon: "/motor.svg" },
+  { label: "Group", href: "#", Icon: "/group.svg" },
+  { label: "Marine Goods", href: "/marine-insurance", Icon: "/marine.svg" },
+  {
+    label: "Life & Family",
+    href: "/life-and-family-insurance",
+    Icon: "/life-family.svg",
+  },
 ];
 
 export default function Navbar() {
@@ -120,8 +126,8 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute left-1/2 -translate-x-1/2 top-full mt-3 bg-white rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.12)] border border-gray-100 z-50"
-                  style={{ minWidth: "480px" }}
+                  className="fixed left-1/2 -translate-x-1/2 top-23 bg-white rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.12)] border border-gray-100 z-50"
+                  style={{ minWidth: "720px" }}
                 >
                   {/* Header */}
                   <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-gray-100">

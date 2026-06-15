@@ -13,6 +13,8 @@ export interface BlogPost {
   content: string;
   tag: string;
   cover_image: string;
+  media?: string;
+  video_link?: string;
   status: "published" | "draft";
   created_at: string;
   updated_at: string;
@@ -49,6 +51,8 @@ export interface CreateBlogPayload {
   title: string;
   content: string;
   cover_image: string;
+  media?: string;
+  video_link?: string;
   status?: "published" | "draft";
 }
 

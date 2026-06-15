@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import CouponIcon from "@/src/assets/icons/coupon-icon.svg";
 
@@ -9,6 +10,7 @@ const cards = [
     description:
       "Generate a unique coupon code by purchasing an insurance premium on behalf of someone else.",
     buttonLabel: "Generate Coupon",
+    href: "/coupon/generate",
   },
   {
     title: "Redeem Coupon Code",
@@ -19,6 +21,8 @@ const cards = [
 ];
 
 export default function CouponSection() {
+  const router = useRouter();
+
   return (
     <section className="mx-auto max-w-[1440px] px-6 md:px-12 lg:px-[100px] py-12 md:py-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -50,7 +54,7 @@ export default function CouponSection() {
             <div>
               <Button
                 className="rounded-full bg-brand-red text-white text-sm font-medium !px-5 !py-2 hover:bg-brand-red/90"
-                
+                onClick={() => card.href && router.push(card.href)}
               >
                 {card.buttonLabel}
               </Button>

@@ -23,7 +23,9 @@ export default function EditResourcePage({ params }: EditResourcePageProps) {
   const numericId = id;
 
   const [formData, setFormData] = useState<ResourceFormData>({
+    media: "image",
     category: "",
+    videoLink: "",
     title: "",
     content: "",
     coverImageUrl: null,
@@ -51,7 +53,9 @@ export default function EditResourcePage({ params }: EditResourcePageProps) {
   useEffect(() => {
     if (resourceData && !initialDataLoaded) {
       setFormData({
+        media: resourceData.media || "image",
         category: resourceData.tag || "",
+        videoLink: resourceData.video_link || "",
         title: resourceData.title || "",
         content: resourceData.content || "", // Use description as content
         coverImageUrl: resourceData.cover_image || null,
@@ -98,6 +102,8 @@ export default function EditResourcePage({ params }: EditResourcePageProps) {
           title: formData.title,
           content: formData.content,
           cover_image: coverImageUrl,
+          media: formData.media,
+          video_link: formData.media === "video" ? formData.videoLink : "",
           status: "draft",
         },
       });
@@ -120,6 +126,11 @@ export default function EditResourcePage({ params }: EditResourcePageProps) {
       return;
     }
 
+    if (formData.media === "video" && !formData.videoLink.trim()) {
+      setErrorMessage("Please provide the video link for a video post");
+      return;
+    }
+
     try {
       setIsUploading(true);
       let coverImageUrl = formData.coverImageUrl || "";
@@ -138,6 +149,8 @@ export default function EditResourcePage({ params }: EditResourcePageProps) {
           title: formData.title,
           content: formData.content,
           cover_image: coverImageUrl,
+          media: formData.media,
+          video_link: formData.media === "video" ? formData.videoLink : "",
           status: "published",
         },
       });

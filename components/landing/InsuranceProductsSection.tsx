@@ -1,37 +1,74 @@
 "use client";
 
 import { useRef } from "react";
+import type { ComponentType, SVGProps } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useCouponFlowStore } from "@/lib/store/couponFlowStore";
 import HomeProduct from "@/src/assets/icons/home-product.svg";
 import MarineProduct from "@/src/assets/icons/marine-product.svg";
 import TravelProduct from "@/src/assets/icons/travel-product.svg";
 import MotorProduct from "@/src/assets/icons/motor-product.svg";
 import { motion, useInView, type Variants } from "framer-motion";
 
-const products = [
+export type InsuranceProduct = {
+  Icon: ComponentType<SVGProps<SVGSVGElement>>;
+  title: string;
+  desc: string;
+  href?: string;
+};
+
+const defaultProducts: InsuranceProduct[] = [
   {
     Icon: HomeProduct,
     title: "Home Insurance",
     desc: "Protect your home, building, or investment property against key risks. Perfect for homeowners, renters, and real estate developers.",
+    href: "/property-insurance",
   },
   {
     Icon: MarineProduct,
     title: "Marine (Cargo) Insurance",
     desc: "Safeguard goods in transit by sea, air, or land. Ideal for importers, exporters, and logistics operators.",
+    href: "/marine-insurance",
   },
   {
     Icon: TravelProduct,
     title: "Travel Insurance",
     desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
+    href: "/travel-insurance",
   },
   {
     Icon: MotorProduct,
     title: "Motor Insurance",
     desc: "Get on the road with confidence with our 3rd Party and Comprehensive Insurance covers. Quick quotes, instant e-policies, and support when accidents happen.",
+    href: "/motor-insurance",
   },
 ];
 
-export default function InsuranceProductsSection() {
+interface InsuranceProductsSectionProps {
+  title?: string;
+  subtitle?: string;
+  products?: InsuranceProduct[];
+  /** When true, selecting a product starts the coupon generation flow. */
+  couponFlow?: boolean;
+}
+
+export default function InsuranceProductsSection({
+  title = "Choose Your Insurance Product",
+  subtitle = "Choose the insurance that fits your needs and get covered in minutes.",
+  products = defaultProducts,
+  couponFlow = false,
+}: InsuranceProductsSectionProps = {}) {
+  const startCouponFlow = useCouponFlowStore((s) => s.startCouponFlow);
+  const resetCouponFlow = useCouponFlowStore((s) => s.reset);
+
+  const handleSelect = () => {
+    if (couponFlow) {
+      startCouponFlow();
+    } else {
+      resetCouponFlow();
+    }
+  };
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -59,8 +96,8 @@ export default function InsuranceProductsSection() {
   };
 
   return (
-    <section className="bg-[#FFFAFA] py-10 lg:py-20 px-4 lg:px-20">
-      <div className="mx-auto md:w-9/12">
+    <section className="bg-[#FFFAFA] py-10 px-4 lg:px-20">
+      <div className="mx-auto ">
         {/* Heading */}
         <motion.div
           ref={ref}
@@ -70,12 +107,9 @@ export default function InsuranceProductsSection() {
           className="mb-8 lg:mb-12 flex flex-col items-center gap-1 text-center"
         >
           <h2 className="font-heading text-2xl sm:text-3xl lg:text-[40px] font-bold text-dark-text">
-            Choose Your Insurance Product
+            {title}
           </h2>
-          <p className="text-base lg:text-lg text-body-text px-4">
-            Choose the insurance that fits your needs and get covered in
-            minutes.
-          </p>
+          <p className="text-base text-body-text px-4">{subtitle}</p>
         </motion.div>
 
         {/* Products grid */}
@@ -85,8 +119,8 @@ export default function InsuranceProductsSection() {
           animate={isInView ? "visible" : "hidden"}
           className="flex flex-col gap-3 lg:gap-0"
         >
-          <div className="grid grid-cols-1 gap-3 lg:gap-4 sm:grid-cols-2">
-            {products.map(({ Icon, title, desc }) => (
+          <div className="grid grid-cols-1 gap-3 lg:gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map(({ Icon, title, desc, href }) => (
               <motion.div
                 key={title}
                 variants={itemVariants}
@@ -101,8 +135,13 @@ export default function InsuranceProductsSection() {
                     {desc}
                   </p>
                 </div>
-                <Button className="mt-1 lg:mt-2 rounded-full bg-brand-red !px-6 !py-2 lg:!px-8 lg:!py-3 text-sm lg:text-sm font-medium text-white hover:bg-brand-red/90 h-auto">
-                  Get Insured Now
+                <Button
+                  asChild
+                  className="mt-1 lg:mt-2 rounded-full bg-brand-red !px-6 !py-2 lg:!px-8 lg:!py-3 text-sm lg:text-sm font-medium text-white hover:bg-brand-red/90 h-auto"
+                >
+                  <Link href={href ?? "#"} onClick={handleSelect}>
+                    Get Insured Now
+                  </Link>
                 </Button>
               </motion.div>
             ))}

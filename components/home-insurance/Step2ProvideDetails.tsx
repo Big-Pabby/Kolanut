@@ -12,6 +12,8 @@ import {
 import PlusRed from "@/src/assets/icons/plus-red.svg";
 import Trash from "@/src/assets/icons/trash.svg";
 import { Button } from "@/components/ui/button";
+import CouponGeneratorDetails from "@/components/coupon/CouponGeneratorDetails";
+import CustomerPersonalDetailsHeading from "@/components/coupon/CustomerPersonalDetailsHeading";
 
 const policyholderOptions = [
   { label: "Private", value: "private" },
@@ -72,6 +74,10 @@ export default function Step2ProvideDetails({
       </div>
 
       <div className="flex flex-col gap-6">
+        {/* Coupon Generator Details — only shown when arriving via the coupon flow */}
+        <CouponGeneratorDetails />
+        <CustomerPersonalDetailsHeading />
+
         {/* Policy Type Section */}
         <div className="flex flex-col gap-4">
           <h3 className="text-base font-medium text-[#111827]">Policy Type</h3>

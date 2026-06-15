@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import CouponGeneratorDetails from "@/components/coupon/CouponGeneratorDetails";
 import type { ComprehensiveAutoInsuranceFormData } from "@/lib/store/comprehensiveAutoInsuranceStore";
 import { States } from "@/utils/states";
 
@@ -27,10 +28,13 @@ export default function MotorInsuranceStep2ProvideDetails({
 
   return (
     <div className="bg-white rounded-lg shadow-sm p-8">
+      {/* Coupon Generator Details — only shown when arriving via the coupon flow */}
+      <CouponGeneratorDetails />
+
       {/* Personal Details Section */}
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-6 text-[#161616]">
-          Personal Details
+          Customer Personal Details
         </h3>
 
         {/* Car Ownership + Last Name */}
