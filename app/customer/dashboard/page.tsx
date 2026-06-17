@@ -12,6 +12,7 @@ const quickLinks = [
     description: "Purchase an insurance policy",
     bg: "bg-[#FEF2F2] border border-[#FEE2E2]",
     iconColor: "text-[#AF060D] bg-[#FEE2E2]",
+    href: "/customer/purchased-premium",
   },
   {
     icon: FileText,
@@ -19,6 +20,7 @@ const quickLinks = [
     description: "View all your purchased policies",
     bg: "bg-[#F0F8FF] border border-[#DBEEFF]",
     iconColor: "text-[#005AAD] bg-[#DBEEFF]",
+    href: "/customer/purchased-premium",
   },
   {
     icon: UserLock,
@@ -26,6 +28,7 @@ const quickLinks = [
     description: "File a claim on your policy",
     bg: "bg-[#F0FDF4] border border-[#BBF7D0]",
     iconColor: "text-[#005AAD] bg-[#DBEEFF]",
+    href: undefined,
   },
 ];
 
@@ -83,11 +86,9 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {quickLinks.map((link) => {
               const Icon = link.icon;
-              return (
-                <button
-                  key={link.title}
-                  className={`${link.bg} rounded-[8px] px-4 py-6 flex items-center gap-4 text-left hover:opacity-90 transition-opacity w-full`}
-                >
+              const cardClass = `${link.bg} rounded-[8px] px-4 py-6 flex items-center gap-4 text-left hover:opacity-90 transition-opacity w-full`;
+              const inner = (
+                <>
                   <div
                     className={`${link.iconColor} h-8 w-8 rounded-full flex justify-center items-center`}
                   >
@@ -101,6 +102,16 @@ export default function DashboardPage() {
                       {link.description}
                     </p>
                   </div>
+                </>
+              );
+
+              return link.href ? (
+                <Link key={link.title} href={link.href} className={cardClass}>
+                  {inner}
+                </Link>
+              ) : (
+                <button key={link.title} className={cardClass}>
+                  {inner}
                 </button>
               );
             })}
