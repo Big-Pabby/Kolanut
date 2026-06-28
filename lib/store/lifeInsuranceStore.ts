@@ -15,10 +15,25 @@ export interface Beneficiary {
   guardianRelationship: string;
 }
 
+export interface FamilyMember {
+  firstName: string;
+  lastname: string;
+  gender: string;
+  dateOfBirth: string;
+  otherName: string;
+  relationship: string;
+  sumAssured: string;
+}
+
 export interface LifeInsuranceFormData {
   // Step 1 - Personal Information
   premiumAmount: string;
   premiumFrequency: string;
+  // Family Benefits / Lifestyle Protection specific
+  sumAssured: string;
+  coverDuration: string;
+  liveCover: string;
+  familyMembers: FamilyMember[];
   gender: string;
   dateOfBirth: string;
   firstName: string;
@@ -75,6 +90,13 @@ export interface LifeInsuranceStore {
   ) => void;
   addBeneficiary: () => void;
   removeBeneficiary: (index: number) => void;
+  updateFamilyMember: (
+    index: number,
+    field: keyof FamilyMember,
+    value: string
+  ) => void;
+  addFamilyMember: () => void;
+  removeFamilyMember: (index: number) => void;
   reset: () => void;
 }
 
@@ -93,9 +115,23 @@ const emptyBeneficiary: Beneficiary = {
   guardianRelationship: "",
 };
 
+const emptyFamilyMember: FamilyMember = {
+  firstName: "",
+  lastname: "",
+  gender: "",
+  dateOfBirth: "",
+  otherName: "",
+  relationship: "",
+  sumAssured: "",
+};
+
 const initialFormData: LifeInsuranceFormData = {
   premiumAmount: "",
   premiumFrequency: "Annually",
+  sumAssured: "",
+  coverDuration: "",
+  liveCover: "",
+  familyMembers: [{ ...emptyFamilyMember }],
   gender: "",
   dateOfBirth: "",
   firstName: "",
@@ -168,6 +204,35 @@ function createLifeInsuranceStore() {
             state.formData.beneficiaries.length > 1
               ? state.formData.beneficiaries.filter((_, i) => i !== index)
               : state.formData.beneficiaries,
+        },
+      })),
+    updateFamilyMember: (index, field, value) =>
+      set((state) => ({
+        formData: {
+          ...state.formData,
+          familyMembers: state.formData.familyMembers.map((m, i) =>
+            i === index ? { ...m, [field]: value } : m
+          ),
+        },
+      })),
+    addFamilyMember: () =>
+      set((state) => ({
+        formData: {
+          ...state.formData,
+          familyMembers: [
+            ...state.formData.familyMembers,
+            { ...emptyFamilyMember },
+          ],
+        },
+      })),
+    removeFamilyMember: (index) =>
+      set((state) => ({
+        formData: {
+          ...state.formData,
+          familyMembers:
+            state.formData.familyMembers.length > 1
+              ? state.formData.familyMembers.filter((_, i) => i !== index)
+              : state.formData.familyMembers,
         },
       })),
     reset: () => set({ currentStep: 1, formData: initialFormData }),

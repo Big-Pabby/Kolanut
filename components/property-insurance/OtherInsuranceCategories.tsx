@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import PropertyCategoryIcon from "@/src/assets/icons/property-category.svg";
+import FamilyInsuranceIcon from "@/src/assets/icons/family-insurance.svg";
+import GroupIcon from "@/src/assets/icons/Group.svg";
 import TravelCategoryIcon from "@/src/assets/icons/travel-category.svg";
 import MotorCategoryIcon from "@/src/assets/icons/motor-category.svg";
 import MarineCategoryIcon from "@/src/assets/icons/marine-category.svg";
+import PropertyCategoryIcon from "@/src/assets/icons/property-category.svg";
 
 const categories = [
   {
@@ -31,12 +33,12 @@ const categories = [
   },
   {
     label: "Life Insurance",
-    Icon: PropertyCategoryIcon,
+    Icon: FamilyInsuranceIcon,
     href: "/life-and-family-insurance",
   },
   {
     label: "Group Insurance",
-    Icon: PropertyCategoryIcon,
+    Icon: GroupIcon,
     href: "/group-insurance",
   },
 ];

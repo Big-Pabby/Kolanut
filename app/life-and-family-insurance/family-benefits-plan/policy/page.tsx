@@ -5,7 +5,7 @@ import GenericStepIndicator from "@/components/insurance/GenericStepIndicator";
 import Step3ReviewPay from "@/components/insurance/Step3ReviewPay";
 import Step4PolicyDocument from "@/components/insurance/Step4PolicyDocument";
 import PageHero from "@/components/landing/PageHero";
-import TermLifeStep1PersonalInfo from "@/components/life-insurance/TermLifeStep1PersonalInfo";
+import FamilyBenefitsStep1 from "@/components/life-insurance/FamilyBenefitsStep1";
 import TermLifeStep2Beneficiary from "@/components/life-insurance/TermLifeStep2Beneficiary";
 import TermLifeStep3Identity from "@/components/life-insurance/TermLifeStep3Identity";
 
@@ -15,11 +15,6 @@ const STEPS = [
   { number: 3, label: "Identity Details" },
   { number: 4, label: "Review & Pay" },
   { number: 5, label: "Policy Document" },
-];
-
-const PREMIUM_OPTIONS = [
-  { value: "15000", label: "₦15,000 (Standard)" },
-  { value: "25000", label: "₦25,000 (Premium)" },
 ];
 
 function formatNaira(amount: number): string {
@@ -46,6 +41,9 @@ export default function FamilyBenefitsPlanPolicyPage() {
     updateBeneficiary,
     addBeneficiary,
     removeBeneficiary,
+    updateFamilyMember,
+    addFamilyMember,
+    removeFamilyMember,
     reset,
   } = useFamilyBenefitsPlanStore();
 
@@ -78,12 +76,14 @@ export default function FamilyBenefitsPlanPolicyPage() {
 
           <div className="transition-all duration-300 max-w-[920px] mx-auto mt-8">
             {currentStep === 1 && (
-              <TermLifeStep1PersonalInfo
+              <FamilyBenefitsStep1
                 formData={formData}
                 onUpdate={(field, value) => updateField(field, value)}
+                onUpdateFamilyMember={updateFamilyMember}
+                onAddFamilyMember={addFamilyMember}
+                onRemoveFamilyMember={removeFamilyMember}
                 onContinue={handleContinueStep1}
                 onBack={handleBack}
-                premiumOptions={PREMIUM_OPTIONS}
               />
             )}
 

@@ -11,37 +11,27 @@ import {
 import FormInput from "@/components/home-insurance/FormInput";
 import StepNavigation from "@/components/insurance/StepNavigation";
 import CouponGeneratorDetails from "@/components/coupon/CouponGeneratorDetails";
-import CustomerPersonalDetailsHeading from "@/components/coupon/CustomerPersonalDetailsHeading";
 import { States } from "@/utils/states";
 import type { LifeInsuranceFormData } from "@/lib/store/lifeInsuranceStore";
 
-interface CoverOption {
-  value: string;
-  label: string;
-}
+const FREQUENCY_OPTIONS = ["Annually", "Quarterly", "Monthly"];
+const GENDER_OPTIONS = ["Male", "Female"];
+
+const triggerClass =
+  "!h-12 w-full rounded-[10px] border border-[#d1d5db] shadow-[0_1px_2px_rgba(18,26,43,0.05)]";
 
 interface Props {
   formData: LifeInsuranceFormData;
   onUpdate: (field: keyof LifeInsuranceFormData, value: string) => void;
   onContinue: () => void;
   onBack?: () => void;
-  coverOptions?: CoverOption[];
 }
 
-const DEFAULT_COVER_OPTIONS: CoverOption[] = [
-  { value: "5000", label: "Bronze (₦5,000)" },
-  { value: "10000", label: "Silver (₦10,000)" },
-  { value: "20000", label: "Gold (₦20,000)" },
-];
-
-const GENDER_OPTIONS = ["Male", "Female"];
-
-export default function PersonalProtectionStep1({
+export default function LifestyleProtectionStep1({
   formData,
   onUpdate,
   onContinue,
   onBack,
-  coverOptions = DEFAULT_COVER_OPTIONS,
 }: Props) {
   const stateList = useMemo(() => Array.from(States.keys()).sort(), []);
   const cityList = useMemo(() => {
@@ -50,17 +40,19 @@ export default function PersonalProtectionStep1({
   }, [formData.state]);
 
   const isFormValid =
-    !!formData.premiumAmount &&
+    !!formData.sumAssured.trim() &&
     !!formData.premiumFrequency &&
+    !!formData.coverDuration.trim() &&
+    !!formData.liveCover.trim() &&
     !!formData.firstName.trim() &&
     !!formData.lastname.trim() &&
     !!formData.gender &&
+    !!formData.dateOfBirth &&
     !!formData.phone.trim() &&
     !!formData.email.trim() &&
     !!formData.nin.trim() &&
     !!formData.state &&
     !!formData.city &&
-    !!formData.dateOfBirth &&
     !!formData.address.trim();
 
   return (
@@ -75,45 +67,71 @@ export default function PersonalProtectionStep1({
       </div>
 
       <div className="flex flex-col gap-6">
-        {/* Coupon Generator Details — only shown when arriving via the coupon flow */}
         <CouponGeneratorDetails />
-        <CustomerPersonalDetailsHeading />
 
-        {/* Cover Type + Cover Frequency */}
+        {/* Sum Assured + Premium Frequency */}
         <div className="grid gap-5 grid-cols-1 lg:grid-cols-2">
+          <FormInput
+            label="Sum Assured"
+            placeholder="Enter amount"
+            value={formData.sumAssured}
+            onChange={(v) => onUpdate("sumAssured", v)}
+            type="number"
+          />
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-[#374151]">
-              Cover Type
+              Premium Frequency
             </label>
             <Select
-              value={formData.premiumAmount}
-              onValueChange={(v) => onUpdate("premiumAmount", v)}
+              value={formData.premiumFrequency}
+              onValueChange={(v) => onUpdate("premiumFrequency", v)}
             >
-              <SelectTrigger className="!h-12 w-full rounded-[10px] border border-[#d1d5db] shadow-[0_1px_2px_rgba(18,26,43,0.05)]">
-                <SelectValue placeholder="Enter" />
+              <SelectTrigger className={triggerClass}>
+                <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
-                {coverOptions.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
+                {FREQUENCY_OPTIONS.map((f) => (
+                  <SelectItem key={f} value={f}>
+                    {f}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
+        </div>
 
+        {/* Cover Duration + Live Cover */}
+        <div className="grid gap-5 grid-cols-1 lg:grid-cols-2">
+          <FormInput
+            label="Cover Duration (in years)"
+            placeholder="Enter"
+            value={formData.coverDuration}
+            onChange={(v) => onUpdate("coverDuration", v)}
+            type="number"
+          />
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-[#374151]">
-              Cover Frequency
+              Live Cover{" "}
+              <span className="text-[#9ca3af] font-normal">
+                (minimum of N500,000)
+              </span>
             </label>
             <input
-              type="text"
-              value="Annually"
-              readOnly
-              disabled
-              className="h-12 w-full rounded-[10px] border border-[#d1d5db] px-3 text-sm text-[#161616] shadow-[0_1px_2px_rgba(18,26,43,0.05)] bg-[#f9fafb] cursor-not-allowed"
+              type="number"
+              placeholder="Enter"
+              value={formData.liveCover}
+              onChange={(e) => onUpdate("liveCover", e.target.value)}
+              className="h-12 w-full rounded-[10px] border border-[#d1d5db] px-3 text-sm text-[#161616] placeholder:text-[#6b7280] shadow-[0_1px_2px_rgba(18,26,43,0.05)] outline-none focus:border-brand-red transition-colors bg-white"
             />
           </div>
+        </div>
+
+        {/* Your Personal Information */}
+        <div>
+          <h3 className="text-base font-semibold text-dark-text mb-2">
+            Your Personal Information
+          </h3>
+          <hr className="border-[#f3f4f6]" />
         </div>
 
         {/* First Name + Last Name */}
@@ -132,24 +150,33 @@ export default function PersonalProtectionStep1({
           />
         </div>
 
-        {/* Gender (full width) */}
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-[#374151]">Gender</label>
-          <Select
-            value={formData.gender}
-            onValueChange={(v) => onUpdate("gender", v)}
-          >
-            <SelectTrigger className="!h-12 w-full rounded-[10px] border border-[#d1d5db] shadow-[0_1px_2px_rgba(18,26,43,0.05)]">
-              <SelectValue placeholder="Select" />
-            </SelectTrigger>
-            <SelectContent>
-              {GENDER_OPTIONS.map((g) => (
-                <SelectItem key={g} value={g}>
-                  {g}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        {/* Gender + Date of Birth */}
+        <div className="grid gap-5 grid-cols-1 lg:grid-cols-2">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-[#374151]">Gender</label>
+            <Select
+              value={formData.gender}
+              onValueChange={(v) => onUpdate("gender", v)}
+            >
+              <SelectTrigger className={triggerClass}>
+                <SelectValue placeholder="Male" />
+              </SelectTrigger>
+              <SelectContent>
+                {GENDER_OPTIONS.map((g) => (
+                  <SelectItem key={g} value={g}>
+                    {g}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <FormInput
+            label="Date of Birth"
+            placeholder="mm/dd/yyyy"
+            value={formData.dateOfBirth}
+            onChange={(v) => onUpdate("dateOfBirth", v)}
+            type="date"
+          />
         </div>
 
         {/* Other Name + Phone */}
@@ -197,7 +224,7 @@ export default function PersonalProtectionStep1({
                 onUpdate("city", "");
               }}
             >
-              <SelectTrigger className="!h-12 w-full rounded-[10px] border border-[#d1d5db] shadow-[0_1px_2px_rgba(18,26,43,0.05)]">
+              <SelectTrigger className={triggerClass}>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
@@ -209,7 +236,6 @@ export default function PersonalProtectionStep1({
               </SelectContent>
             </Select>
           </div>
-
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-[#374151]">
               City/LGA
@@ -219,7 +245,7 @@ export default function PersonalProtectionStep1({
               onValueChange={(v) => onUpdate("city", v)}
               disabled={!formData.state}
             >
-              <SelectTrigger className="!h-12 w-full rounded-[10px] border border-[#d1d5db] shadow-[0_1px_2px_rgba(18,26,43,0.05)]">
+              <SelectTrigger className={triggerClass}>
                 <SelectValue placeholder="Select" />
               </SelectTrigger>
               <SelectContent>
@@ -233,16 +259,7 @@ export default function PersonalProtectionStep1({
           </div>
         </div>
 
-        {/* Date of Birth (full width) */}
-        <FormInput
-          label="Date of Birth"
-          placeholder="mm/dd/yyyy"
-          value={formData.dateOfBirth}
-          onChange={(v) => onUpdate("dateOfBirth", v)}
-          type="date"
-        />
-
-        {/* Address (full width) */}
+        {/* Address */}
         <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-[#374151]">Address</label>
           <input
@@ -258,7 +275,6 @@ export default function PersonalProtectionStep1({
       <StepNavigation
         onBack={onBack}
         onContinue={onContinue}
-        continueLabel="Get Quote"
         isDisabled={!isFormValid}
       />
     </div>

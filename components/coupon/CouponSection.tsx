@@ -17,6 +17,7 @@ const cards = [
     description:
       "Use the coupon code you received to activate the premium level of coverage on your insurance plan.",
     buttonLabel: "Redeem Coupon",
+    href: "/coupon/redeem",
   },
 ];
 

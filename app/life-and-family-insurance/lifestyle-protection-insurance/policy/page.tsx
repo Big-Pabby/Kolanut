@@ -5,7 +5,7 @@ import GenericStepIndicator from "@/components/insurance/GenericStepIndicator";
 import Step3ReviewPay from "@/components/insurance/Step3ReviewPay";
 import Step4PolicyDocument from "@/components/insurance/Step4PolicyDocument";
 import PageHero from "@/components/landing/PageHero";
-import TermLifeStep1PersonalInfo from "@/components/life-insurance/TermLifeStep1PersonalInfo";
+import LifestyleProtectionStep1 from "@/components/life-insurance/LifestyleProtectionStep1";
 import TermLifeStep2Beneficiary from "@/components/life-insurance/TermLifeStep2Beneficiary";
 import TermLifeStep3Identity from "@/components/life-insurance/TermLifeStep3Identity";
 
@@ -15,12 +15,6 @@ const STEPS = [
   { number: 3, label: "Identity Details" },
   { number: 4, label: "Review & Pay" },
   { number: 5, label: "Policy Document" },
-];
-
-const PREMIUM_OPTIONS = [
-  { value: "20000", label: "₦20,000 (5% escalation)" },
-  { value: "35000", label: "₦35,000 (10% escalation)" },
-  { value: "50000", label: "₦50,000 (15% escalation)" },
 ];
 
 function formatNaira(amount: number): string {
@@ -81,12 +75,11 @@ export default function LifestyleProtectionInsurancePolicyPage() {
 
           <div className="transition-all duration-300 max-w-[920px] mx-auto mt-8">
             {currentStep === 1 && (
-              <TermLifeStep1PersonalInfo
+              <LifestyleProtectionStep1
                 formData={formData}
                 onUpdate={(field, value) => updateField(field, value)}
                 onContinue={handleContinueStep1}
                 onBack={handleBack}
-                premiumOptions={PREMIUM_OPTIONS}
               />
             )}
 

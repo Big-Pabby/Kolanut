@@ -1,6 +1,14 @@
 "use client";
 
-const steps = [
+import type { ReactNode } from "react";
+
+export type CouponStep = {
+  title: string;
+  description: string;
+  icon: ReactNode;
+};
+
+const defaultSteps: CouponStep[] = [
   {
     title: "1. Select Insurance Product",
     description:
@@ -83,11 +91,19 @@ const steps = [
   },
 ];
 
-export default function GenerateCouponSteps() {
+interface GenerateCouponStepsProps {
+  title?: string;
+  steps?: CouponStep[];
+}
+
+export default function GenerateCouponSteps({
+  title = "How Generating Coupon Works",
+  steps = defaultSteps,
+}: GenerateCouponStepsProps = {}) {
   return (
     <section className="mx-auto max-w-[1440px] px-6 md:px-12 lg:px-20 py-12 md:py-16">
       <h2 className="font-heading text-center text-2xl sm:text-3xl lg:text-[40px] font-bold text-dark-text mb-8 lg:mb-12">
-        How Generating Coupon Works
+        {title}
       </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
