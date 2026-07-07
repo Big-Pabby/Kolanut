@@ -15,10 +15,14 @@ import {
 } from "./hooks/useFaqs";
 
 const CATEGORIES = [
-  "General",
-  "Payment",
+  "Premium Payment",
+  "General Questions",
   "Insurance Policy",
-  "Claims",
+  "Claim Process",
+  "Motor Insurance",
+  "Home & Property Insurance",
+  "Life & Family Insurance",
+  "Health Insurance",
 ] as const;
 type Category = (typeof CATEGORIES)[number];
 
@@ -27,7 +31,8 @@ function countByCategory(cat: Category, faqs: FaqItem[]) {
 }
 
 export default function AdminFaqsPage() {
-  const [activeCategory, setActiveCategory] = useState<Category>("General");
+  const [activeCategory, setActiveCategory] =
+    useState<Category>("Premium Payment");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingFaq, setEditingFaq] = useState<FaqItem | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -152,13 +157,13 @@ export default function AdminFaqsPage() {
 
         {/* Category tabs */}
         <div
-          className="flex items-center"
+          className="flex flex-wrap items-center"
           style={{
             gap: 8,
             backgroundColor: "#f9fafb",
             borderRadius: 8,
             padding: "4px",
-            width: "fit-content",
+            width: "100%",
           }}
         >
           {CATEGORIES.map((cat) => {
@@ -167,7 +172,7 @@ export default function AdminFaqsPage() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className="flex items-center transition-all"
+                className="flex items-center whitespace-nowrap transition-all"
                 style={{
                   gap: 8,
                   padding: "8px 14px",

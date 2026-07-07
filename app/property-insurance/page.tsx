@@ -31,20 +31,6 @@ export default function PropertyInsurancePage() {
       href: "/property-insurance/landlord-policy",
       image: "/images/landlord.png",
     },
-    {
-      title: "Fire And Allied Perils",
-      description:
-        "Protect your properties from damage caused by fire and allied perils.",
-      href: "/property-insurance/fire-and-allied-perils",
-      image: "/images/fire.png",
-    },
-    {
-      title: "Burglary Insurance",
-      description:
-        "Get coverage for damage or stolen properties in the event of theft.",
-      href: "/property-insurance/burglary-insurance",
-      image: "/images/burglary.png",
-    },
   ];
   return (
     <main className="min-h-screen bg-page-bg">

@@ -4,11 +4,11 @@ import { useState, useRef, ChangeEvent, useEffect } from "react";
 import RichTextEditor from "./RichTextEditor";
 
 const CATEGORIES = [
-  "Insurance Basics",
-  "Claims",
-  "Premiums",
-  "Regulatory",
-  "Premium",
+  "Insurance policies",
+  "Insurance procedures",
+  "Premiums in insurance",
+  "Insurance claims process",
+  "Insurance regulatory",
 ];
 
 const MEDIA_OPTIONS = [

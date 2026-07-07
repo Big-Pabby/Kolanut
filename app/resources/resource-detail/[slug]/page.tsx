@@ -90,15 +90,7 @@ const ResourceDetail: React.FC = () => {
           backgroundColor: "#808080",
         }}
       >
-        <div className="flex flex-col justify-start items-start text-left z-10 max-w-4xl">
-          <button
-            onClick={handleGoBack}
-            className="flex items-center gap-2 text-white/80 hover:text-white mb-20 transition-colors"
-          >
-            <ArrowLeft size={20} />
-            Back to Resources
-          </button>
-
+        <div className="flex flex-col justify-end items-start text-left z-10 max-w-4xl">
           <div
             className={`transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
           >
@@ -136,6 +128,15 @@ const ResourceDetail: React.FC = () => {
             transition: "opacity 0.5s ease-out 0.3s",
           }}
         >
+          {/* Back link */}
+          <button
+            onClick={handleGoBack}
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+          >
+            <ArrowLeft size={20} />
+            Back to Resources
+          </button>
+
           {/* Cover Image */}
           {resource.cover_image && (
             <figure className="w-full h-[300px] md:h-[400px] rounded-xl overflow-hidden mb-8">

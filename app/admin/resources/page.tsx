@@ -13,7 +13,13 @@ import { BlogPost } from "./hooks/useResources";
 import ResourcesFilters from "@/components/admin/resources/ResourcesFilters";
 import ResourceCard from "@/components/admin/resources/ResourceCard";
 
-const CATEGORIES = ["Insurance Basics", "Claims", "Premiums", "Regulatory"];
+const CATEGORIES = [
+  "Insurance policies",
+  "Insurance procedures",
+  "Premiums in insurance",
+  "Insurance claims process",
+  "Insurance regulatory",
+];
 
 export default function AdminResourcesPage() {
   const router = useRouter();

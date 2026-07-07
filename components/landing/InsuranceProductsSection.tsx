@@ -34,24 +34,6 @@ const defaultProducts: InsuranceProduct[] = [
     desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
     href: "/life-and-family-insurance",
   },
-  {
-    icon: "/group.svg",
-    title: "Group Insurance",
-    desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
-    href: "#",
-  },
-  {
-    icon: "/travel.svg",
-    title: "Travel Insurance",
-    desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
-    href: "#",
-  },
-  {
-    icon: "/marine.svg",
-    title: "Marine Goods Insurance",
-    desc: "Safeguard goods in transit by sea, air, or land. Ideal for importers, exporters, and logistics operators.",
-    href: "#",
-  },
 ];
 
 interface InsuranceProductsSectionProps {

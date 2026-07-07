@@ -20,10 +20,14 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 const FAQ_CATEGORIES = [
-  { value: "General", label: "General" },
-  { value: "Payment", label: "Payment" },
+  { value: "Premium Payment", label: "Premium Payment" },
+  { value: "General Questions", label: "General Questions" },
   { value: "Insurance Policy", label: "Insurance Policy" },
-  { value: "Claims", label: "Claims" },
+  { value: "Claim Process", label: "Claim Process" },
+  { value: "Motor Insurance", label: "Motor Insurance" },
+  { value: "Home & Property Insurance", label: "Home & Property Insurance" },
+  { value: "Life & Family Insurance", label: "Life & Family Insurance" },
+  { value: "Health Insurance", label: "Health Insurance" },
 ];
 
 interface FAQDialogProps {

@@ -90,9 +90,11 @@ const Loader = () => (
 
 const CATEGORIES = [
   { label: "All Resources", icon: <BookOpen size={18} /> },
-  { label: "Claims", icon: <Shield size={18} /> },
-  { label: "Premiums", icon: <Calculator size={18} /> },
-  { label: "Regulatory", icon: <Book size={18} /> },
+  { label: "Insurance policies", icon: <Book size={18} /> },
+  { label: "Insurance procedures", icon: <BookOpen size={18} /> },
+  { label: "Premiums in insurance", icon: <Calculator size={18} /> },
+  { label: "Insurance claims process", icon: <Shield size={18} /> },
+  { label: "Insurance regulatory", icon: <Book size={18} /> },
 ];
 
 const Resources: React.FC = () => {
@@ -135,7 +137,7 @@ const Resources: React.FC = () => {
   }, []);
 
   const handleCardClick = (resource: PublicResource) => {
-    router.push(`/resources/resource-detail/${resource.id}`);
+    router.push(`/resources/resource-detail/${resource.slug}`);
   };
 
   return (

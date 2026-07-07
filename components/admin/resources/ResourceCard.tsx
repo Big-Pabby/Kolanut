@@ -112,7 +112,7 @@ export default function ResourceCard({ resource, onViewPost, onEdit, onDelete }:
         {/* Title + description */}
         <div className="flex flex-col gap-1">
           <h3
-            className="line-clamp-1"
+            className="line-clamp-2"
             style={{
               color: "#161616",
               fontSize: 16,

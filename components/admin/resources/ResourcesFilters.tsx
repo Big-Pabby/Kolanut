@@ -79,6 +79,7 @@ export default function ResourcesFilters({
           }}
         >
           <span
+            className="whitespace-nowrap"
             style={{
               color: "#374151",
               fontSize: 16,
@@ -100,12 +101,12 @@ export default function ResourcesFilters({
                 backgroundColor: "#ffffff",
                 border: "1px solid #e5e7eb",
                 borderRadius: 8,
-                minWidth: 140,
+                minWidth: 220,
                 boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               }}
             >
               <button
-                className="text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors"
+                className="text-left whitespace-nowrap px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors"
                 style={{ color: "#374151" }}
                 onClick={() => { onCategoryChange(""); setCategoryOpen(false); }}
               >
@@ -114,7 +115,7 @@ export default function ResourcesFilters({
               {categories.map((cat) => (
                 <button
                   key={cat}
-                  className="text-left px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors"
+                  className="text-left whitespace-nowrap px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors"
                   style={{ color: "#374151", fontWeight: selectedCategory === cat ? 500 : 400 }}
                   onClick={() => { onCategoryChange(cat); setCategoryOpen(false); }}
                 >
