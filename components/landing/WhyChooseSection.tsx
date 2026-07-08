@@ -17,7 +17,7 @@ const features = [
   {
     Icon: LicensedPartner,
     title: "Licensed With Trusted Partner",
-    desc: "We are duly Licensed by NAICOM and work with Cornerstone Insurance PLC.",
+    desc: "We are duly Licensed by NAICOM and work with Leadway Insurance PLC.",
   },
   {
     Icon: FastClaims,

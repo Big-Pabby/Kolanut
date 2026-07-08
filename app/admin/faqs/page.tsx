@@ -22,7 +22,6 @@ const CATEGORIES = [
   "Motor Insurance",
   "Home & Property Insurance",
   "Life & Family Insurance",
-  "Health Insurance",
 ] as const;
 type Category = (typeof CATEGORIES)[number];
 

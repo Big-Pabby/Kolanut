@@ -2,7 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, Search, BadgePercent, CircleCheck } from "lucide-react";
+import {
+  Eye,
+  Search,
+  BadgePercent,
+  CircleCheck,
+  ChevronDown,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -82,6 +88,7 @@ type TabValue = (typeof TABS)[number]["value"];
 export default function AdminCouponPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabValue>("all");
+  const [tabOpen, setTabOpen] = useState(false);
   const [search, setSearch] = useState("");
 
   const counts = useMemo(
@@ -143,30 +150,68 @@ export default function AdminCouponPage() {
         <CardContent className="p-4 space-y-4">
           {/* Tabs + search */}
           <div className="flex flex-col lg:flex-row justify-between gap-3 py-4 border-b border-[#E5E7EB]">
-            <div className="flex items-center gap-4 flex-wrap">
-              {TABS.map((tab) => {
-                const isActive = activeTab === tab.value;
-                return (
-                  <button
-                    key={tab.value}
-                    onClick={() => setActiveTab(tab.value)}
-                    className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-                      isActive ? "text-[#AF060D] font-semibold" : "text-gray-500"
-                    }`}
-                  >
-                    <span className="whitespace-nowrap">{tab.label}</span>
-                    <span
-                      className={`flex items-center justify-center min-w-[26px] h-6 px-1.5 rounded-full text-xs ${
-                        isActive
-                          ? "bg-[#FEF2F2] text-[#AF060D]"
-                          : "bg-gray-100 text-gray-500"
-                      }`}
-                    >
-                      {counts[tab.value]}
-                    </span>
-                  </button>
-                );
-              })}
+            <div className="relative w-full lg:w-auto">
+              <button
+                onClick={() => setTabOpen((prev) => !prev)}
+                className="flex items-center justify-between gap-3 w-full lg:w-auto px-4 h-11 rounded-lg border border-[#E5E7EB] bg-white hover:bg-gray-50 transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-[#374151] whitespace-nowrap">
+                    {TABS.find((t) => t.value === activeTab)?.label}
+                  </span>
+                  <span className="flex items-center justify-center min-w-[26px] h-6 px-1.5 rounded-full text-xs bg-[#FEF2F2] text-[#AF060D]">
+                    {counts[activeTab]}
+                  </span>
+                </span>
+                <ChevronDown
+                  className={`w-4 h-4 text-gray-500 transition-transform ${
+                    tabOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {tabOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setTabOpen(false)}
+                  />
+                  <div className="absolute left-0 top-full z-20 mt-1 min-w-[240px] flex flex-col overflow-hidden bg-white border border-[#E5E7EB] rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
+                    {TABS.map((tab) => {
+                      const isActive = activeTab === tab.value;
+                      return (
+                        <button
+                          key={tab.value}
+                          onClick={() => {
+                            setActiveTab(tab.value);
+                            setTabOpen(false);
+                          }}
+                          className="flex items-center justify-between gap-2 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors"
+                        >
+                          <span
+                            className={`whitespace-nowrap ${
+                              isActive
+                                ? "text-[#AF060D] font-semibold"
+                                : "text-[#374151]"
+                            }`}
+                          >
+                            {tab.label}
+                          </span>
+                          <span
+                            className={`flex items-center justify-center min-w-[26px] h-6 px-1.5 rounded-full text-xs ${
+                              isActive
+                                ? "bg-[#FEF2F2] text-[#AF060D]"
+                                : "bg-gray-100 text-gray-500"
+                            }`}
+                          >
+                            {counts[tab.value]}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </div>
 
             <div className="relative w-full lg:max-w-[420px]">

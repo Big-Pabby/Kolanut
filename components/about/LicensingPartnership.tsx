@@ -54,8 +54,8 @@ export default function LicensingPartnership() {
           <p className="text-base md:text-lg lg:text-2xl font-normal text-body-text max-w-[800px] lg:max-w-[900px]">
             Kolanut Africa operates as an insurtech platform Licensed by the
             Nigerian Insurance Commission NAICOM, working in partnership with
-            Cornerstone Insurance PLC. Our role is to make the journey digital,
-            simple, and customer-friendly, while Cornerstone provides the
+            Leadway Insurance PLC. Our role is to make the journey digital,
+            simple, and customer-friendly, while Leadway provides the
             regulated insurance products and underwriting expertise. Together,
             we offer you the best of both worlds: reliable insurance solutions
             and a modern, seamless experience.

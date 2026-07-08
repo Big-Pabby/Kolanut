@@ -8,34 +8,16 @@ import InsuranceProductsSection, {
 
 const products: InsuranceProduct[] = [
   {
-    icon: "/travel.svg",
-    title: "Travel Insurance",
-    desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
-    href: "/travel-insurance",
-  },
-  {
-    icon: "/motor.svg",
-    title: "Motor Insurance",
-    desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
-    href: "/motor-insurance",
-  },
-  {
     icon: "/home.svg",
     title: "Home & Property Insurance",
     desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
     href: "/property-insurance",
   },
   {
-    icon: "/group.svg",
-    title: "Group Insurance",
+    icon: "/motor.svg",
+    title: "Motor Insurance",
     desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
-    href: "#",
-  },
-  {
-    icon: "/marine.svg",
-    title: "Marine Goods Insurance",
-    desc: "Safeguard goods in transit by sea, air, or land. Ideal for importers, exporters, and logistics operators.",
-    href: "/marine-insurance",
+    href: "/motor-insurance",
   },
   {
     icon: "/life-family.svg",

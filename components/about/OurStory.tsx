@@ -84,7 +84,7 @@ export default function OurStory() {
               <p className="text-base md:text-lg leading-[26.1px] text-body-text">
                 Today, we offer Home, Motor, Travel, and Marine (Cargo)
                 insurance through our digital platform, in partnership with
-                Cornerstone Insurance Company, one of Nigeria's established
+                Leadway Insurance Company, one of Nigeria's established
                 insurers. Tomorrow, we aim to extend this experience across more
                 products, markets, and lives.
               </p>

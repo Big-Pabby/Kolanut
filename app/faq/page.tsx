@@ -77,6 +77,16 @@ const animationStyles = `
   }
 `;
 
+const FAQ_CATEGORIES = [
+  "Premium Payment",
+  "General Questions",
+  "Insurance Policy",
+  "Claim Process",
+  "Motor Insurance",
+  "Home & Property Insurance",
+  "Life & Family Insurance",
+];
+
 const Faqs: React.FC = () => {
   const { data: faqsFromApi, isLoading, error } = useFaqs();
   const [faqs, setFaqs] = useState<any[]>([]);
@@ -87,7 +97,7 @@ const Faqs: React.FC = () => {
       setFaqs(faqsFromApi);
     }
   }, [faqsFromApi]);
-  const [activeTab, setActiveTab] = useState("General");
+  const [activeTab, setActiveTab] = useState(FAQ_CATEGORIES[0]);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -100,24 +110,11 @@ const Faqs: React.FC = () => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  // Extract unique categories
-  const uniqueTabs = Array.from(new Set(faqs.map((faq: any) => faq.category)));
-
-  const tabs = uniqueTabs.sort((a, b) => {
-    if (a === "general") return -1;
-    if (b === "general") return 1;
-    return a.localeCompare(b);
-  });
+  // Always show all FAQ types; categories without data render an empty state
+  const tabs = FAQ_CATEGORIES;
 
   // Filter FAQs by selected tab
   const filteredFaqs = faqs.filter((faq: any) => faq.category === activeTab);
-
-  const categoryLabels: Record<string, string> = {
-    general: "General",
-    payment: "Payment",
-    policy: "Policy",
-    claims: "Claims",
-  };
 
   return (
     <>
@@ -159,10 +156,6 @@ const Faqs: React.FC = () => {
               <p className="text-gray-500 text-sm">Please try again later.</p>
             </div>
           </div>
-        ) : faqs.length === 0 ? (
-          <div className="flex justify-center py-20">
-            <p className="text-gray-500">No FAQs available at the moment.</p>
-          </div>
         ) : (
           <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12 flex flex-col lg:flex-row items-start gap-6 md:gap-8">
             {/* Tabs */}
@@ -175,7 +168,7 @@ const Faqs: React.FC = () => {
                       setActiveTab(tab);
                       setOpenIndex(0);
                     }}
-                    className={`tab-btn flex-1 text-left lg:px-3 py-2 md:py-3 text-sm font-medium whitespace-nowrap cursor-pointer ${idx === 3 ? "border-none" : "lg:border-b-2"}  ${
+                    className={`tab-btn flex-1 text-left lg:px-3 py-2 md:py-3 text-sm font-medium whitespace-nowrap cursor-pointer ${idx === tabs.length - 1 ? "border-none" : "lg:border-b-2"}  ${
                       activeTab === tab
                         ? "text-primary font-semibold  lg:border-primary"
                         : "text-[#4B5563] lg:border-gray-100 hover:bg-gray-50"
@@ -186,7 +179,7 @@ const Faqs: React.FC = () => {
                       transition: `all 0.3s ease ${idx * 50}ms`,
                     }}
                   >
-                    {categoryLabels[tab] || tab}
+                    {tab}
                   </button>
                 ))}
               </div>
@@ -194,6 +187,17 @@ const Faqs: React.FC = () => {
 
             {/* FAQ Accordion */}
             <div className="flex-1 bg-white h-fit rounded-xl border overflow-hidden w-full">
+              {filteredFaqs.length === 0 && (
+                <div className="flex flex-col items-center justify-center gap-2 py-16 px-4 text-center">
+                  <p className="text-base font-semibold text-[#161616]">
+                    No FAQs yet
+                  </p>
+                  <p className="text-sm text-[#6B7280]">
+                    There are no questions under {activeTab} at the moment.
+                    Please check back later.
+                  </p>
+                </div>
+              )}
               {filteredFaqs.map((faq: any, i) => (
                 <div
                   key={faq.id}

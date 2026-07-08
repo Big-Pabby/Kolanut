@@ -122,30 +122,24 @@ export default function TransactionsPage() {
             </p>
           </div>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="bg-[#F9FAFB] gap-1 !p-1 rounded-[8px]">
+            <TabsList className="bg-[#F9FAFB] gap-1 !p-1 rounded-[8px] flex-wrap h-auto">
               <TabsTrigger
                 value="home"
                 className="!px-4.5 py-2  text-sm font-medium rounded-[8px] border border-transparent data-[state=active]:border-[#AF060D] data-[state=active]:text-[#AF060D] data-[state=active]:bg-white data-[state=active]:font-semibold text-gray-500 transition-all"
               >
-                Home Insurance
-              </TabsTrigger>
-              <TabsTrigger
-                value="marine"
-                className="!px-4.5 py-2  text-sm font-medium rounded-[8px] border border-transparent data-[state=active]:border-[#AF060D] data-[state=active]:text-[#AF060D] data-[state=active]:bg-white data-[state=active]:font-semibold text-gray-500 transition-all"
-              >
-                Marine (Cargo) Insurance
-              </TabsTrigger>
-              <TabsTrigger
-                value="travel"
-                className="!px-4.5 py-2  text-sm font-medium rounded-[8px] border border-transparent data-[state=active]:border-[#AF060D] data-[state=active]:text-[#AF060D] data-[state=active]:bg-white data-[state=active]:font-semibold text-gray-500 transition-all"
-              >
-                Travel Insurance
+                Home & Property Insurance
               </TabsTrigger>
               <TabsTrigger
                 value="motor"
                 className="!px-4.5 py-2  text-sm font-medium rounded-[8px] border border-transparent data-[state=active]:border-[#AF060D] data-[state=active]:text-[#AF060D] data-[state=active]:bg-white data-[state=active]:font-semibold text-gray-500 transition-all"
               >
                 Motor Insurance
+              </TabsTrigger>
+              <TabsTrigger
+                value="life"
+                className="!px-4.5 py-2  text-sm font-medium rounded-[8px] border border-transparent data-[state=active]:border-[#AF060D] data-[state=active]:text-[#AF060D] data-[state=active]:bg-white data-[state=active]:font-semibold text-gray-500 transition-all"
+              >
+                Life & Family Insurance
               </TabsTrigger>
             </TabsList>
           </Tabs>

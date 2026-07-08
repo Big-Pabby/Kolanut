@@ -4,22 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import FamilyInsuranceIcon from "@/src/assets/icons/family-insurance.svg";
-import GroupIcon from "@/src/assets/icons/Group.svg";
-import TravelCategoryIcon from "@/src/assets/icons/travel-category.svg";
 import MotorCategoryIcon from "@/src/assets/icons/motor-category.svg";
-import MarineCategoryIcon from "@/src/assets/icons/marine-category.svg";
 import PropertyCategoryIcon from "@/src/assets/icons/property-category.svg";
 
 const categories = [
   {
-    label: "Property Insurance",
+    label: "Home & Property Insurance",
     Icon: PropertyCategoryIcon,
     href: "/property-insurance",
-  },
-  {
-    label: "Travel Insurance",
-    Icon: TravelCategoryIcon,
-    href: "/travel-insurance",
   },
   {
     label: "Motor Insurance",
@@ -27,19 +19,9 @@ const categories = [
     href: "/motor-insurance",
   },
   {
-    label: "Marine Insurance",
-    Icon: MarineCategoryIcon,
-    href: "/marine-insurance",
-  },
-  {
-    label: "Life Insurance",
+    label: "Life & Family Insurance",
     Icon: FamilyInsuranceIcon,
     href: "/life-and-family-insurance",
-  },
-  {
-    label: "Group Insurance",
-    Icon: GroupIcon,
-    href: "/group-insurance",
   },
 ];
 
@@ -61,7 +43,7 @@ export default function OtherInsuranceCategories() {
         </motion.h2>
 
         {/* Category cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
           {categories.map(({ label, Icon, href }, index) => {
             const active = pathname === href;
             return (

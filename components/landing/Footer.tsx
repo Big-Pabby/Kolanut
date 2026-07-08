@@ -18,10 +18,9 @@ const footerLinks = {
     { label: "Our Team", href: "/about#team" },
   ],
   insurance: [
-    { label: "Marine (cargo) Insurance", href: "/marine-insurance" },
-    { label: "Travel Insurance", href: "#" },
-    { label: "Home Insurance", href: "/home-insurance" },
-    { label: "Motor Insurance", href: "#" },
+    { label: "Home & Property Insurance", href: "/property-insurance" },
+    { label: "Motor Insurance", href: "/motor-insurance" },
+    { label: "Life & Family Insurance", href: "/life-and-family-insurance" },
   ],
   quickLinks: [
     { label: "Help & Support", href: "#" },
@@ -91,7 +90,7 @@ export default function Footer() {
 
               <p className="text-sm lg:text-base leading-6 text-white">
                 Insurance made simple, fast and truly African. Licensed by
-                NAICOM, in partnership with Cornerstone Insurance PLC.
+                NAICOM, in partnership with Leadway Insurance PLC.
               </p>
             </div>
             <Button className="w-fit rounded-full border-white bg-white !px-5 !py-2.5 lg:!px-6 lg:!py-4 text-sm lg:text-base font-medium text-brand-red hover:bg-white/10">

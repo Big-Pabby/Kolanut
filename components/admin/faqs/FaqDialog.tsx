@@ -27,7 +27,6 @@ const FAQ_CATEGORIES = [
   { value: "Motor Insurance", label: "Motor Insurance" },
   { value: "Home & Property Insurance", label: "Home & Property Insurance" },
   { value: "Life & Family Insurance", label: "Life & Family Insurance" },
-  { value: "Health Insurance", label: "Health Insurance" },
 ];
 
 interface FAQDialogProps {

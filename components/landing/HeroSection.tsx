@@ -62,7 +62,7 @@ export default function HeroSection() {
               style={{ color: "#af060d" }}
             />
             <span className="text-xs text-brand-red whitespace-nowrap">
-              Licensed by NAICOM • In Partnership with Cornerstone
+              Licensed by NAICOM • In Partnership with Leadway
             </span>
           </motion.div>
 
