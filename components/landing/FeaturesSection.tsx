@@ -2,8 +2,7 @@
 
 import { useRef } from "react";
 import HomeInsurance from "@/src/assets/icons/home-insurance.svg";
-import MarineInsurance from "@/src/assets/icons/marine-insurance.svg";
-import TravelInsurance from "@/src/assets/icons/travel-insurance.svg";
+import FamilyInsurance from "@/src/assets/icons/family-insurance.svg";
 import MotorInsurance from "@/src/assets/icons/motor-insurance.svg";
 import FeaturesPattern from "@/src/assets/icons/features-pattern.svg";
 import { motion, useInView } from "framer-motion";
@@ -11,24 +10,19 @@ import type { Variants } from "framer-motion";
 
 const features = [
   {
-    Icon: HomeInsurance,
-    title: "Home Insurance",
-    desc: "Protect your home, building, or investment property against key risks. Perfect for homeowners and others.",
-  },
-  {
-    Icon: MarineInsurance,
-    title: "Marine (Cargo) Insurance",
-    desc: "Safeguard goods in transit by sea, air, or land. Ideal for importers, exporters, and logistics operators.",
-  },
-  {
-    Icon: TravelInsurance,
-    title: "Travel Insurance",
-    desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
-  },
-  {
     Icon: MotorInsurance,
     title: "Motor Insurance",
-    desc: "Get on the road with confidence with our 3rd Party and Comprehensive Insurance covers.",
+    desc: "Get on the road with confidence with our Third Party, Autobase, and Comprehensive covers.",
+  },
+  {
+    Icon: HomeInsurance,
+    title: "Home & Property Insurance",
+    desc: "Tenant, Homeowner, and Landlord policies that cover your building, contents, and liabilities.",
+  },
+  {
+    Icon: FamilyInsurance,
+    title: "Life & Family Insurance",
+    desc: "Term Life, Family Benefits, Personal Accident, and Lifestyle Protection plans for your loved ones.",
   },
 ];
 
@@ -60,7 +54,7 @@ export default function FeaturesSection() {
   };
 
   return (
-    <section className="relative m-2 lg:m-4 rounded-[20px] bg-[#AF060D] py-4 lg:py-16 min-h-auto lg:h-[480px]">
+    <section className="relative m-2 lg:m-4 rounded-[20px] bg-[#AF060D] py-4 lg:pt-16 lg:pb-0 min-h-auto">
       {/* Decorative pattern */}
       <div className="pointer-events-none absolute inset-0">
         <FeaturesPattern
@@ -95,18 +89,18 @@ export default function FeaturesSection() {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1  lg:-mb-16 gap-3 lg:gap-5 rounded-[20px] border border-[#FFDFDF] bg-[#FFFFFF] p-3 lg:p-5 sm:grid-cols-2"
+          className="grid grid-cols-1  lg:-mb-16  gap-3 lg:gap-5 rounded-[20px] border border-[#FFDFDF] bg-[#FFFFFF] p-3 lg:p-5 lg:grid-cols-3"
         >
           {features.map(({ Icon, title, desc }) => (
             <motion.div
               key={title}
               variants={itemVariants}
-              className="flex items-start gap-3 lg:gap-4 rounded-xl bg-white p-4 lg:p-6 border border-[#ED202429]"
+              className="flex flex-col items-start gap-3 lg:gap-4 rounded-xl bg-white p-4 lg:p-6 border border-[#ED202429]"
             >
               <div className="flex h-[45px] w-[45px] lg:h-[57px] lg:w-[57px] shrink-0 items-center justify-center rounded-full bg-brand-red">
                 <Icon
-                  width={32}
-                  height={32}
+                  width={24}
+                  height={24}
                   className="lg:w-10 lg:h-10"
                   style={{ color: "#fff" }}
                 />

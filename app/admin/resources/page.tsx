@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   useResources,
@@ -8,6 +8,8 @@ import {
   useBlogStats,
   BlogFilters,
 } from "./hooks/useResources";
+import { BLOG_PAGE_SIZE } from "@/lib/constants";
+import { DOTS, getPageRange } from "@/lib/utils/pagination";
 import ResourceMetricCard from "@/components/admin/resources/ResourceMetricCard";
 import { BlogPost } from "./hooks/useResources";
 import ResourcesFilters from "@/components/admin/resources/ResourcesFilters";
@@ -29,7 +31,7 @@ export default function AdminResourcesPage() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const pageSize = BLOG_PAGE_SIZE;
 
   // Delete confirmation modal state
   const [deleteModal, setDeleteModal] = useState<{
@@ -56,8 +58,9 @@ export default function AdminResourcesPage() {
   const resources: BlogPost[] = resourcesData?.results || [];
 
   // Pagination info from API
-  const totalPages = resourcesData?.total_Pages || 1;
+  const totalPages = resourcesData?.total_pages || 1;
   const totalCount = resourcesData?.count || 0;
+  const pageNumbers = getPageRange(currentPage, totalPages);
 
   // Reset to page 1 when filters change
   const handleSearchChange = (value: string) => {
@@ -83,6 +86,10 @@ export default function AdminResourcesPage() {
     if (deleteModal.resource) {
       await deleteMutation.mutateAsync(deleteModal.resource.id);
       setDeleteModal({ isOpen: false, resource: null });
+      // Deleting the last item on a page would leave it empty — step back one
+      if (resources.length === 1 && currentPage > 1) {
+        setCurrentPage((p) => p - 1);
+      }
     }
   };
 
@@ -303,21 +310,36 @@ export default function AdminResourcesPage() {
               Previous
             </button>
 
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <button
-                key={page}
-                onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1.5 rounded-md ${currentPage === page ? "bg-[#af060d] text-white" : "border border-gray-300 hover:bg-gray-50"}`}
-                style={{
-                  color: currentPage === page ? "#ffffff" : "#374151",
-                  fontSize: 14,
-                  fontFamily:
-                    "HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
-                }}
-              >
-                {page}
-              </button>
-            ))}
+            {pageNumbers.map((page, idx) =>
+              page === DOTS ? (
+                <span
+                  key={`dots-${idx}`}
+                  className="px-2 py-1.5 select-none"
+                  style={{
+                    color: "#9ca3af",
+                    fontSize: 14,
+                    fontFamily:
+                      "HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
+                  }}
+                >
+                  {DOTS}
+                </span>
+              ) : (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page as number)}
+                  className={`px-3 py-1.5 rounded-md ${currentPage === page ? "bg-[#af060d] text-white" : "border border-gray-300 hover:bg-gray-50"}`}
+                  style={{
+                    color: currentPage === page ? "#ffffff" : "#374151",
+                    fontSize: 14,
+                    fontFamily:
+                      "HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
+                  }}
+                >
+                  {page}
+                </button>
+              ),
+            )}
 
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}

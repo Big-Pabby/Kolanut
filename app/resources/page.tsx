@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { ArrowRight, Book, BookOpen, Calculator, Shield } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { usePublicResources, PublicResource } from "./hooks/usePublicResources";
+import { BLOG_PAGE_SIZE } from "@/lib/constants";
+import { DOTS, getPageRange } from "@/lib/utils/pagination";
 
 // Animation keyframes style
 const animationStyles = `
@@ -102,7 +104,7 @@ const Resources: React.FC = () => {
   const [activeResource, setActiveResource] = useState("All Resources");
   const [isVisible, setIsVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 12;
+  const pageSize = BLOG_PAGE_SIZE;
 
   // Map UI category to API tag
   const getTagFromCategory = (category: string): string | undefined => {
@@ -124,11 +126,19 @@ const Resources: React.FC = () => {
   const resources: PublicResource[] = resourcesData?.results || [];
   const totalPages = resourcesData?.total_pages || 1;
   const totalCount = resourcesData?.count || 0;
+  const pageNumbers = getPageRange(currentPage, totalPages);
 
   // Reset to page 1 when category changes
   const handleCategoryChange = (category: string) => {
     setActiveResource(category);
     setCurrentPage(1);
+  };
+
+  const goToPage = (page: number) => {
+    const next = Math.min(Math.max(page, 1), totalPages);
+    if (next === currentPage) return;
+    setCurrentPage(next);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Initialize animation on mount
@@ -169,7 +179,7 @@ const Resources: React.FC = () => {
       </div>
       <div className="px-6 md:px-12 lg:px-24 flex flex-col gap-4 py-4 my-5">
         <div className="lg:flex gap-4 items-center lg:my-5 lg:overflow-visible overflow-x-auto pb-2">
-          <div className="flex gap-2 md:gap-4 items-center min-w-0">
+          <div className="flex gap-2 md:gap-4 items-center min-w-0 flex-wrap">
             {CATEGORIES.map(({ label, icon }, idx) => (
               <button
                 key={label}
@@ -314,39 +324,54 @@ const Resources: React.FC = () => {
         )}
 
         {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-primary text-white rounded disabled:bg-gray-300 transition-colors duration-200 hover:bg-red-700 disabled:hover:bg-gray-300"
-            >
-              Previous
-            </button>
-
-            {Array.from({ length: totalPages }, (_, i) => (
+        {!isLoading && totalPages > 1 && (
+          <div className="flex flex-col items-center gap-3 mt-8">
+            <div className="flex justify-center items-center gap-2 flex-wrap">
               <button
-                key={i}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`px-4 py-2 rounded transition-all duration-200 ${
-                  currentPage === i + 1
-                    ? "bg-primary text-white hover:bg-red-700"
-                    : "bg-white border text-primary hover:bg-gray-50"
-                }`}
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-primary text-white rounded disabled:bg-gray-300 transition-colors duration-200 hover:bg-red-700 disabled:hover:bg-gray-300"
               >
-                {i + 1}
+                Previous
               </button>
-            ))}
 
-            <button
-              onClick={() =>
-                setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-              }
-              disabled={currentPage === totalPages}
-              className="px-4 py-2 bg-primary text-white rounded disabled:bg-gray-300 transition-colors duration-200 hover:bg-red-700 disabled:hover:bg-gray-300"
-            >
-              Next
-            </button>
+              {pageNumbers.map((page, idx) =>
+                page === DOTS ? (
+                  <span
+                    key={`dots-${idx}`}
+                    className="px-2 py-2 text-gray-400 select-none"
+                  >
+                    {DOTS}
+                  </span>
+                ) : (
+                  <button
+                    key={page}
+                    onClick={() => goToPage(page as number)}
+                    className={`px-4 py-2 rounded transition-all duration-200 ${
+                      currentPage === page
+                        ? "bg-primary text-white hover:bg-red-700"
+                        : "bg-white border text-primary hover:bg-gray-50"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ),
+              )}
+
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-primary text-white rounded disabled:bg-gray-300 transition-colors duration-200 hover:bg-red-700 disabled:hover:bg-gray-300"
+              >
+                Next
+              </button>
+            </div>
+
+            <p className="text-sm text-[#5B5B5B]">
+              Showing {(currentPage - 1) * pageSize + 1}–
+              {Math.min(currentPage * pageSize, totalCount)} of {totalCount}{" "}
+              resources
+            </p>
           </div>
         )}
       </div>

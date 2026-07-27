@@ -10,7 +10,7 @@ export default function InsuredPage() {
       <HeroSection />
       <ProcessSection />
       <InsuranceProductsSection />
-      <KolanutWaySection />
+      {/* <KolanutWaySection /> */}
     </main>
   );
 }

@@ -1,7 +1,13 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { admin } from "@/lib/service";
+import { BLOG_PAGE_SIZE } from "@/lib/constants";
 import { ResourceItem } from "@/components/admin/resources/ResourceCard";
 import { toast } from "@/lib/utils/toast";
 
@@ -22,13 +28,9 @@ export interface BlogPost {
 }
 
 export interface BlogListResponse {
-  success: boolean;
-  message: string;
   results: BlogPost[];
   count: number;
-  page: number;
-  limit: number;
-  total_Pages: number;
+  total_pages: number;
 }
 
 export interface BlogCounts {
@@ -69,7 +71,7 @@ const transformBlogPost = (post: BlogPost) => ({
 });
 
 export const useResources = (filters: BlogFilters) => {
-  const { status, tag, search, page = 1, page_size = 10 } = filters;
+  const { status, tag, search, page = 1, page_size = BLOG_PAGE_SIZE } = filters;
 
   return useQuery({
     queryKey: ["resources", filters],
@@ -87,9 +89,11 @@ export const useResources = (filters: BlogFilters) => {
 
       return {
         ...response,
-        data: response.results.map(transformBlogPost),
+        results: response.results ?? [],
+        data: (response.results ?? []).map(transformBlogPost),
       };
     },
+    placeholderData: keepPreviousData,
     staleTime: 30000,
   });
 };

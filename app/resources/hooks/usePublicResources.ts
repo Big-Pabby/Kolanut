@@ -1,8 +1,8 @@
 "use client";
 
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { admin } from "@/lib/service";
+import { BLOG_PAGE_SIZE } from "@/lib/constants";
 
 // Public blog/resource response type
 export interface PublicResource {
@@ -20,12 +20,8 @@ export interface PublicResource {
 }
 
 export interface PublicResourceListResponse {
-  success: boolean;
-  message: string;
   results: PublicResource[];
   count: number;
-  page: number;
-  limit: number;
   total_pages: number;
 }
 
@@ -39,7 +35,7 @@ export interface PublicResourceFilters {
 
 // Fetch public resources
 export const usePublicResources = (filters: PublicResourceFilters = {}) => {
-  const { tag, search, page = 1, page_size = 12 } = filters;
+  const { tag, search, page = 1, page_size = BLOG_PAGE_SIZE } = filters;
 
   return useQuery({
     queryKey: ["public-resources", filters],
@@ -59,6 +55,7 @@ export const usePublicResources = (filters: PublicResourceFilters = {}) => {
       );
       return response;
     },
+    placeholderData: keepPreviousData,
     staleTime: 30000,
   });
 };
