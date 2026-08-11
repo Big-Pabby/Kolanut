@@ -19,19 +19,19 @@ const defaultProducts: InsuranceProduct[] = [
   {
     icon: "/motor.svg",
     title: "Motor Insurance",
-    desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
+    desc: "Drive assured knowing your vehicle is  financially protected from unforeseen perils.",
     href: "/motor-insurance",
   },
   {
     icon: "/home.svg",
     title: "Home & Property Insurance",
-    desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
+    desc: "Our Property Insurance products you in the event of damage or theft of your property.",
     href: "/property-insurance",
   },
   {
     icon: "/life-family.svg",
     title: "Life & Family Insurance",
-    desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
+    desc: "This plan is designed to provide affordable life insurance to individuals and families.",
     href: "/life-and-family-insurance",
   },
 ];

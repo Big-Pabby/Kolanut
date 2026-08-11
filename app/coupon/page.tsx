@@ -7,7 +7,7 @@ export default function CouponPage() {
       <PageHero
       image="/images/umbrella.jpg"
         title="Generate And Redeem Coupon Codes"
-        subtitle="Gift your customers Free Insurance Cover today... Start by generating a coupon Code for them)"
+        subtitle="Gift your customers Free Insurance Cover today... Start by generating a coupon Code for them"
       />
       <CouponSection />
     </main>

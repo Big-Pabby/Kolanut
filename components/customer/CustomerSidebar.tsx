@@ -14,6 +14,7 @@ import {
   HelpCircle,
   Shield,
   Banknote,
+  BookOpen,
   AlertTriangle,
   X,
 } from "lucide-react";
@@ -42,6 +43,7 @@ const navItems = [
     href: "#",
   },
   { label: "Transactions", icon: <Banknote />, href: "/customer/transactions" },
+  { label: "Resources", icon: <BookOpen />, href: "/customer/resources" },
 ];
 
 export default function CustomerSidebar() {

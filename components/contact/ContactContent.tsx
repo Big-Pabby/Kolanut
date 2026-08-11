@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import PhoneIcon from "@/src/assets/icons/phone-icon.svg";
 import EmailIcon from "@/src/assets/icons/email-icon.svg";
 import LocationIcon from "@/src/assets/icons/location-icon.svg";
+import { useContactUs } from "@/app/contact/hooks/useContactUs";
+import { toast } from "@/lib/utils/toast";
 
 const contactDetails = [
   {
@@ -29,13 +31,18 @@ const contactDetails = [
   },
 ];
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const emptyForm = {
+  fullName: "",
+  email: "",
+  phone: "",
+  message: "",
+};
+
 export default function ContactContent() {
-  const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
+  const [form, setForm] = useState(emptyForm);
+  const contactUs = useContactUs();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -45,7 +52,30 @@ export default function ContactContent() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: wire up form submission
+
+    const fullname = form.fullName.trim();
+    const email = form.email.trim();
+    const phone_number = form.phone.trim();
+    const message = form.message.trim();
+
+    if (!fullname || !email || !phone_number || !message) {
+      toast.error("Missing details", {
+        description: "Please fill in every field before sending your message.",
+      });
+      return;
+    }
+
+    if (!EMAIL_PATTERN.test(email)) {
+      toast.error("Invalid email address", {
+        description: "Enter a valid email address so we can reply to you.",
+      });
+      return;
+    }
+
+    contactUs.mutate(
+      { fullname, email, phone_number, message },
+      { onSuccess: () => setForm(emptyForm) }
+    );
   };
 
   return (
@@ -145,9 +175,10 @@ export default function ContactContent() {
               {/* Submit */}
               <Button
                 type="submit"
-                className="w-full rounded-lg bg-brand-red text-white font-medium text-base hover:bg-brand-red/90 h-12"
+                disabled={contactUs.isPending}
+                className="w-full rounded-lg bg-brand-red text-white font-medium text-base hover:bg-brand-red/90 h-12 disabled:opacity-70"
               >
-                Send Message
+                {contactUs.isPending ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </div>

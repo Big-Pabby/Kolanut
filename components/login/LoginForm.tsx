@@ -176,6 +176,17 @@ export default function LoginForm() {
           >
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
+
+          {/* Create account link */}
+          <p className="text-center text-sm text-[#4b5563]">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/register"
+              className="font-semibold text-brand-red hover:underline"
+            >
+              Sign up
+            </Link>
+          </p>
         </form>
       </div>
     </div>
