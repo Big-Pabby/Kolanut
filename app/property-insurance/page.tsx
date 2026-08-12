@@ -36,8 +36,8 @@ export default function PropertyInsurancePage() {
     <main className="min-h-screen bg-page-bg">
       {/* Hero */}
       <PageHero
-        title="Property Insurance"
-        subtitle="Our Property Insurance Product reimburse you in the event of damage or theft of your property. It also provides a cover for injuries incurred on your property."
+        title="Complete Home & Property Insurance for Homeowners, Landlords & Tenants"
+        subtitle="Protect your residential or commercial structure, interior contents, appliances, and loss-of-rent risks against fire, flood, theft, and natural disasters."
         image={HERO_IMAGE}
       />
 

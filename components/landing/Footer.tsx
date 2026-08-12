@@ -9,6 +9,7 @@ import Twitter from "@/src/assets/icons/twitter.svg";
 import Telegram from "@/src/assets/icons/telegram.svg";
 import Copyright from "@/src/assets/icons/copyright.svg";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useInView, type Variants } from "framer-motion";
 import Tiktok from "@/src/assets/icons/tiktok.svg";
 
@@ -16,17 +17,21 @@ const footerLinks = {
   kolanutAfrica: [
     { label: "About Us", href: "/about" },
     { label: "Our Team", href: "/about#team" },
+    { label: "Contact Us", href: "/contact" },
   ],
   insurance: [
     { label: "Home & Property Insurance", href: "/property-insurance" },
     { label: "Motor Insurance", href: "/motor-insurance" },
     { label: "Life & Family Insurance", href: "/life-and-family-insurance" },
+    { label: "Get Insured", href: "/insured" },
   ],
   quickLinks: [
-    { label: "Help & Support", href: "#" },
     { label: "Resources", href: "/resources" },
-    { label: "Claims", href: "#" },
-    { label: "Contact Us", href: "/contact" },
+    { label: "FAQs", href: "/faq" },
+    { label: "Premium Calculator", href: "/calculator" },
+    { label: "Coupon", href: "/coupon" },
+    // No claims page yet — matches the navbar's "Make a Claim" placeholder
+    { label: "Make a Claim", href: "#" },
   ],
 };
 
@@ -93,8 +98,11 @@ export default function Footer() {
                 NAICOM, in partnership with Leadway Insurance PLC.
               </p>
             </div>
-            <Button className="w-fit rounded-full border-white bg-white !px-5 !py-2.5 lg:!px-6 lg:!py-4 text-sm lg:text-base font-medium text-brand-red hover:bg-white/10">
-              Learn More
+            <Button
+              asChild
+              className="w-fit rounded-full border-white bg-white !px-5 !py-2.5 lg:!px-6 lg:!py-4 text-sm lg:text-base font-medium text-brand-red hover:bg-white/10"
+            >
+              <Link href="/about">Learn More</Link>
             </Button>
           </div>
 
@@ -110,13 +118,13 @@ export default function Footer() {
               </h4>
               <div className="flex flex-col gap-2 lg:gap-4">
                 {footerLinks.kolanutAfrica.map((link) => (
-                  <a
+                  <Link
                     key={link.label}
                     href={link.href}
                     className="text-sm lg:text-base text-white/90 hover:text-white transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </motion.div>
@@ -131,13 +139,13 @@ export default function Footer() {
               </h4>
               <div className="flex flex-col gap-2 lg:gap-4">
                 {footerLinks.insurance.map((link) => (
-                  <a
+                  <Link
                     key={link.label}
                     href={link.href}
                     className="text-sm lg:text-base text-white/90 hover:text-white transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </motion.div>
@@ -152,13 +160,13 @@ export default function Footer() {
               </h4>
               <div className="flex flex-col gap-2 lg:gap-4">
                 {footerLinks.quickLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.label}
                     href={link.href}
                     className="text-sm lg:text-base text-white/90 hover:text-white transition-colors"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </motion.div>

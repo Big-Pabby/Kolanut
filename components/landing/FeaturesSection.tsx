@@ -12,7 +12,7 @@ const features = [
   {
     Icon: MotorInsurance,
     title: "Motor Insurance",
-    desc: "Get on the road with confidence with our Third Party, Autobase, and Comprehensive covers.",
+    desc: "Get on the road with confidence with our comprehensive covers for Third-Party, Autobase, and Full Collision Protection.",
   },
   {
     Icon: HomeInsurance,
