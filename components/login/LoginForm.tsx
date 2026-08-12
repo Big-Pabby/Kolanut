@@ -22,13 +22,13 @@ export default function LoginForm() {
     e.preventDefault();
 
     try {
-      await loginMutation.mutateAsync({
+      const { user } = await loginMutation.mutateAsync({
         username: form.username,
         password: form.password,
       });
 
-      // Redirect to admin dashboard after successful login
-      router.push("/admin/resources");
+      // Admins land in the admin area, everyone else in the customer dashboard
+      router.push(user?.is_admin ? "/admin/resources" : "/customer/dashboard");
     } catch (error) {
       // Error handling is done in the mutation's onError callback
       console.error("Login failed:", error);

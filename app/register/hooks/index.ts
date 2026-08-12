@@ -4,20 +4,18 @@ import { useMutation } from "@tanstack/react-query";
 import { admin } from "@/lib/service";
 import { toast } from "@/lib/utils/toast";
 
-/**
- * Signup email verification. The API does not publish these routes yet — the
- * only OTP endpoints it documents are for the password-reset flow
- * (initiate_password_reset / verify_password_reset). The paths below follow the
- * same snake_case convention; update them to whatever the backend ships and the
- * dialog works unchanged.
- */
-export const VERIFY_OTP_ENDPOINT = "/auth/verify_email";
-export const RESEND_OTP_ENDPOINT = "/auth/resend_email_otp";
+// Signup email verification — POST /v1/auth/activation, /v1/auth/resend_activation
+export const VERIFY_OTP_ENDPOINT = "/auth/activation";
+export const RESEND_OTP_ENDPOINT = "/auth/resend_activation";
+
+/** The activation code is a fixed-length string (UserVerificationModel). */
+export const ACTIVATION_CODE_LENGTH = 4;
 
 // POST /v1/auth/signup — UserSignUpData
 export interface SignupPayload {
   email: string;
   password: string;
+  fullname: string;
 }
 
 // UserModel
@@ -31,6 +29,8 @@ export interface SignupResponse {
 
 export const PASSWORD_MIN_LENGTH = 8;
 export const PASSWORD_MAX_LENGTH = 50;
+export const FULLNAME_MIN_LENGTH = 3;
+export const FULLNAME_MAX_LENGTH = 250;
 
 export const useSignup = () => {
   return useMutation({
@@ -45,9 +45,15 @@ export const useSignup = () => {
   });
 };
 
+// POST /v1/auth/activation — UserVerificationModel
+export interface ActivationPayload {
+  email: string;
+  code: string;
+}
+
 export const useVerifyEmailOtp = () => {
   return useMutation({
-    mutationFn: async (payload: { email: string; code: string }) => {
+    mutationFn: async (payload: ActivationPayload) => {
       return admin.post<unknown>(VERIFY_OTP_ENDPOINT, payload);
     },
     onError: (error: Error) => {
@@ -58,9 +64,14 @@ export const useVerifyEmailOtp = () => {
   });
 };
 
+// POST /v1/auth/resend_activation
+export interface ResendActivationPayload {
+  email: string;
+}
+
 export const useResendEmailOtp = () => {
   return useMutation({
-    mutationFn: async (payload: { email: string }) => {
+    mutationFn: async (payload: ResendActivationPayload) => {
       return admin.post<unknown>(RESEND_OTP_ENDPOINT, payload);
     },
     onSuccess: () => {

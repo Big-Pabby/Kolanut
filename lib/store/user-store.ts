@@ -1,15 +1,14 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface UserData {
+/** Mirrors the API's UserModel (returned nested inside the /auth/token Token). */
+export interface UserData {
   id: string;
-  created_at: string;
-  updated_at: string;
-  full_name: string;
   email: string;
-  is_active: boolean;
-  role: string;
-  last_login_at: string;
+  is_admin: boolean;
+  fullname: string | null;
+  date_created: string;
+  date_updated: string;
 }
 
 interface UserStore {
@@ -30,4 +29,3 @@ export const useUserStore = create<UserStore>()(
     }
   )
 );
-

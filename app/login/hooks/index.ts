@@ -6,23 +6,17 @@ import {
 } from "@tanstack/react-query";
 import { admin } from "@/lib/service";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/lib/constants";
-import { useUserStore } from "@/lib/store/user-store";
+import { useUserStore, type UserData } from "@/lib/store/user-store";
 import { toast } from "@/lib/utils/toast";
 
+// POST /v1/auth/token — Token
 interface LoginResponse {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  full_name: string;
-  email: string;
-  is_active: boolean;
-  role: string;
-  last_login_at: string;
+  user: UserData;
   token_type: string;
   access_token: string;
   refresh_token: string;
-  access_expires_at: string;
-  refresh_expires_at: string;
+  access_expires_at: string | null;
+  refresh_expires_at: string | null;
 }
 
 interface LoginCredentials {
@@ -56,16 +50,15 @@ export const useAdminLogin = () => {
       }
 
       // Store user data in Zustand store
-      if (data) {
-        const { access_token, refresh_token, ...userData } = data;
-        setUser(userData);
+      if (data.user) {
+        setUser(data.user);
       }
 
       toast.success("Login successful", {
-        description: `Welcome back, ${data.full_name || "Admin"}!`,
+        description: `Welcome back, ${data.user?.fullname || data.user?.email || "there"}!`,
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error("Login failed", {
         description:
           error?.message || "Please check your credentials and try again.",

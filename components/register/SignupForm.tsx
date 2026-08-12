@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/lib/utils/toast";
 import {
+  FULLNAME_MAX_LENGTH,
+  FULLNAME_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   useResendEmailOtp,
@@ -52,6 +54,16 @@ export default function SignupForm() {
       return;
     }
 
+    if (
+      fullName.length < FULLNAME_MIN_LENGTH ||
+      fullName.length > FULLNAME_MAX_LENGTH
+    ) {
+      toast.error("Invalid full name", {
+        description: `Full name must be between ${FULLNAME_MIN_LENGTH} and ${FULLNAME_MAX_LENGTH} characters.`,
+      });
+      return;
+    }
+
     if (!EMAIL_PATTERN.test(email)) {
       toast.error("Invalid email address", {
         description: "Enter a valid email address to continue.",
@@ -70,7 +82,7 @@ export default function SignupForm() {
     }
 
     signup.mutate(
-      { email, password },
+      { email, password, fullname: fullName },
       {
         onSuccess: () => {
           // Account exists now — clear the form so it can't be resubmitted

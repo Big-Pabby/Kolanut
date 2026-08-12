@@ -8,8 +8,9 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ACTIVATION_CODE_LENGTH } from "@/app/register/hooks";
 
-const CODE_LENGTH = 4;
+const CODE_LENGTH = ACTIVATION_CODE_LENGTH;
 
 interface VerificationCodeDialogProps {
   open: boolean;

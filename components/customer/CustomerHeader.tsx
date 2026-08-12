@@ -4,10 +4,24 @@ import { Bell, Search, User, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCustomer } from "./CustomerContext";
 import { useState, useEffect } from "react";
+import { useUserStore } from "@/lib/store/user-store";
+
+/** "Mauteen Adeleke" -> "MA", falls back to the first letter of the email. */
+const getInitials = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
 
 export default function CustomerHeader() {
   const { isMobileMenuOpen, setIsMobileMenuOpen } = useCustomer();
   const [isMobile, setIsMobile] = useState(false);
+  const user = useUserStore((state) => state.user);
+
+  const displayName = user?.fullname || user?.email || "";
+  const initials = displayName ? getInitials(displayName) : "";
 
   useEffect(() => {
     const checkMobile = () => {
@@ -49,12 +63,21 @@ export default function CustomerHeader() {
 
         {/* Profile - hidden on mobile, shown on larger screens */}
         <div className="hidden md:flex items-center gap-3 pl-4 border-l border-gray-200">
-          <div className="text-right">
-            <p className="text-sm font-medium text-gray-800">John Doe</p>
-            <p className="text-xs text-gray-500">Customer</p>
+          {/* The user is rehydrated from localStorage, so it is absent from the
+              prerendered HTML — suppress the resulting hydration warning. */}
+          <div className="text-right" suppressHydrationWarning>
+            <p className="text-sm font-medium text-gray-800 max-w-[220px] truncate">
+              {displayName}
+            </p>
+            <p className="text-xs text-gray-500">
+              {user?.is_admin ? "Admin" : "Customer"}
+            </p>
           </div>
-          <button className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-            <User className="h-5 w-5 text-gray-600" />
+          <button
+            suppressHydrationWarning
+            className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-600"
+          >
+            {initials || <User className="h-5 w-5 text-gray-600" />}
           </button>
         </div>
       </div>
