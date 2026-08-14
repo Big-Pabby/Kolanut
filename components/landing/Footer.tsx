@@ -102,7 +102,7 @@ export default function Footer() {
               asChild
               className="w-fit rounded-full border-white bg-white !px-5 !py-2.5 lg:!px-6 lg:!py-4 text-sm lg:text-base font-medium text-brand-red hover:bg-white/10"
             >
-              <Link href="/about">Learn More</Link>
+              <Link href="/resources">Learn More</Link>
             </Button>
           </div>
 

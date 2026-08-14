@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function LoginBranding() {
   return (
-    <div className="relative flex flex-col overflow-hidden w-1/2 shrink-0 min-h-screen px-20 pt-36 pb-16 bg-[url('/images/Features.svg')] bg-cover bg-no-repeat">
+    <div className="relative hidden lg:flex lg:flex-col overflow-hidden w-full lg:w-1/2 shrink-0 min-h-screen px-8 lg:px-20 pt-36 pb-16 bg-[url('/images/Features.svg')] bg-cover bg-no-repeat">
       {/* Main content */}
       <div className="relative z-10 flex flex-col gap-6">
         {/* Headline + description */}

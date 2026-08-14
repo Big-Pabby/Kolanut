@@ -28,6 +28,7 @@ export default function SignupForm() {
   const [form, setForm] = useState({
     fullName: "",
     email: "",
+    phone: "",
     password: "",
   });
   const [verifyingEmail, setVerifyingEmail] = useState("");
@@ -45,9 +46,10 @@ export default function SignupForm() {
 
     const fullName = form.fullName.trim();
     const email = form.email.trim();
+    const phone = form.phone.trim();
     const { password } = form;
 
-    if (!fullName || !email || !password) {
+    if (!fullName || !email || !phone || !password) {
       toast.error("Missing details", {
         description: "Please fill in every field to create your account.",
       });
@@ -82,12 +84,12 @@ export default function SignupForm() {
     }
 
     signup.mutate(
-      { email, password, fullname: fullName },
+      { email, password, fullname: fullName, phone },
       {
         onSuccess: () => {
           // Account exists now — clear the form so it can't be resubmitted
           // while the user finishes verifying.
-          setForm({ fullName: "", email: "", password: "" });
+          setForm({ fullName: "", email: "", phone: "", password: "" });
           setVerifyingEmail(email);
 
           toast.success("Account created", {
@@ -171,6 +173,25 @@ export default function SignupForm() {
                 value={form.email}
                 onChange={handleChange}
                 placeholder="Enter your email address"
+                className={inputClasses}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="phone"
+                className="text-sm font-medium text-[#374151]"
+              >
+                Phone Number
+              </label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                autoComplete="tel"
+                value={form.phone}
+                onChange={handleChange}
+                placeholder="Enter your phone number"
                 className={inputClasses}
               />
             </div>

@@ -139,6 +139,7 @@ export default function MotorInsuranceStep2ProvideDetails({
               placeholder="Enter your phone number"
               value={formData.phone}
               onChange={(e) => onUpdate("phone", e.target.value)}
+              autoComplete="off"
               className="h-12 w-full rounded-[10px] border border-[#d1d5db] px-3 text-sm text-[#161616] placeholder:text-[#6b7280] shadow-[0_1px_2px_rgba(18,26,43,0.05)] outline-none focus:border-brand-red transition-colors bg-white"
             />
           </div>
@@ -166,6 +167,7 @@ export default function MotorInsuranceStep2ProvideDetails({
               placeholder="Enter your NIN"
               value={formData.nin}
               onChange={(e) => onUpdate("nin", e.target.value)}
+              autoComplete="off"
               className="h-12 w-full rounded-[10px] border border-[#d1d5db] px-3 text-sm text-[#161616] placeholder:text-[#6b7280] shadow-[0_1px_2px_rgba(18,26,43,0.05)] outline-none focus:border-brand-red transition-colors bg-white"
             />
           </div>

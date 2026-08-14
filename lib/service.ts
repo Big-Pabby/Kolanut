@@ -51,16 +51,28 @@ apiAdmin.interceptors.response.use(
         "An unknown error occurred";
     }
 
-    if (errorMessage === "Not authenticated") {
+    // Treat any auth/expiry failure the same way: clear the session and send
+    // the user back to sign in instead of leaving them stuck (e.g. the JWT
+    // "Signature has expired" error after a token times out).
+    const status = error.response?.status;
+    const normalized = errorMessage.toLowerCase();
+    const isAuthError =
+      status === 401 ||
+      normalized.includes("not authenticated") ||
+      normalized.includes("signature has expired") ||
+      normalized.includes("token has expired") ||
+      normalized.includes("could not validate credentials");
+
+    if (isAuthError && typeof window !== "undefined") {
+      const hadToken = !!localStorage.getItem(ACCESS_TOKEN);
       localStorage.removeItem(ACCESS_TOKEN);
       localStorage.removeItem(REFRESH_TOKEN);
-      // Clear user store
-      if (typeof window !== "undefined") {
-        const { clearUser } = useUserStore.getState();
-        clearUser();
-        if (window.location.pathname !== "/admin") {
-          window.location.href = "/admin";
-        }
+      const { clearUser } = useUserStore.getState();
+      clearUser();
+
+      // Only redirect authenticated sessions; skip public/unauthenticated pages.
+      if (hadToken && window.location.pathname !== "/login") {
+        window.location.href = "/login";
       }
     }
 

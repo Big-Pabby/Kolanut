@@ -7,6 +7,11 @@ interface FormInputProps {
   onChange: (value: string) => void;
   type?: string;
   className?: string;
+  /**
+   * Defaults to "off" so the browser does not auto-fill insured-person details
+   * (e.g. NIN / phone) with the signed-in user's saved data.
+   */
+  autoComplete?: string;
 }
 
 export default function FormInput({
@@ -16,6 +21,7 @@ export default function FormInput({
   onChange,
   type = 'text',
   className = '',
+  autoComplete = 'off',
 }: FormInputProps) {
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
@@ -25,6 +31,7 @@ export default function FormInput({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        autoComplete={autoComplete}
         className="h-12 w-full rounded-[10px] border border-[#d1d5db] px-3 text-sm text-[#161616] placeholder:text-[#6b7280] shadow-[0_1px_2px_rgba(18,26,43,0.05)] outline-none focus:border-brand-red transition-colors bg-white"
       />
     </div>

@@ -14,6 +14,7 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import { useAdminLogout } from "@/app/login/hooks";
 
 const navItems = [
   { label: "Dashboard", icon: <LayoutGrid />, href: "/admin/dashboard" },
@@ -29,6 +30,7 @@ const navItems = [
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const logout = useAdminLogout();
 
   return (
     <aside
@@ -77,9 +79,10 @@ export default function AdminSidebar() {
 
         {/* Divider + Logout */}
         <div className="mt-auto pt-4">
-          <Link
-            href="/logout"
-            className="flex items-center gap-2 px-3 py-3 rounded-lg transition-colors"
+          <button
+            type="button"
+            onClick={logout}
+            className="flex w-full items-center gap-2 px-3 py-3 rounded-lg transition-colors hover:bg-white/10"
             style={{
               color: "#ffffff",
               fontSize: 14,
@@ -101,7 +104,7 @@ export default function AdminSidebar() {
               <LogOut />
             </span>
             Log out
-          </Link>
+          </button>
         </div>
       </nav>
     </aside>

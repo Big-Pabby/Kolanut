@@ -76,7 +76,7 @@ export const useAdminLogout = () => {
     clearUser();
     toast.success("Logged out successfully");
     if (typeof window !== "undefined") {
-      window.location.href = "/admin";
+      window.location.href = "/login";
     }
   };
 };

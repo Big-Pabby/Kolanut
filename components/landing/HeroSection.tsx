@@ -89,7 +89,7 @@ export default function HeroSection() {
                 Get Insured Now
               </Button>
               </Link>
-              <Link href='/about'>
+              <Link href='/resources'>
               <Button className="rounded-full border border-white bg-transparent !py-3 !px-8 text-sm lg:text-base font-medium text-white !hover:bg-white/10 h-auto flex  items-center justify-center">
                 Learn More
               </Button>

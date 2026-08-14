@@ -181,14 +181,19 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Sign In */}
-        <div className="hidden lg:flex">
+        {/* Sign In / Sign Up */}
+        <div className="hidden lg:flex items-center gap-3">
           <Link href={"/login"}>
             <Button
               variant="outline"
               className="rounded-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white transition-colors"
             >
               Sign In
+            </Button>
+          </Link>
+          <Link href={"/register"}>
+            <Button className="rounded-full bg-brand-red text-white hover:bg-brand-red/90 transition-colors">
+              Sign Up
             </Button>
           </Link>
         </div>
@@ -291,10 +296,18 @@ export default function Navbar() {
                   </Link>
                 ))}
 
-                <div className="p-6 mt-2">
+                <div className="p-6 mt-2 flex flex-col gap-3">
                   <Link href={"/login"}>
                     <Button className="w-full rounded-full bg-white text-brand-red hover:bg-gray-100 py-6 text-base font-medium">
                       Sign In
+                    </Button>
+                  </Link>
+                  <Link href={"/register"}>
+                    <Button
+                      variant="outline"
+                      className="w-full rounded-full border-white bg-transparent text-white hover:bg-white/10 py-6 text-base font-medium"
+                    >
+                      Sign Up
                     </Button>
                   </Link>
                 </div>
