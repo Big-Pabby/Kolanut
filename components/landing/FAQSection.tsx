@@ -19,7 +19,7 @@ export default function FAQSection() {
   const faqs = useMemo(
     () =>
       (faqsFromApi ?? []).filter(
-        (faq) => faq.category?.toLowerCase() === "general",
+        (faq) => faq.category?.toLowerCase() === "general questions",
       ),
     [faqsFromApi],
   );

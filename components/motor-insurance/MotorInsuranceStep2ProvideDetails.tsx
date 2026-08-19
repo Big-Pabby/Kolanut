@@ -375,12 +375,12 @@ export default function MotorInsuranceStep2ProvideDetails({
         </div>
       </div>
 
-      <div className="mt-6 bg-[#FFFAFA] border border-[#FFD4D6] rounded-[8px] p-6 text-[#4B5563] text-base">
+      {/* <div className="mt-6 bg-[#FFFAFA] border border-[#FFD4D6] rounded-[8px] p-6 text-[#4B5563] text-base">
         Please note that once your purchase is completed, you will immediately
         receive a link to carry out your vehicle inspection. Kindly follow the
         instructions in the link to complete the inspection, or call +234 020
         12800 700 or +234 701 939 1747 for any assistance.
-      </div>
+      </div> */}
 
       {/* Action Buttons */}
       <div className="flex gap-4 mt-10">

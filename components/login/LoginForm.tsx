@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
 import { useAdminLogin } from "@/app/login/hooks";
 
 export default function LoginForm() {
@@ -38,8 +39,18 @@ export default function LoginForm() {
   const isLoading = loginMutation.isPending;
 
   return (
-    <div className="flex flex-1 items-center justify-center px-6 py-12 bg-white">
-      <div className="w-full max-w-[477px]">
+    <div className="flex flex-1 flex-col bg-white px-6 py-8 lg:px-12">
+      {/* Back link */}
+      <Link
+        href="/"
+        className="inline-flex items-center gap-2 self-start text-sm text-[#111827] hover:text-brand-red"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        Go back to homepage
+      </Link>
+
+      <div className="flex flex-1 items-center justify-center">
+        <div className="w-full max-w-[477px]">
         {/* Header */}
         <div className="flex flex-col gap-2 text-center mb-6">
           <h2
@@ -188,6 +199,7 @@ export default function LoginForm() {
             </Link>
           </p>
         </form>
+        </div>
       </div>
     </div>
   );

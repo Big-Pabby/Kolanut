@@ -1,15 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUserStore } from "@/lib/store/user-store";
+import { toast } from "@/lib/utils/toast";
 
 type Tab = "personal" | "password";
 
 export default function AccountSettingsPage() {
   const [activeTab, setActiveTab] = useState<Tab>("personal");
 
-  // Personal Info state
-  const [fullName, setFullName] = useState("Mauteen Adeleke");
-  const [email, setEmail] = useState("mauteenadeleke@gmail.com");
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
+
+  // Personal Info state — prefilled from the signed-in user
+  const [fullName, setFullName] = useState(user?.fullname ?? "");
+  const [email, setEmail] = useState(user?.email ?? "");
+
+  // Keep fields in sync once the persisted user hydrates / changes
+  useEffect(() => {
+    setFullName(user?.fullname ?? "");
+    setEmail(user?.email ?? "");
+  }, [user?.fullname, user?.email]);
 
   // Password state
   const [currentPassword, setCurrentPassword] = useState("");
@@ -18,17 +29,25 @@ export default function AccountSettingsPage() {
 
   const handlePersonalSave = (e: React.FormEvent) => {
     e.preventDefault();
-    // handle save logic
-    alert("Personal information saved!");
+    if (!user) return;
+    setUser({ ...user, fullname: fullName.trim(), email: email.trim() });
+    toast.success("Personal information saved");
   };
 
   const handlePasswordSave = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      alert("Passwords do not match.");
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error("Please fill in all password fields");
       return;
     }
-    alert("Password updated!");
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    toast.success("Password updated");
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
   };
 
   return (
@@ -73,6 +92,7 @@ export default function AccountSettingsPage() {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Enter your full name"
                   className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
                 />
               </div>
@@ -86,6 +106,7 @@ export default function AccountSettingsPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
                   className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
                 />
               </div>

@@ -74,7 +74,7 @@ export default function ComprehensiveAutoInsurancePolicyPage() {
                  onUpdate={(field, value) =>
                    updateField(field as keyof ComprehensiveAutoInsuranceFormData, value)
                  }
-                 onContinue={handleContinueStep2}
+                 onContinue={handleContinueStep1}
                  onBack={handleBack}
                />
              )}

@@ -82,7 +82,7 @@ export default function OurStory() {
                 step.
               </p>
               <p className="text-base md:text-lg leading-[26.1px] text-body-text">
-                Today, we offer Home, Motor, Travel, and Marine (Cargo)
+                Today, we offer Home, Motor,  and Life
                 insurance through our digital platform, in partnership with
                 Leadway Insurance Company, one of Nigeria's established
                 insurers. Tomorrow, we aim to extend this experience across more
