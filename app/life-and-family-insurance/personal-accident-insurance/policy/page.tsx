@@ -23,10 +23,6 @@ function formatNaira(amount: number): string {
   return `₦${amount.toLocaleString("en-NG")}`;
 }
 
-function formatUsd(amount: number): string {
-  const usd = Math.round(amount / 1500);
-  return `$${usd.toLocaleString("en-US")}`;
-}
 
 function getPlanLabel(premium: string): string {
   if (premium === "20000") return "Gold Plan";
@@ -45,8 +41,7 @@ export default function PersonalAccidentInsurancePolicyPage() {
 
   const handleBackToHome = () => {
     reset();
-    window.location.href =
-      "/life-and-family-insurance/personal-accident-insurance";
+    window.location.href = "/insured";
   };
 
   const premium = parseInt(formData.premiumAmount || "0", 10);
@@ -108,7 +103,7 @@ export default function PersonalAccidentInsurancePolicyPage() {
                 currencyCode="₦"
                 onPay={handleContinueStep2}
                 onBack={handleBack}
-                payButtonLabel={`PAY NOW - ${formatUsd(total)}`}
+                payButtonLabel={`PAY NOW - ${formatNaira(total)}`}
                 showCoupon
               />
             )}
@@ -122,7 +117,7 @@ export default function PersonalAccidentInsurancePolicyPage() {
                 }
                 insuranceType="Personal Protection Insurance"
                 productName={getPlanLabel(formData.premiumAmount)}
-                premiumPaid={formatUsd(total)}
+                premiumPaid={formatNaira(total)}
                 coveragePeriod="12 Months"
                 userEmail={formData.email || "your email"}
                 onBackToHome={handleBackToHome}

@@ -84,10 +84,6 @@ function formatNaira(amount: number): string {
   return `₦${amount.toLocaleString("en-NG")}`;
 }
 
-function formatUsd(amount: number): string {
-  const usd = Math.round(amount / 1500);
-  return `$${usd.toLocaleString("en-US")}`;
-}
 
 function getPlanLabel(planId: string): string {
   const map: Record<string, string> = {
@@ -116,7 +112,7 @@ export default function LandlordPolicyPage() {
 
   const handleBackToHome = () => {
     reset();
-    window.location.href = "/";
+    window.location.href = "/insured";
   };
 
   const handleSelectPlan = (planId: string, price: number) => {
@@ -204,7 +200,7 @@ export default function LandlordPolicyPage() {
                 currencyCode="₦"
                 onPay={handleContinueStep3}
                 onBack={handleBack}
-                payButtonLabel={`PAY NOW - ${formatUsd((formData.selectedPlanPrice || 45000) + 10)}`}
+                payButtonLabel={`PAY NOW - ${formatNaira((formData.selectedPlanPrice || 45000) + 10)}`}
               />
             )}
 
@@ -217,7 +213,7 @@ export default function LandlordPolicyPage() {
                 }
                 insuranceType="Landlord Insurance"
                 productName={getPlanLabel(formData.selectedPlan)}
-                premiumPaid={formatUsd(formData.selectedPlanPrice || 45000)}
+                premiumPaid={formatNaira(formData.selectedPlanPrice || 45000)}
                 coveragePeriod="12 Months"
                 userEmail={formData.email || "your email"}
                 onBackToHome={handleBackToHome}

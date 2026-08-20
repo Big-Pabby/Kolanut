@@ -22,7 +22,7 @@ export default function CoverageDetailsPage() {
           We couldn&apos;t find the coverage details for this plan.
         </p>
         <Link
-          href="/property-insurance"
+          href="/home-and-property-insurance"
           className="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded-full"
         >
           Back to Insurance
@@ -33,11 +33,11 @@ export default function CoverageDetailsPage() {
 
   const getBackLink = () => {
     const typeMap: Record<string, string> = {
-      "tenant-policy": "/property-insurance/tenant-policy",
-      "homeowner-policy": "/property-insurance/homeowner-policy",
-      "landlord-policy": "/property-insurance/landlord-policy",
+      "tenant-policy": "/home-and-property-insurance/tenant-policy",
+      "homeowner-policy": "/home-and-property-insurance/homeowner-policy",
+      "landlord-policy": "/home-and-property-insurance/landlord-policy",
     };
-    return typeMap[insuranceType] || "/property-insurance";
+    return typeMap[insuranceType] || "/home-and-property-insurance";
   };
 
   return (

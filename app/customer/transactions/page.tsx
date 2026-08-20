@@ -125,7 +125,7 @@ export default function TransactionsPage() {
           <CardContent className="p-4 space-y-4">
             {/* Tabs + Search */}
             <div className="flex flex-col sm:flex-row justify-between gap-3 py-4 border-b border-[#E5E7EB] ">
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-full overflow-x-auto">
                 <TabsList className="bg-[#F9FAFB] gap-1 !p-1 rounded-[8px]">
                   <TabsTrigger
                     value="premium"

@@ -21,10 +21,6 @@ function formatNaira(amount: number): string {
   return `₦${amount.toLocaleString("en-NG")}`;
 }
 
-function formatUsd(amount: number): string {
-  const usd = Math.round(amount / 1500);
-  return `$${usd.toLocaleString("en-US")}`;
-}
 
 function getBenefitLabel(premium: string): string {
   if (premium === "10000") return "Up to ₦1,000,000";
@@ -52,7 +48,7 @@ export default function TermLifePlanPolicyPage() {
 
   const handleBackToHome = () => {
     reset();
-    window.location.href = "/life-and-family-insurance/term-life-plan";
+    window.location.href = "/insured";
   };
 
   const premium = parseInt(formData.premiumAmount || "0", 10);
@@ -144,7 +140,7 @@ export default function TermLifePlanPolicyPage() {
                 currencyCode="₦"
                 onPay={handleContinueStep4}
                 onBack={handleBack}
-                payButtonLabel={`PAY NOW - ${formatUsd(total)}`}
+                payButtonLabel={`PAY NOW - ${formatNaira(total)}`}
                 showCoupon
               />
             )}
@@ -158,7 +154,7 @@ export default function TermLifePlanPolicyPage() {
                 }
                 insuranceType="Term Life Plan Insurance"
                 productName="Term Life Plan"
-                premiumPaid={formatUsd(total)}
+                premiumPaid={formatNaira(total)}
                 coveragePeriod="12 Months"
                 userEmail={formData.email || "your email"}
                 onBackToHome={handleBackToHome}

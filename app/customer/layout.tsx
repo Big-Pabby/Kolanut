@@ -12,9 +12,12 @@ export default function CustomerLayout({
     <CustomerProvider>
       <div className="flex min-h-screen" style={{ backgroundColor: "#f9fafb" }}>
         <CustomerSidebar />
-        <div className="flex flex-col flex-1 transition-all duration-300 md:ml-[250px]">
+        {/* min-w-0 lets this column shrink below its content's intrinsic width,
+            so wide tables scroll inside their own container instead of
+            stretching the whole page. */}
+        <div className="flex flex-1 min-w-0 flex-col transition-all duration-300 md:ml-[250px]">
           <CustomerHeader />
-          <main className="flex-1 overflow-y-auto" style={{ paddingTop: 64 }}>
+          <main className="flex-1 min-w-0 overflow-y-auto pt-16">
             <div className="p-4 md:p-6 lg:p-10">{children}</div>
           </main>
         </div>

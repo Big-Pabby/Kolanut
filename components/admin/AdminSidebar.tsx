@@ -13,8 +13,10 @@ import {
   MessageCircleQuestionMark,
   Settings,
   LogOut,
+  X,
 } from "lucide-react";
 import { useAdminLogout } from "@/app/login/hooks";
+import { useAdminShell } from "./AdminContext";
 
 const navItems = [
   { label: "Dashboard", icon: <LayoutGrid />, href: "/admin/dashboard" },
@@ -31,19 +33,42 @@ const navItems = [
 export default function AdminSidebar() {
   const pathname = usePathname();
   const logout = useAdminLogout();
+  const { isMobileMenuOpen, setIsMobileMenuOpen } = useAdminShell();
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <aside
-      className="fixed left-0 top-0 h-screen flex flex-col z-40"
-      style={{ width: 250, backgroundColor: "#af060d" }}
-    >
+    <>
+      {/* Backdrop — only ever visible while the drawer is open on mobile */}
+      <div
+        onClick={closeMobileMenu}
+        aria-hidden="true"
+        className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 md:hidden ${
+          isMobileMenuOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      />
+
+      <aside
+        className={`fixed left-0 top-0 z-50 flex h-screen w-[250px] flex-col transition-transform duration-300 md:z-40 md:translate-x-0 ${
+          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+        style={{ backgroundColor: "#af060d" }}
+      >
       {/* Logo */}
-      <div className="px-4 py-6">
+      <div className="flex items-center justify-between px-4 py-6">
         <img
           src="/images/LogoFooter.svg"
           alt="Kolanut"
           className="h-9 w-auto"
         />
+        <button
+          type="button"
+          onClick={closeMobileMenu}
+          aria-label="Close menu"
+          className="rounded-lg p-2 transition-colors hover:bg-white/10 md:hidden"
+        >
+          <X className="h-5 w-5 text-white" />
+        </button>
       </div>
 
       {/* Nav Items */}
@@ -55,6 +80,7 @@ export default function AdminSidebar() {
             <Link
               key={item.label}
               href={item.href}
+              onClick={closeMobileMenu}
               className="flex items-center h-11 gap-2 px-3 py-3  transition-colors"
               style={{
                 color: isActive ? "#AF060D" : "white",
@@ -107,6 +133,7 @@ export default function AdminSidebar() {
           </button>
         </div>
       </nav>
-    </aside>
+      </aside>
+    </>
   );
 }

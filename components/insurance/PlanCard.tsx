@@ -32,7 +32,7 @@ export default function PlanCard({
   insuranceType,
 }: PlanCardProps) {
   const coverageDetailsLink = insuranceType
-    ? `/property-insurance/coverage/${insuranceType}/${plan.id}`
+    ? `/home-and-property-insurance/coverage/${insuranceType}/${plan.id}`
     : null;
 
   return (

@@ -72,10 +72,10 @@ export default function HeroSection() {
               <h1 className="font-heading text-5xl lg:text-[60px] font-bold capitalize leading-tight text-white max-w-[774px]">
                 Insurance Made Simple, Fast And Truly African
               </h1>
+              
               <p className="text-base lg:text-xl font-normal leading-relaxed text-white max-w-[700px]">
                 Get covered from your phone or laptop—no queues, no heavy
-                paperwork. Protect your home, vehicle, travels, and cargo with
-                ease.
+                paperwork. Protect your home, vehicle, life and family with ease.
               </p>
             </div>
 

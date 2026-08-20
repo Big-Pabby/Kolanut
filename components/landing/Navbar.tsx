@@ -20,7 +20,11 @@ const navLinks = [
 
 const insuredSubItems = [
   { label: "Overview", href: "/insured", Icon: "/dashboard.svg" },
-  { label: "Property", href: "/property-insurance", Icon: "/home.svg" },
+  {
+    label: "Property",
+    href: "/home-and-property-insurance",
+    Icon: "/home.svg",
+  },
   { label: "Motor", href: "/motor-insurance", Icon: "/motor.svg" },
   {
     label: "Life & Family",

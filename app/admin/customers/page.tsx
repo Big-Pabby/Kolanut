@@ -108,7 +108,7 @@ export default function CustomerManagementPage() {
         </div>
         <div className="bg-white border border-[#F3F4F6] rounded-[8px]">
           {/* Filters */}
-          <div className="px-4 py-5 flex justify-between items-center gap-3">
+          <div className="px-4 py-5 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             {/* KYC Status Filter */}
             <Select
               value={kycFilter}
@@ -200,7 +200,7 @@ export default function CustomerManagementPage() {
           </div>
 
           {/* Pagination */}
-          <div className="px-8 py-5 flex items-center justify-between border-t border-gray-100">
+          <div className="px-4 md:px-8 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-gray-100">
             <p className="text-sm text-gray-500">
               Showing{" "}
               {filtered.length > 0 ? (currentPage - 1) * ITEMS_PER_PAGE + 1 : 0}{" "}

@@ -18,10 +18,6 @@ function formatNaira(amount: number): string {
   return `₦${amount.toLocaleString("en-NG")}`;
 }
 
-function formatUsd(amount: number): string {
-  const usd = Math.round(amount / 1500);
-  return `$${usd.toLocaleString("en-US")}`;
-}
 
 function getPlanLabel(planId: string): string {
   const map: Record<string, string> = {
@@ -43,7 +39,7 @@ export default function ComprehensiveAutoInsurancePolicyPage() {
 
   const handleBackToHome = () => {
     reset();
-    window.location.href = "/motor-insurance/comprehensive-auto-insurance";
+    window.location.href = "/insured";
   };
 
   const handleSelectPlan = (planId: string, price: number) => {
@@ -130,7 +126,7 @@ export default function ComprehensiveAutoInsurancePolicyPage() {
                 currencyCode="₦"
                 onPay={handleContinueStep3}
                 onBack={handleBack}
-                payButtonLabel={`PAY NOW - ${formatUsd((formData.selectedPlanPrice || 50000) + 100 + 10)}`}
+                payButtonLabel={`PAY NOW - ${formatNaira((formData.selectedPlanPrice || 50000) + 100 + 10)}`}
                 showCoupon
               />
             )}
@@ -144,7 +140,7 @@ export default function ComprehensiveAutoInsurancePolicyPage() {
                 }
                 insuranceType="Comprehensive Auto Insurance"
                 productName={getPlanLabel(formData.selectedPlan)}
-                premiumPaid={formatUsd(formData.selectedPlanPrice || 50000)}
+                premiumPaid={formatNaira(formData.selectedPlanPrice || 50000)}
                 coveragePeriod="12 Months"
                 userEmail={formData.email || "your email"}
                 onBackToHome={handleBackToHome}

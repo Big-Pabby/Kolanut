@@ -18,7 +18,7 @@ export default function HomeInsurancePage() {
   const handleBack = () => setStep(currentStep - 1);
   const handleBackToHome = () => {
     reset();
-    window.location.href = '/';
+    window.location.href = "/insured";
   };
 
   return (

@@ -8,27 +8,26 @@ export const metadata = {
     "Our Property Insurance Product reimburses you in the event of damage or theft of your property. It also provides cover for injuries incurred on your property.",
 };
 
-const HERO_IMAGE =
-  "/images/property.jpg";
+const HERO_IMAGE = "/images/property.jpg";
 
 export default function PropertyInsurancePage() {
-   const products = [
+  const products = [
     {
       title: "Tenant Policy",
       description: "Protect household items and personal effects.",
-      href: "/property-insurance/tenant-policy",
+      href: "/home-and-property-insurance/tenant-policy",
       image: "/images/tenant.png",
     },
     {
       title: "Homeowner Policy",
       description: "Full protection for building, contents, and liabilities",
-      href: "/property-insurance/homeowner-policy",
+      href: "/home-and-property-insurance/homeowner-policy",
       image: "/images/homeowner.png",
     },
     {
       title: "Landlord's Policy",
       description: "Covers building, loss of rent and tenant-related risks",
-      href: "/property-insurance/landlord-policy",
+      href: "/home-and-property-insurance/landlord-policy",
       image: "/images/landlord.png",
     },
   ];

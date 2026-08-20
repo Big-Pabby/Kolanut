@@ -7,7 +7,7 @@ import EmailIcon from '@/src/assets/icons/email-icon.svg';
 import Link from 'next/link';
 
 const POLICY_NUMBER = 'KA-09795170';
-const PREMIUM_PAID = '$5,110';
+const PREMIUM_PAID = '₦5,110.00';
 const COVERAGE_PERIOD = '12 Months';
 const EFFECTIVE_DATE = new Date().toLocaleDateString('en-US');
 
@@ -94,11 +94,12 @@ export default function Step4PolicyDocument({ onBackToHome }: Step4Props) {
             onClick={onBackToHome}
             className="rounded-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white font-medium px-8 py-3 h-auto transition-colors"
           >
-            Back to Home
+            Back to Insurance
           </Button>
           <Button
-            className="rounded-full bg-brand-red hover:bg-brand-red/90 text-white font-medium px-8 py-3 h-auto"
-            onClick={() => {}}
+            disabled
+            title="Policy download is not available yet"
+            className="rounded-full bg-brand-red hover:bg-brand-red/90 text-white font-medium px-8 py-3 h-auto disabled:opacity-60 disabled:cursor-not-allowed"
           >
             Download Policy
           </Button>

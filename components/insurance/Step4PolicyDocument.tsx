@@ -100,11 +100,12 @@ export default function Step4PolicyDocument({
               onClick={onBackToHome}
               className="rounded-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white font-medium px-8 py-3 h-13 transition-colors w-full flex-1"
             >
-              Back to Home
+              Back to Insurance
             </Button>
             <Button
-              className="rounded-full bg-brand-red hover:bg-brand-red/90 text-white font-medium px-8 py-3 h-13 w-full flex-1 sm:w-auto"
-              onClick={() => window.print()}
+              disabled
+              title="Policy download is not available yet"
+              className="rounded-full bg-brand-red hover:bg-brand-red/90 text-white font-medium px-8 py-3 h-13 w-full flex-1 sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
               aria-label={downloadLabel}
             >
               {downloadLabel}

@@ -55,15 +55,15 @@ const recentPremiums = [
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen">
+    <div>
       {/* KYC Banner */}
-      <div className="bg-[#273DB4] p-4 flex items-center justify-between rounded-[8px]">
-        <div className="flex items-center gap-4">
+      <div className="bg-[#273DB4] p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-[8px]">
+        <div className="flex items-center gap-4 min-w-0">
           <div className="h-12 w-12 rounded-full bg-[#F9FAFB] flex items-center justify-center">
             <User className="h-6 w-6 text-[#AF060D]" />
           </div>
-          <div>
-            <h2 className="text-white font-semibold text-xl leading-tight font-heading">
+          <div className="min-w-0">
+            <h2 className="text-white font-semibold text-lg sm:text-xl leading-tight font-heading">
               Complete Your KYC
             </h2>
             <p className="text-white text-sm mt-0.5">
@@ -71,7 +71,7 @@ export default function DashboardPage() {
             </p>
           </div>
         </div>
-        <Button className="bg-[#AF060D] hover:bg-[#AF060D]/90 text-white text-sm font-medium px-5 py-2 rounded-full h-auto">
+        <Button className="w-full sm:w-auto shrink-0 bg-[#AF060D] hover:bg-[#AF060D]/90 text-white text-sm font-medium px-5 py-2 rounded-full h-auto">
           Complete KYC
         </Button>
       </div>

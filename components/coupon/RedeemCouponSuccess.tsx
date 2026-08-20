@@ -24,7 +24,7 @@ export default function RedeemCouponSuccess({
   insuranceType = "Home Insurance",
   product = "Tenant Policy",
   coveragePeriod = "12 Months",
-  premiumPaid = "$5,110",
+  premiumPaid = "₦5,110.00",
   email = "mauteen@gmail.com",
 }: RedeemCouponSuccessProps) {
   return (
@@ -96,7 +96,9 @@ export default function RedeemCouponSuccess({
           </Button>
           <Button
             onClick={onDownload}
-            className="rounded-full bg-brand-red hover:bg-brand-red/90 text-white font-medium px-8 py-3 h-auto"
+            disabled={!onDownload}
+            title={onDownload ? undefined : "Policy download is not available yet"}
+            className="rounded-full bg-brand-red hover:bg-brand-red/90 text-white font-medium px-8 py-3 h-auto disabled:opacity-60 disabled:cursor-not-allowed"
           >
             Download Policy
           </Button>

@@ -26,7 +26,7 @@ const defaultProducts: InsuranceProduct[] = [
     icon: "/home.svg",
     title: "Home & Property Insurance",
     desc: "Our Property Insurance products you in the event of damage or theft of your property.",
-    href: "/property-insurance",
+    href: "/home-and-property-insurance",
   },
   {
     icon: "/life-family.svg",

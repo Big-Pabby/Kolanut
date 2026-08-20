@@ -8,7 +8,7 @@ import { image } from "framer-motion/client";
 const teamMembers = [
   { name: "Noah Ibrahim", role: "Chief Executive Officer", image: "/images/team/ceo.png" },
   { name: "Collins Oforgu", role: "Chief Of Operations", image: "/images/team/collins.png" },
-  { name: "Mauteen Adeleke", role: "Chief Technology Officer", image: "/images/team/mauteen.png" },
+  { name: "Mauteen Adeleke", role: "Technology Officer", image: "/images/team/mauteen.png" },
   { name: "Edith Adebayo", role: "Client Relations Officer", image: "/images/team/edith.png" },
 ];
 

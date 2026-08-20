@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { motion, useInView, type Variants } from "framer-motion";
 import { useFaqs } from "@/app/faq/hooks/useFaqs";
+import Link from "next/link";
 
 export default function FAQSection() {
   const ref = useRef(null);
@@ -71,9 +72,11 @@ export default function FAQSection() {
                 email. We'll respond as soon as possible to assist you.
               </p>
             </div>
-            <Button className="w-fit rounded-full bg-brand-red !py-2.5 !px-6 lg:!py-3 lg:!px-8 text-sm lg:text-base font-medium text-white hover:bg-brand-red/90 h-auto">
-              Contact Us
-            </Button>
+            <Link href="/contact">
+              <Button className="w-fit rounded-full bg-brand-red !py-2.5 !px-6 lg:!py-3 lg:!px-8 text-sm lg:text-base font-medium text-white hover:bg-brand-red/90 h-auto">
+                Contact Us
+              </Button>
+            </Link>
           </motion.div>
 
           {/* Right accordion */}

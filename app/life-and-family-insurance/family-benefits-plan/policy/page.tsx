@@ -21,10 +21,6 @@ function formatNaira(amount: number): string {
   return `₦${amount.toLocaleString("en-NG")}`;
 }
 
-function formatUsd(amount: number): string {
-  const usd = Math.round(amount / 1500);
-  return `$${usd.toLocaleString("en-US")}`;
-}
 
 function getPlanLabel(premium: string): string {
   if (premium === "25000") return "Premium Plan";
@@ -55,7 +51,7 @@ export default function FamilyBenefitsPlanPolicyPage() {
 
   const handleBackToHome = () => {
     reset();
-    window.location.href = "/life-and-family-insurance/family-benefits-plan";
+    window.location.href = "/insured";
   };
 
   const premium = parseInt(formData.premiumAmount || "0", 10);
@@ -141,7 +137,7 @@ export default function FamilyBenefitsPlanPolicyPage() {
                 currencyCode="₦"
                 onPay={handleContinueStep4}
                 onBack={handleBack}
-                payButtonLabel={`PAY NOW - ${formatUsd(total)}`}
+                payButtonLabel={`PAY NOW - ${formatNaira(total)}`}
                 showCoupon
               />
             )}
@@ -155,7 +151,7 @@ export default function FamilyBenefitsPlanPolicyPage() {
                 }
                 insuranceType="Family Benefits Plan"
                 productName={getPlanLabel(formData.premiumAmount)}
-                premiumPaid={formatUsd(total)}
+                premiumPaid={formatNaira(total)}
                 coveragePeriod="12 Months"
                 userEmail={formData.email || "your email"}
                 onBackToHome={handleBackToHome}

@@ -1,9 +1,7 @@
 "use client";
 
-import { Bell, Search, User, Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Bell, User, Menu } from "lucide-react";
 import { useCustomer } from "./CustomerContext";
-import { useState, useEffect } from "react";
 import { useUserStore } from "@/lib/store/user-store";
 
 /** "Mauteen Adeleke" -> "MA", falls back to the first letter of the email. */
@@ -16,30 +14,20 @@ const getInitials = (name: string) =>
     .join("");
 
 export default function CustomerHeader() {
-  const { isMobileMenuOpen, setIsMobileMenuOpen } = useCustomer();
-  const [isMobile, setIsMobile] = useState(false);
+  const { setIsMobileMenuOpen } = useCustomer();
   const user = useUserStore((state) => state.user);
 
   const displayName = user?.fullname || user?.email || "";
   const initials = displayName ? getInitials(displayName) : "";
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
   return (
+    // The offset is a breakpoint, not a measured viewport width, so the header
+    // is positioned correctly on the very first paint.
     <header
-      className="fixed top-0 right-0 h-16 flex items-center justify-between px-4 md:px-6 z-30"
+      className="fixed top-0 right-0 left-0 z-30 flex h-16 items-center justify-between px-4 md:left-[250px] md:px-6"
       style={{
-        left: isMobile ? 0 : 250,
         backgroundColor: "#ffffff",
         borderBottom: "1px solid #e5e7eb",
-        transition: "left 0.3s ease",
       }}
     >
       {/* Mobile Menu Button */}

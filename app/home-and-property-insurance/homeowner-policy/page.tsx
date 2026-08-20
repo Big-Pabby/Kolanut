@@ -1,7 +1,7 @@
 "use client";
 
-import { useTenantPolicyStore } from "@/lib/store/tenantPolicyStore";
-import type { TenantPolicyFormData } from "@/lib/store/tenantPolicyStore";
+import { useHomeownerPolicyStore } from "@/lib/store/homeownerPolicyStore";
+import type { HomeownerPolicyFormData } from "@/lib/store/homeownerPolicyStore";
 import PropertyHeroSection from "@/components/property-insurance/PropertyHeroSection";
 import GenericStepIndicator from "@/components/insurance/GenericStepIndicator";
 import Step1ChoosePlan from "@/components/insurance/Step1ChoosePlan";
@@ -9,65 +9,78 @@ import Step2ProvideDetails from "@/components/insurance/Step2ProvideDetails";
 import Step3ReviewPay from "@/components/insurance/Step3ReviewPay";
 import Step4PolicyDocument from "@/components/insurance/Step4PolicyDocument";
 
-const TENANT_PLANS = [
+const HOMEOWNER_PLANS = [
   {
-    id: "basic",
+    id: "Basic",
     name: "Basic Plan",
     description: "Perfect for protection for you and up to content",
-    price: 26275,
+    price: 124775,
     features: [
-      "Covers household items and personal effects",
+      "Building coverage up to ₦15 million",
+      "Contents coverage up to ₦5 million",
       "Fire and allied perils",
-      "Burglary and theft coverage",
-      "Personal liability protection",
+      "Burglary and theft",
+      "Personal liability",
     ],
   },
   {
     id: "bronze",
     name: "Bronze Plan",
     description: "Better coverage for your home, contents and small gadgets",
-    price: 49775,
+    price: 221775,
     features: [
-      "All Basic plan benefits",
-      "Higher settlement limits",
-      "Additional perils coverage",
-      "Extended liability",
+      "Building coverage up to ₦50 million",
+      "Contents coverage up to ₦20 million",
+      "All perils coverage",
+      "Valuable items included",
+      "Loss of rent",
+      "Public liability",
+      "Legal expenses",
     ],
   },
   {
     id: "silver",
     name: "Silver Plan",
     description: "Best balance of affordability and complete protection",
-    price: 96775,
+    price: 415775,
     features: [
-      "All Bronze plan benefits",
-      "Comprehensive all-risks coverage",
-      "Valuable items protection",
-      "Loss of rent coverage",
+      "Unlimited building coverage",
+      "Unlimited contents coverage",
+      "Comprehensive all-risks",
+      "Worldwide coverage",
+      "High-value items",
+      "VIP claims service",
+      "24/7 support",
     ],
   },
   {
     id: "gold",
     name: "Gold Plan",
     description: "Provides even with higher limits for valuables and more",
-    price: 143775,
+    price: 609775,
     features: [
-      "All Silver plan benefits",
-      "Higher valuables limits",
+      "Unlimited building coverage",
+      "Unlimited contents coverage",
+      "Comprehensive all-risks",
       "Worldwide coverage",
-      "Legal assistance",
+      "High-value items",
+      "VIP claims service",
+      "24/7 support",
     ],
   },
   {
     id: "platinum",
     name: "Platinum Plan",
     description: "All-round protection for high-value homes and possessions",
-    price: 237775,
+    price: 706775,
     features: [
-      "All Gold plan benefits",
-      "Unlimited coverage",
-      "Premium customer service",
-      "First-class claim handling",
+      "Unlimited building coverage",
+      "Unlimited contents coverage",
+      "Comprehensive all-risks",
+      "Worldwide coverage",
+      "High-value items",
+      "VIP claims service",
+      "24/7 support",
     ],
   },
 ];
@@ -76,20 +89,14 @@ function formatNaira(amount: number): string {
   return `₦${amount.toLocaleString("en-NG")}`;
 }
 
-function formatUsd(amount: number): string {
-  const usd = Math.round(amount / 1500);
-  return `$${usd.toLocaleString("en-US")}`;
-}
 
 function getPlanLabel(planId: string): string {
   const map: Record<string, string> = {
-    basic: "Basic Plan",
-    bronze: "Bronze Plan",
-    silver: "Silver Plan",
-    gold: "Gold Plan",
-    platinum: "Platinum Plan",
+    standard: "Standard Plan",
+    comprehensive: "Comprehensive Plan",
+    premium: "Premium Plan",
   };
-  return map[planId] || "Tenant Policy";
+  return map[planId] || "Homeowner Policy";
 }
 
 const STEPS = [
@@ -99,9 +106,9 @@ const STEPS = [
   { number: 4, label: "Policy Document" },
 ];
 
-export default function TenantPolicyPage() {
+export default function HomeownerPolicyPage() {
   const { currentStep, setStep, formData, updateField, reset } =
-    useTenantPolicyStore();
+    useHomeownerPolicyStore();
 
   const handleContinueStep1 = () => setStep(2);
   const handleContinueStep2 = () => setStep(3);
@@ -110,7 +117,7 @@ export default function TenantPolicyPage() {
 
   const handleBackToHome = () => {
     reset();
-    window.location.href = "/";
+    window.location.href = "/insured";
   };
 
   const handleSelectPlan = (planId: string, price: number) => {
@@ -122,8 +129,8 @@ export default function TenantPolicyPage() {
     <main className="min-h-screen bg-page-bg">
       {/* Hero */}
       <PropertyHeroSection
-        title="Tenant Insurance"
-        subtitle="Protect your household items and personal effects with our comprehensive tenant insurance."
+        title="Homeowner Insurance"
+        subtitle="Full protection for your building, contents, and liabilities."
       />
 
       {/* Steps Content */}
@@ -133,33 +140,41 @@ export default function TenantPolicyPage() {
           <GenericStepIndicator currentStep={currentStep} steps={STEPS} />
 
           {/* Step Content */}
-          <div className="transition-all max-w-[920px] mx-auto duration-300 mt-8">
+          <div className="transition-all duration-300 max-w-[920px] mx-auto mt-8">
             {currentStep === 1 && (
-              <Step1ChoosePlan<TenantPolicyFormData>
-                plans={TENANT_PLANS}
+              <Step1ChoosePlan<HomeownerPolicyFormData>
+                plans={HOMEOWNER_PLANS}
                 formatPrice={formatNaira}
                 onSelect={handleSelectPlan}
                 onContinue={handleContinueStep1}
-                insuranceType="tenant-policy"
+                title="Choose the Right Cover for Your Home"
+                description="Compare our flexible homeowner plans and find one that fits your home, your lifestyle, and your budget"
+                insuranceType="homeowner-policy"
               />
             )}
 
             {currentStep === 2 && (
-              <Step2ProvideDetails<TenantPolicyFormData>
-                personalFields={{
-                  firstName: formData.firstName,
-                  lastname: formData.lastname,
-                  email: formData.email,
-                  phone: formData.phone,
-                  dateOfBirth: formData.dateOfBirth,
-                  nin: formData.nin,
-                  state: formData.state,
-                  city: formData.city,
-                }}
+              <Step2ProvideDetails<HomeownerPolicyFormData>
+                 personalFields={{
+                   firstName: formData.firstName,
+                   lastname: formData.surname,
+                   email: formData.email,
+                   phone: formData.phone,
+                   dateOfBirth: formData.dateOfBirth,
+                   nin: formData.nin,
+                   state: formData.state,
+                   city: formData.city,
+                 }}
                 locationFields={{
                   address: formData.address,
                 }}
-                onUpdate={updateField}
+                 onUpdate={(field, value) => {
+                   const fieldName = (field as string) === "lastname" ? "surname" : field;
+                   updateField(
+                     fieldName as keyof HomeownerPolicyFormData,
+                     value
+                   );
+                 }}
                 onContinue={handleContinueStep2}
                 onBack={handleBack}
               />
@@ -171,7 +186,7 @@ export default function TenantPolicyPage() {
                   {
                     label: "Full Name:",
                     value:
-                      `${formData.firstName} ${formData.lastname}`.trim() ||
+                      `${formData.firstName} ${formData.surname}`.trim() ||
                       "N/A",
                   },
                   { label: "Insurance Type:", value: "Home Insurance" },
@@ -184,19 +199,24 @@ export default function TenantPolicyPage() {
                 costRows={[
                   {
                     label: "Premium Cost:",
-                    value: formatNaira(formData.selectedPlanPrice || 26275),
+                    value: formatNaira(formData.selectedPlanPrice || 35000),
+                  },
+                  {
+                    label: "Tax:",
+                    value: formatNaira(100),
                   },
                   {
                     label: "Extra Fee:",
                     value: `₦10`,
                   },
                 ]}
-                totalCost={(formData.selectedPlanPrice || 26275) + 10}
+                totalCost={(formData.selectedPlanPrice || 35000) + 100 + 10}
                 currencyFormatter={formatNaira}
                 currencyCode="₦"
                 onPay={handleContinueStep3}
                 onBack={handleBack}
-                payButtonLabel={`PAY NOW - ${formatUsd((formData.selectedPlanPrice || 26275) + 10)}`}
+                payButtonLabel={`PAY NOW - ${formatNaira((formData.selectedPlanPrice || 35000) + 100 + 10)}`}
+                showCoupon
               />
             )}
 
@@ -204,12 +224,12 @@ export default function TenantPolicyPage() {
               <Step4PolicyDocument
                 policyNumber="KA-09795170"
                 fullName={
-                  `${formData.firstName} ${formData.lastname}`.trim() ||
+                  `${formData.firstName} ${formData.surname}`.trim() ||
                   "Policy Holder"
                 }
                 insuranceType="Home Insurance"
                 productName={getPlanLabel(formData.selectedPlan)}
-                premiumPaid={formatUsd(formData.selectedPlanPrice || 26275)}
+                premiumPaid={formatNaira(formData.selectedPlanPrice || 35000)}
                 coveragePeriod="12 Months"
                 userEmail={formData.email || "your email"}
                 onBackToHome={handleBackToHome}

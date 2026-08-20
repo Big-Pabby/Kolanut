@@ -3,14 +3,11 @@
 import { useState } from 'react';
 import { useMarineInsuranceStore } from '@/lib/store/marineInsuranceStore';
 import { Button } from '@/components/ui/button';
+import { formatAsNaira, formatNaira } from '@/utils/textHelper';
 
 const PREMIUM_COST = 75000;
 const TAX = 3750;
 const EXTRA_FEE = 500;
-
-function formatNaira(amount: number) {
-  return `₦${amount.toLocaleString('en-NG')}`;
-}
 
 function getDisplayName(formData: ReturnType<typeof useMarineInsuranceStore.getState>['formData']) {
   if (formData.policyholderType === 'corporate') return formData.companyName || 'N/A';
@@ -111,7 +108,11 @@ export default function MarineStep3ReviewPay({ onPay, onBack }: Step3Props) {
             />
             <SummaryRow
               label="Insured Value:"
-              value={formData.insuredValue ? `₦${Number(formData.insuredValue).toLocaleString('en-NG')}` : 'N/A'}
+              value={
+                formData.insuredValue
+                  ? formatAsNaira(formData.insuredValue, formData.currency)
+                  : 'N/A'
+              }
             />
             <div className="flex items-center justify-between py-3">
               <span className="text-base font-normal text-[#4b5563]">Coverage Period:</span>

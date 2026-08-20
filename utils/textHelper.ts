@@ -81,3 +81,39 @@ export function formatPhoneNumber(phone: string): string {
   }
   return `+234${cleaned}`;
 }
+
+/**
+ * Conversion rates into Naira, keyed by the currency codes offered in the
+ * insurance forms. PLACEHOLDER VALUES — swap for a live rate feed before
+ * these figures are used for anything a customer is charged.
+ */
+export const FX_RATES_TO_NGN: Record<string, number> = {
+  NGN: 1,
+  USD: 1550,
+  EUR: 1680,
+  GBP: 1960,
+};
+
+/** Converts an amount in `currency` to Naira. Unknown codes are treated as NGN. */
+export function convertToNaira(
+  value: number | string,
+  currency: string = "NGN",
+): number {
+  const amount = typeof value === "string" ? parseFloat(value) : value;
+  if (isNaN(amount)) return 0;
+
+  const rate = FX_RATES_TO_NGN[currency?.toUpperCase()] ?? 1;
+  return amount * rate;
+}
+
+/**
+ * Single entry point for money shown anywhere in the insurance flows: converts
+ * out of whatever currency the customer entered and renders Naira only, so no
+ * screen ever mixes symbols.
+ */
+export function formatAsNaira(
+  value: number | string,
+  currency: string = "NGN",
+): string {
+  return formatNaira(convertToNaira(value, currency));
+}

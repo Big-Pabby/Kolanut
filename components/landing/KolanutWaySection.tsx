@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { motion, useInView, type Variants } from "framer-motion";
+import Link from "next/link";
 
 export default function KolanutWaySection() {
   const ref = useRef(null);
@@ -70,9 +71,11 @@ export default function KolanutWaySection() {
                 like a burden and more like a smart lifestyle decision.
               </p>
             </div>
-            <Button className="w-fit rounded-full bg-brand-red !py-2.5 !px-6 lg:!py-3 lg:!px-8 text-sm lg:text-base font-medium text-white hover:bg-brand-red/90 h-auto">
-              Get Insured Now
-            </Button>
+            <Link href="/get-insured">
+              <Button className="w-fit rounded-full bg-brand-red !py-2.5 !px-6 lg:!py-3 lg:!px-8 text-sm lg:text-base font-medium text-white hover:bg-brand-red/90 h-auto">
+                Get Insured Now
+              </Button>
+            </Link>
           </motion.div>
 
           {/* Right image */}

@@ -11,7 +11,7 @@ const products: InsuranceProduct[] = [
     icon: "/home.svg",
     title: "Home & Property Insurance",
     desc: "Cover medical emergencies, lost baggage, and trip disruptions on your next local or international trip.",
-    href: "/property-insurance",
+    href: "/home-and-property-insurance",
   },
   {
     icon: "/motor.svg",

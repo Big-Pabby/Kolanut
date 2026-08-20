@@ -20,7 +20,10 @@ const footerLinks = {
     { label: "Contact Us", href: "/contact" },
   ],
   insurance: [
-    { label: "Home & Property Insurance", href: "/property-insurance" },
+    {
+      label: "Home & Property Insurance",
+      href: "/home-and-property-insurance",
+    },
     { label: "Motor Insurance", href: "/motor-insurance" },
     { label: "Life & Family Insurance", href: "/life-and-family-insurance" },
     { label: "Get Insured", href: "/insured" },
@@ -28,7 +31,7 @@ const footerLinks = {
   quickLinks: [
     { label: "Resources", href: "/resources" },
     { label: "FAQs", href: "/faq" },
-    { label: "Premium Calculator", href: "/calculator" },
+
     { label: "Coupon", href: "/coupon" },
     // No claims page yet — matches the navbar's "Make a Claim" placeholder
     { label: "Make a Claim", href: "#" },
@@ -37,8 +40,16 @@ const footerLinks = {
 
 const socials = [
   { Icon: Facebook, label: "Facebook", href: "#" },
-  { Icon: Instagram, label: "Instagram", href: "https://www.instagram.com/kolanutafrica?igsh=MXg5ZThjeTN4MHhpMQ==" },
-  { Icon: Tiktok, label: "Tiktok", href: "https://www.tiktok.com/@kolanutafrica" },
+  {
+    Icon: Instagram,
+    label: "Instagram",
+    href: "https://www.instagram.com/kolanutafrica?igsh=MXg5ZThjeTN4MHhpMQ==",
+  },
+  {
+    Icon: Tiktok,
+    label: "Tiktok",
+    href: "https://www.tiktok.com/@kolanutafrica",
+  },
 ];
 
 export default function Footer() {
@@ -187,7 +198,11 @@ export default function Footer() {
                 aria-label={label}
                 className="flex h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-full bg-white hover:bg-white/30 transition-colors"
               >
-                <Icon width={ label === "Tiktok" ? 24 : 16} height={ label === "Tiktok" ? 24 : 16} style={{ color: "#AF060D" }} />
+                <Icon
+                  width={label === "Tiktok" ? 24 : 16}
+                  height={label === "Tiktok" ? 24 : 16}
+                  style={{ color: "#AF060D" }}
+                />
               </a>
             ))}
           </div>
@@ -198,7 +213,7 @@ export default function Footer() {
           {/* Copyright */}
           <div className="flex items-center gap-1.5 lg:gap-2 text-xs lg:text-base text-white">
             <Copyright width={18} height={18} style={{ color: "#ffffff" }} />
-            <span>2024</span>
+            <span>2026</span>
             <span className="hidden sm:inline">
               All rights reserved to Kolanut Africa
             </span>

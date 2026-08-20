@@ -3,14 +3,11 @@
 import { useState } from 'react';
 import { useHomeInsuranceStore } from '@/lib/store/homeInsuranceStore';
 import { Button } from '@/components/ui/button';
+import { formatNaira } from '@/utils/textHelper';
 
 const PREMIUM_COST = 5000;
 const TAX = 100;
 const EXTRA_FEE = 10;
-
-function formatCurrency(amount: number) {
-  return `$${amount.toLocaleString()}`;
-}
 
 function getFullName(formData: ReturnType<typeof useHomeInsuranceStore.getState>['formData']) {
   if (formData.policyholderType === 'corporate') return formData.companyName || 'N/A';
@@ -101,15 +98,15 @@ export default function Step3ReviewPay({ onPay, onBack }: Step3Props) {
 
             {/* Cost Breakdown */}
             <div className="flex flex-col">
-              <PaymentRow label="Premium Cost:" value={formatCurrency(PREMIUM_COST)} />
-              <PaymentRow label="Tax:" value={formatCurrency(TAX)} />
-              <PaymentRow label="Extra Fee:" value={formatCurrency(EXTRA_FEE)} />
+              <PaymentRow label="Premium Cost:" value={formatNaira(PREMIUM_COST)} />
+              <PaymentRow label="Tax:" value={formatNaira(TAX)} />
+              <PaymentRow label="Extra Fee:" value={formatNaira(EXTRA_FEE)} />
             </div>
 
             {/* Total */}
             <div className="flex items-center justify-between pt-1">
               <span className="text-base font-normal text-[#161616]">Total Cost:</span>
-              <span className="text-xl font-medium text-brand-red">{formatCurrency(PREMIUM_COST)}</span>
+              <span className="text-xl font-medium text-brand-red">{formatNaira(total)}</span>
             </div>
           </div>
 
@@ -118,7 +115,7 @@ export default function Step3ReviewPay({ onPay, onBack }: Step3Props) {
             onClick={onPay}
             className="w-full rounded-full bg-brand-red hover:bg-brand-red/90 text-white font-medium py-3 h-auto text-base"
           >
-            PAY NOW - {formatCurrency(total).replace('$', ' $')}
+            PAY NOW - {formatNaira(total)}
           </Button>
         </div>
       </div>
