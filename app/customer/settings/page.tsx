@@ -1,12 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Upload, X, FileText, CheckCircle } from "lucide-react";
 
-type Tab = "personal" | "password" | "id-card";
+const TABS = ["personal", "password", "id-card"] as const;
+type Tab = (typeof TABS)[number];
 
-export default function CustomerSettingsPage() {
-  const [activeTab, setActiveTab] = useState<Tab>("personal");
+function CustomerSettingsContent() {
+  // ?tab=id-card lets other pages (e.g. the dashboard's "Complete KYC" call to
+  // action) deep-link straight into a tab. A tab the user picks themselves
+  // takes precedence from then on.
+  const searchParams = useSearchParams();
+  const tabFromUrl = searchParams.get("tab") as Tab | null;
+  const [selectedTab, setSelectedTab] = useState<Tab | null>(null);
+  const activeTab =
+    selectedTab ??
+    (tabFromUrl && TABS.includes(tabFromUrl) ? tabFromUrl : "personal");
+  const setActiveTab = setSelectedTab;
 
   // Personal Info state
   const [fullName, setFullName] = useState("Mauteen Adeleke");
@@ -44,8 +55,8 @@ export default function CustomerSettingsPage() {
 
   const handleIdCardSave = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!idNumber || !frontImage || !backImage) {
-      alert("Please fill in all fields and upload both sides of your ID.");
+    if (!idNumber || !frontImage) {
+      alert("Please enter your ID number and upload the front of your ID.");
       return;
     }
     alert("Identification card saved!");
@@ -342,7 +353,10 @@ export default function CustomerSettingsPage() {
 
               {/* Back of ID */}
               <div className="space-y-1.5">
-                <label className="text-sm text-gray-600">Back of ID Card</label>
+                <label className="text-sm text-gray-600">
+                  Back of ID Card{" "}
+                  <span className="text-gray-400">(optional)</span>
+                </label>
                 {!backPreview ? (
                   <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center hover:border-red-400 transition-colors">
                     <input
@@ -432,5 +446,13 @@ function TabButton({
     >
       {label}
     </button>
+  );
+}
+
+export default function CustomerSettingsPage() {
+  return (
+    <Suspense fallback={null}>
+      <CustomerSettingsContent />
+    </Suspense>
   );
 }

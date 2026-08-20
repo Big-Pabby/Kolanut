@@ -71,8 +71,11 @@ export default function DashboardPage() {
             </p>
           </div>
         </div>
-        <Button className="w-full sm:w-auto shrink-0 bg-[#AF060D] hover:bg-[#AF060D]/90 text-white text-sm font-medium px-5 py-2 rounded-full h-auto">
-          Complete KYC
+        <Button
+          asChild
+          className="w-full sm:w-auto shrink-0 bg-[#AF060D] hover:bg-[#AF060D]/90 text-white text-sm font-medium px-5 py-2 rounded-full h-auto"
+        >
+          <Link href="/customer/settings?tab=id-card">Complete KYC</Link>
         </Button>
       </div>
 
