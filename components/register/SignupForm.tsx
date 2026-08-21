@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { toast } from "@/lib/utils/toast";
 import {
   FULLNAME_MAX_LENGTH,
@@ -203,10 +204,9 @@ export default function SignupForm() {
               >
                 Password
               </label>
-              <Input
+              <PasswordInput
                 id="password"
                 name="password"
-                type="password"
                 autoComplete="new-password"
                 value={form.password}
                 onChange={handleChange}

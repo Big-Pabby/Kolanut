@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import Link from "next/link";
 
 export default function ForgotPasswordForm() {
@@ -114,10 +115,9 @@ export default function ForgotPasswordForm() {
             >
               New Password
             </label>
-            <Input
+            <PasswordInput
               id="newPassword"
               name="newPassword"
-              type="password"
               value={form.newPassword}
               onChange={handleChange}
               placeholder="Enter new password"
@@ -144,10 +144,9 @@ export default function ForgotPasswordForm() {
             >
               Confirm New Password
             </label>
-            <Input
+            <PasswordInput
               id="confirmPassword"
               name="confirmPassword"
-              type="password"
               value={form.confirmPassword}
               onChange={handleChange}
               placeholder="Re-enter new password"

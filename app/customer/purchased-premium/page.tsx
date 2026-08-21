@@ -2,42 +2,26 @@
 
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import PremiumCard from "@/components/customer/PremiumCard";
+import {
+  PREMIUM_CATEGORIES,
+  premiumsByRecency,
+  type PremiumCategory,
+} from "@/lib/data/premiums";
 
-const CATEGORIES = [
-  "Home Insurance",
-  "Marine (Cargo) Insurance",
-  "Travel Insurance",
-  "Motor Insurance",
-] as const;
-type Category = (typeof CATEGORIES)[number];
+const FILTERS = ["All", ...PREMIUM_CATEGORIES] as const;
+type Filter = (typeof FILTERS)[number];
 
-export default function AdminFaqsPage() {
-  const [activeCategory, setActiveCategory] =
-    useState<Category>("Home Insurance");
+export default function PurchasedPremiumsPage() {
+  const [activeCategory, setActiveCategory] = useState<Filter>("All");
 
-  const recentPremiums = [
-    {
-      policyNumber: "KA-09795170",
-      insuranceType: "Tenant Policy Insurance",
-      premiumPaid: "N10,000",
-      datePurchased: "12/8/2025",
-    },
-    {
-      policyNumber: "KA-09795170",
-      insuranceType: "Landlord’s Policy Insurance",
-      premiumPaid: "N10,000",
-      datePurchased: "12/8/2025",
-    },
-    {
-      policyNumber: "KA-09795170",
-      insuranceType: "Comprehensive Auto Insurance",
-      premiumPaid: "N10,000",
-      datePurchased: "12/8/2025",
-    },
-  ];
+  const premiums = premiumsByRecency().filter(
+    (premium) =>
+      activeCategory === "All" ||
+      premium.category === (activeCategory as PremiumCategory),
+  );
+
   return (
     <div className="flex flex-col gap-4">
       {/* Header card */}
@@ -77,7 +61,8 @@ export default function AdminFaqsPage() {
             </p>
           </div>
 
-          <button
+          <Link
+            href="/customer/get-insured"
             className="flex items-center justify-center px-5 py-2.5 transition-opacity hover:opacity-90"
             style={{
               backgroundColor: "#af060d",
@@ -92,7 +77,7 @@ export default function AdminFaqsPage() {
             }}
           >
             Get Insured
-          </button>
+          </Link>
         </div>
 
         {/* Category tabs - scrollable on mobile */}
@@ -107,7 +92,7 @@ export default function AdminFaqsPage() {
             maxWidth: "100%",
           }}
         >
-          {CATEGORIES.map((cat) => {
+          {FILTERS.map((cat) => {
             const isActive = cat === activeCategory;
             return (
               <button
@@ -142,55 +127,22 @@ export default function AdminFaqsPage() {
           })}
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {recentPremiums.map((premium, i) => (
-          <Card
-            key={i}
-            className="border border-[#F3F4F6] bg-[#FEFEFE] rounded-[10px] shadow-none hover:shadow-sm transition-shadow"
-          >
-            <CardContent className="p-3 space-y-4">
-              <div>
-                <p className="text-[#4B5563] text-sm">Policy Number:</p>
-                <p className="text-[#AF060D] font-semibold text-sm mt-0.5">
-                  {premium.policyNumber}
-                </p>
-              </div>
-
-              <div className="border-t border-gray-100 pt-3">
-                <p className="text-[#4B5563] text-sm">Insurance Type:</p>
-                <p className="text-gray-800 font-semibold text-sm mt-0.5">
-                  {premium.insuranceType}
-                </p>
-              </div>
-
-              <div className="border-t border-gray-100 pt-3">
-                <p className="text-[#4B5563] text-sm">Premium Paid:</p>
-                <p className="text-gray-800 font-semibold text-sm mt-0.5">
-                  {premium.premiumPaid}
-                </p>
-              </div>
-
-              <div className="border-t border-gray-100 pt-3">
-                <p className="text-[#4B5563] text-sm">Date Purchased:</p>
-                <p className="text-gray-800 font-semibold text-sm mt-0.5">
-                  {premium.datePurchased}
-                </p>
-              </div>
-              <Link
-                href={`/customer/purchased-premium/${premium.policyNumber}`}
-                passHref
-              >
-                <Button
-                  variant="outline"
-                  className="w-full border-[#AF060D] text-[#AF060D] hover:bg-red-50 hover:text-red-700 rounded-full text-sm font-semibold h-10 mt-1"
-                >
-                  View Details
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {premiums.length === 0 ? (
+        <div className="rounded-[8px] border border-[#F3F4F6] bg-white p-10 text-center">
+          <p className="text-base font-semibold text-[#374151]">
+            No premiums in this category
+          </p>
+          <p className="mt-1 text-sm text-[#6b7280]">
+            Pick another category, or buy a new policy to see it here.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {premiums.map((premium) => (
+            <PremiumCard key={premium.policyNumber} premium={premium} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

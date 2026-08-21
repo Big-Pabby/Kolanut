@@ -2,6 +2,7 @@
 
 import InsurancePolicyLayout from "@/components/insurance/InsurancePolicyLayout";
 import { useRouter } from "next/navigation";
+import { useComprehensiveAutoInsuranceStore } from "@/lib/store/comprehensiveAutoInsuranceStore";
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -93,6 +94,7 @@ const categories = [
 
 export default function ThirdPartyAutoInsurance() {
   const router = useRouter();
+  const resetMotorFlow = useComprehensiveAutoInsuranceStore((s) => s.reset);
   return (
     <InsurancePolicyLayout
       heroCategory="Auto Insurance"
@@ -106,6 +108,7 @@ export default function ThirdPartyAutoInsurance() {
       documents={documents}
       categories={categories}
      onGetQuote={() => {
+      resetMotorFlow();
       router.push('/motor-insurance/third-party-autobase-insurance/policy');
      }}
     />

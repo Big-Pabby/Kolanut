@@ -32,9 +32,8 @@ export default function ComprehensiveAutoInsurancePolicyPage() {
   const { currentStep, setStep, formData, updateField, reset } =
     useComprehensiveAutoInsuranceStore();
 
-  const handleContinueStep1 = () => setStep(2);
-  const handleContinueStep2 = () => setStep(3);
-  const handleContinueStep3 = () => setStep(4);
+  const goToReview = () => setStep(2);
+  const goToPolicyDocument = () => setStep(3);
   const handleBack = () => setStep(currentStep - 1);
 
   const handleBackToHome = () => {
@@ -70,7 +69,7 @@ export default function ComprehensiveAutoInsurancePolicyPage() {
                  onUpdate={(field, value) =>
                    updateField(field as keyof ComprehensiveAutoInsuranceFormData, value)
                  }
-                 onContinue={handleContinueStep1}
+                 onContinue={goToReview}
                  onBack={handleBack}
                />
              )}
@@ -124,7 +123,7 @@ export default function ComprehensiveAutoInsurancePolicyPage() {
                 totalCost={(formData.selectedPlanPrice || 50000) + 100 + 10}
                 currencyFormatter={formatNaira}
                 currencyCode="₦"
-                onPay={handleContinueStep3}
+                onPay={goToPolicyDocument}
                 onBack={handleBack}
                 payButtonLabel={`PAY NOW - ${formatNaira((formData.selectedPlanPrice || 50000) + 100 + 10)}`}
                 showCoupon
@@ -138,7 +137,7 @@ export default function ComprehensiveAutoInsurancePolicyPage() {
                   `${formData.firstName} ${formData.lastname}`.trim() ||
                   "Policy Holder"
                 }
-                insuranceType="Comprehensive Auto Insurance"
+                insuranceType="Motor Insurance"
                 productName={getPlanLabel(formData.selectedPlan)}
                 premiumPaid={formatNaira(formData.selectedPlanPrice || 50000)}
                 coveragePeriod="12 Months"

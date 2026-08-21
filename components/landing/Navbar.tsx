@@ -8,6 +8,8 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import UserMenu from "@/components/landing/UserMenu";
+import { useUserStore } from "@/lib/store/user-store";
 
 const navLinks = [
   { label: "About Us", href: "/about" },
@@ -34,6 +36,7 @@ const insuredSubItems = [
 ];
 
 export default function Navbar() {
+  const user = useUserStore((state) => state.user);
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [insuredDropdownOpen, setInsuredDropdownOpen] = useState(false);
@@ -185,21 +188,32 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* Sign In / Sign Up */}
-        <div className="hidden lg:flex items-center gap-3">
-          <Link href={"/login"}>
-            <Button
-              variant="outline"
-              className="rounded-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white transition-colors"
-            >
-              Sign In
-            </Button>
-          </Link>
-          <Link href={"/register"}>
-            <Button className="rounded-full bg-brand-red text-white hover:bg-brand-red/90 transition-colors">
-              Sign Up
-            </Button>
-          </Link>
+        {/* Account menu when signed in, otherwise Sign In / Sign Up.
+            The user is rehydrated from localStorage, so it is absent from the
+            prerendered HTML — suppress the resulting hydration warning. */}
+        <div
+          className="hidden lg:flex items-center gap-3"
+          suppressHydrationWarning
+        >
+          {user ? (
+            <UserMenu />
+          ) : (
+            <>
+              <Link href={"/login"}>
+                <Button
+                  variant="outline"
+                  className="rounded-full border-brand-red text-brand-red hover:bg-brand-red hover:text-white transition-colors"
+                >
+                  Sign In
+                </Button>
+              </Link>
+              <Link href={"/register"}>
+                <Button className="rounded-full bg-brand-red text-white hover:bg-brand-red/90 transition-colors">
+                  Sign Up
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -301,19 +315,28 @@ export default function Navbar() {
                 ))}
 
                 <div className="p-6 mt-2 flex flex-col gap-3">
-                  <Link href={"/login"}>
-                    <Button className="w-full rounded-full bg-white text-brand-red hover:bg-gray-100 py-6 text-base font-medium">
-                      Sign In
-                    </Button>
-                  </Link>
-                  <Link href={"/register"}>
-                    <Button
-                      variant="outline"
-                      className="w-full rounded-full border-white bg-transparent text-white hover:bg-white/10 py-6 text-base font-medium"
-                    >
-                      Sign Up
-                    </Button>
-                  </Link>
+                  {user ? (
+                    <UserMenu
+                      variant="light"
+                      onNavigate={() => setMobileOpen(false)}
+                    />
+                  ) : (
+                    <>
+                      <Link href={"/login"}>
+                        <Button className="w-full rounded-full bg-white text-brand-red hover:bg-gray-100 py-6 text-base font-medium">
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link href={"/register"}>
+                        <Button
+                          variant="outline"
+                          className="w-full rounded-full border-white bg-transparent text-white hover:bg-white/10 py-6 text-base font-medium"
+                        >
+                          Sign Up
+                        </Button>
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </motion.div>

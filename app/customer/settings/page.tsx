@@ -2,10 +2,28 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Upload, X, FileText, CheckCircle } from "lucide-react";
+import { Upload, X, CheckCircle } from "lucide-react";
+import { toast } from "@/lib/utils/toast";
+import { PasswordInput } from "@/components/ui/password-input";
+import {
+  FULLNAME_MAX_LENGTH,
+  FULLNAME_MIN_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  PHONE_MIN_LENGTH,
+  useIdentityCard,
+  useMe,
+  useUpdateIdentityCard,
+  useUpdateMe,
+  useUploadIdentityCardImage,
+} from "./hooks";
 
 const TABS = ["personal", "password", "id-card"] as const;
 type Tab = (typeof TABS)[number];
+
+const inputClass =
+  "w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition";
+const submitClass =
+  "bg-red-700 hover:bg-red-800 text-white text-sm font-semibold px-6 py-2.5 rounded-full transition-colors disabled:opacity-60 disabled:cursor-not-allowed";
 
 function CustomerSettingsContent() {
   // ?tab=id-card lets other pages (e.g. the dashboard's "Complete KYC" call to
@@ -19,86 +37,196 @@ function CustomerSettingsContent() {
     (tabFromUrl && TABS.includes(tabFromUrl) ? tabFromUrl : "personal");
   const setActiveTab = setSelectedTab;
 
-  // Personal Info state
-  const [fullName, setFullName] = useState("Mauteen Adeleke");
-  const [email, setEmail] = useState("mauteenadeleke@gmail.com");
-  const [phone, setPhone] = useState("+234 812 345 6789");
-  const [nin, setNin] = useState("738593029482");
+  const { data: me, isLoading: isLoadingMe } = useMe();
+  const { data: identityCard, isLoading: isLoadingCard } = useIdentityCard();
+  const updateMe = useUpdateMe();
+  const updateIdentityCard = useUpdateIdentityCard();
+  const uploadImage = useUploadIdentityCardImage();
 
-  // Password state
+  // Each field holds `null` until the user edits it, so the fetched value shows
+  // through without having to sync server data into state inside an effect.
+  const [fullNameEdit, setFullNameEdit] = useState<string | null>(null);
+  const [phoneEdit, setPhoneEdit] = useState<string | null>(null);
+  const fullName = fullNameEdit ?? me?.fullname ?? "";
+  const phone = phoneEdit ?? me?.phone_number ?? "";
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // ID Card state
-  const [idType, setIdType] = useState("national-id");
-  const [idNumber, setIdNumber] = useState("");
-  const [frontImage, setFrontImage] = useState<File | null>(null);
-  const [backImage, setBackImage] = useState<File | null>(null);
-  const [frontPreview, setFrontPreview] = useState<string | null>(null);
-  const [backPreview, setBackPreview] = useState<string | null>(null);
+  const [idTypeEdit, setIdTypeEdit] = useState<string | null>(null);
+  const [idNumberEdit, setIdNumberEdit] = useState<string | null>(null);
+  const [dateIssuedEdit, setDateIssuedEdit] = useState<string | null>(null);
+  const [expiryDateEdit, setExpiryDateEdit] = useState<string | null>(null);
+  const idType = idTypeEdit ?? identityCard?.id_type ?? "national-id";
+  const idNumber = idNumberEdit ?? identityCard?.identification_number ?? "";
+  const dateIssued = dateIssuedEdit ?? identityCard?.date_issued ?? "";
+  const expiryDate = expiryDateEdit ?? identityCard?.expiry_date ?? "";
+
+  const [idImage, setIdImage] = useState<File | null>(null);
+  const [idImagePreview, setIdImagePreview] = useState<string | null>(null);
+  const currentImage = idImagePreview ?? identityCard?.image ?? null;
 
   const handlePersonalSave = (e: React.FormEvent) => {
     e.preventDefault();
-    // handle save logic
-    alert("Personal information saved!");
+
+    const trimmedName = fullName.trim();
+    const trimmedPhone = phone.trim();
+
+    if (
+      trimmedName.length < FULLNAME_MIN_LENGTH ||
+      trimmedName.length > FULLNAME_MAX_LENGTH
+    ) {
+      toast.error("Invalid full name", {
+        description: `Full name must be between ${FULLNAME_MIN_LENGTH} and ${FULLNAME_MAX_LENGTH} characters.`,
+      });
+      return;
+    }
+
+    if (trimmedPhone && trimmedPhone.length < PHONE_MIN_LENGTH) {
+      toast.error("Invalid phone number", {
+        description: `Phone number must be at least ${PHONE_MIN_LENGTH} digits.`,
+      });
+      return;
+    }
+
+    updateMe.mutate(
+      {
+        fullname: trimmedName,
+        ...(trimmedPhone ? { phone_number: trimmedPhone } : {}),
+      },
+      {
+        onSuccess: () => {
+          setFullNameEdit(null);
+          setPhoneEdit(null);
+          toast.success("Personal information saved");
+        },
+      },
+    );
   };
 
   const handlePasswordSave = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!currentPassword || !newPassword) {
+      toast.error("Missing details", {
+        description: "Enter your current password and a new one.",
+      });
+      return;
+    }
+
+    if (newPassword.length < PASSWORD_MIN_LENGTH) {
+      toast.error("Password too short", {
+        description: `New password must be at least ${PASSWORD_MIN_LENGTH} characters.`,
+      });
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
-      alert("Passwords do not match.");
+      toast.error("Passwords do not match", {
+        description: "The new password and confirmation must be identical.",
+      });
       return;
     }
-    alert("Password updated!");
+
+    updateMe.mutate(
+      { old_password: currentPassword, new_password: newPassword },
+      {
+        onSuccess: () => {
+          setCurrentPassword("");
+          setNewPassword("");
+          setConfirmPassword("");
+          toast.success("Password updated");
+        },
+      },
+    );
   };
 
-  const handleIdCardSave = (e: React.FormEvent) => {
+  const handleIdCardSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!idNumber || !frontImage) {
-      alert("Please enter your ID number and upload the front of your ID.");
+
+    if (!idNumber.trim() || !dateIssued || !expiryDate) {
+      toast.error("Missing details", {
+        description:
+          "Enter your ID number, issue date and expiry date to continue.",
+      });
       return;
     }
-    alert("Identification card saved!");
-  };
 
-  const handleFrontImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFrontImage(file);
-      setFrontPreview(URL.createObjectURL(file));
+    if (!idImage && !identityCard?.image) {
+      toast.error("Missing document", {
+        description: "Upload a photo of your ID to continue.",
+      });
+      return;
+    }
+
+    if (Date.parse(expiryDate) <= Date.parse(dateIssued)) {
+      toast.error("Invalid dates", {
+        description: "The expiry date must be after the issue date.",
+      });
+      return;
+    }
+
+    try {
+      // A newly picked file has to be hosted before the card can reference it.
+      const image = idImage
+        ? (await uploadImage.mutateAsync(idImage)).url
+        : (identityCard?.image as string);
+
+      updateIdentityCard.mutate(
+        {
+          image,
+          id_type: idType,
+          identification_number: idNumber.trim(),
+          date_issued: dateIssued,
+          expiry_date: expiryDate,
+        },
+        {
+          onSuccess: () => {
+            setIdImage(null);
+            setIdImagePreview(null);
+            setIdTypeEdit(null);
+            setIdNumberEdit(null);
+            setDateIssuedEdit(null);
+            setExpiryDateEdit(null);
+          },
+        },
+      );
+    } catch {
+      // the upload mutation already surfaced the error
     }
   };
 
-  const handleBackImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setBackImage(file);
-      setBackPreview(URL.createObjectURL(file));
+      setIdImage(file);
+      setIdImagePreview(URL.createObjectURL(file));
     }
   };
 
-  const removeFrontImage = () => {
-    setFrontImage(null);
-    setFrontPreview(null);
+  const removeImage = () => {
+    setIdImage(null);
+    setIdImagePreview(null);
   };
 
-  const removeBackImage = () => {
-    setBackImage(null);
-    setBackPreview(null);
-  };
+  const isSavingIdCard =
+    uploadImage.isPending || updateIdentityCard.isPending;
 
   return (
     <div className="min-h-screen">
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Header */}
-        <div className="flex flex-col sm:items-start sm:justify-between gap-2 p-4 bg-white border border-[#F3F4F6] rounded-[8px]">
-          <h1 className="text-2xl font-heading font-bold text-gray-900 tracking-tight">
-            Account Setting
+        <div className="bg-white rounded-[10px] border border-[#F3F4F6] p-4">
+          <h1 className="text-xl md:text-2xl font-heading font-bold text-gray-900 tracking-tight">
+            Account
           </h1>
-          <p className="text-sm text-gray-500 mt-1">Manage your account.</p>
+          <p className="text-sm text-[#6B7280] mt-0.5">
+            Manage your personal details, password and identification
+          </p>
+
           {/* Tabs */}
-          <div className="flex border-b border-gray-100 bg-[#F9FAFB] p-1 rounded-[8px] w-full overflow-x-auto">
+          <div className="flex items-center gap-2 mt-4 border-b border-gray-100 overflow-x-auto">
             <TabButton
               label="Personal Information"
               active={activeTab === "personal"}
@@ -134,8 +262,10 @@ function CustomerSettingsContent() {
                   id="fullName"
                   type="text"
                   value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  disabled={isLoadingMe}
+                  onChange={(e) => setFullNameEdit(e.target.value)}
+                  placeholder={isLoadingMe ? "Loading..." : "Enter your name"}
+                  className={inputClass}
                 />
               </div>
 
@@ -146,10 +276,14 @@ function CustomerSettingsContent() {
                 <input
                   id="email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  value={me?.email ?? ""}
+                  readOnly
+                  disabled
+                  className={`${inputClass} bg-gray-50 text-gray-500`}
                 />
+                <p className="text-xs text-gray-400">
+                  Contact support to change the email on your account.
+                </p>
               </div>
 
               <div className="space-y-1.5">
@@ -160,29 +294,20 @@ function CustomerSettingsContent() {
                   id="phone"
                   type="tel"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-sm text-gray-600" htmlFor="phone">
-                  NIN
-                </label>
-                <input
-                  id="number"
-                  type="number"
-                  value={nin}
-                  onChange={(e) => setNin(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  disabled={isLoadingMe}
+                  onChange={(e) => setPhoneEdit(e.target.value)}
+                  placeholder="e.g. 08123456789"
+                  className={inputClass}
                 />
               </div>
 
               <div className="flex justify-end pt-2">
                 <button
                   type="submit"
-                  className="bg-red-700 hover:bg-red-800 text-white text-sm font-semibold px-6 py-2.5 rounded-full transition-colors"
+                  disabled={isLoadingMe || updateMe.isPending}
+                  className={submitClass}
                 >
-                  Save Changes
+                  {updateMe.isPending ? "Saving..." : "Save Changes"}
                 </button>
               </div>
             </form>
@@ -201,13 +326,13 @@ function CustomerSettingsContent() {
                 >
                   Current Password
                 </label>
-                <input
+                <PasswordInput
                   id="currentPassword"
-                  type="password"
+                  autoComplete="current-password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Enter current password"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  className={`${inputClass} h-auto`}
                 />
               </div>
 
@@ -215,13 +340,13 @@ function CustomerSettingsContent() {
                 <label className="text-sm text-gray-600" htmlFor="newPassword">
                   New Password
                 </label>
-                <input
+                <PasswordInput
                   id="newPassword"
-                  type="password"
+                  autoComplete="new-password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Enter new password"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  className={`${inputClass} h-auto`}
                 />
               </div>
 
@@ -232,22 +357,23 @@ function CustomerSettingsContent() {
                 >
                   Confirm New Password
                 </label>
-                <input
+                <PasswordInput
                   id="confirmPassword"
-                  type="password"
+                  autoComplete="new-password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter new password"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  className={`${inputClass} h-auto`}
                 />
               </div>
 
               <div className="flex justify-end pt-2">
                 <button
                   type="submit"
-                  className="bg-red-700 hover:bg-red-800 text-white text-sm font-semibold px-6 py-2.5 rounded-full transition-colors"
+                  disabled={updateMe.isPending}
+                  className={submitClass}
                 >
-                  Update Password
+                  {updateMe.isPending ? "Updating..." : "Update Password"}
                 </button>
               </div>
             </form>
@@ -269,13 +395,14 @@ function CustomerSettingsContent() {
                 <select
                   id="idType"
                   value={idType}
-                  onChange={(e) => setIdType(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  disabled={isLoadingCard}
+                  onChange={(e) => setIdTypeEdit(e.target.value)}
+                  className={inputClass}
                 >
                   <option value="national-id">National ID</option>
                   <option value="passport">International Passport</option>
-                  <option value="drivers-license">Driver's License</option>
-                  <option value="voters-card">Voter's Card</option>
+                  <option value="drivers-license">Driver&apos;s License</option>
+                  <option value="voters-card">Voter&apos;s Card</option>
                 </select>
               </div>
 
@@ -287,125 +414,95 @@ function CustomerSettingsContent() {
                   id="idNumber"
                   type="text"
                   value={idNumber}
-                  onChange={(e) => setIdNumber(e.target.value)}
+                  disabled={isLoadingCard}
+                  onChange={(e) => setIdNumberEdit(e.target.value)}
                   placeholder="Enter your ID number"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  className={inputClass}
                 />
               </div>
 
-              {/* Front of ID */}
-              <div className="space-y-1.5">
-                <label className="text-sm text-gray-600">
-                  Front of ID Card
-                </label>
-                {!frontPreview ? (
-                  <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center hover:border-red-400 transition-colors">
-                    <input
-                      type="file"
-                      accept="image/*,.pdf"
-                      onChange={handleFrontImageChange}
-                      className="hidden"
-                      id="front-image-upload"
-                    />
-                    <label
-                      htmlFor="front-image-upload"
-                      className="cursor-pointer flex flex-col items-center"
-                    >
-                      <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                      <span className="text-sm text-gray-500">
-                        Click to upload front side
-                      </span>
-                      <span className="text-xs text-gray-400 mt-1">
-                        PNG, JPG, PDF up to 5MB
-                      </span>
-                    </label>
-                  </div>
-                ) : (
-                  <div className="relative border border-gray-200 rounded-lg p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
-                        <img
-                          src={frontPreview}
-                          alt="Front of ID"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-800">
-                          {frontImage?.name}
-                        </p>
-                        <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
-                          <CheckCircle className="w-3 h-3" />
-                          Uploaded successfully
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={removeFrontImage}
-                      className="absolute top-2 right-2 p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-                    >
-                      <X className="w-4 h-4 text-gray-600" />
-                    </button>
-                  </div>
-                )}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm text-gray-600" htmlFor="dateIssued">
+                    Date Issued
+                  </label>
+                  <input
+                    id="dateIssued"
+                    type="date"
+                    value={dateIssued}
+                    disabled={isLoadingCard}
+                    onChange={(e) => setDateIssuedEdit(e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-sm text-gray-600" htmlFor="expiryDate">
+                    Expiry Date
+                  </label>
+                  <input
+                    id="expiryDate"
+                    type="date"
+                    value={expiryDate}
+                    disabled={isLoadingCard}
+                    onChange={(e) => setExpiryDateEdit(e.target.value)}
+                    className={inputClass}
+                  />
+                </div>
               </div>
 
-              {/* Back of ID */}
+              {/* ID document */}
               <div className="space-y-1.5">
-                <label className="text-sm text-gray-600">
-                  Back of ID Card{" "}
-                  <span className="text-gray-400">(optional)</span>
-                </label>
-                {!backPreview ? (
+                <label className="text-sm text-gray-600">ID Document</label>
+                {!currentImage ? (
                   <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center hover:border-red-400 transition-colors">
                     <input
                       type="file"
                       accept="image/*,.pdf"
-                      onChange={handleBackImageChange}
+                      onChange={handleImageChange}
                       className="hidden"
-                      id="back-image-upload"
+                      id="id-image-upload"
                     />
                     <label
-                      htmlFor="back-image-upload"
-                      className="cursor-pointer flex flex-col items-center"
+                      htmlFor="id-image-upload"
+                      className="cursor-pointer flex flex-col items-center gap-2"
                     >
-                      <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                      <span className="text-sm text-gray-500">
-                        Click to upload back side
+                      <Upload className="w-6 h-6 text-gray-400" />
+                      <span className="text-sm text-gray-600">
+                        Click to upload
                       </span>
-                      <span className="text-xs text-gray-400 mt-1">
-                        PNG, JPG, PDF up to 5MB
+                      <span className="text-xs text-gray-400">
+                        PNG, JPG or PDF
                       </span>
                     </label>
                   </div>
                 ) : (
-                  <div className="relative border border-gray-200 rounded-lg p-4">
+                  <div className="relative rounded-lg border border-gray-200 p-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
-                        <img
-                          src={backPreview}
-                          alt="Back of ID"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-800">
-                          {backImage?.name}
+                      <CheckCircle className="w-5 h-5 text-green-600 shrink-0" />
+                      <div className="min-w-0">
+                        <p className="text-sm text-gray-800 truncate">
+                          {idImage ? idImage.name : "Uploaded document"}
                         </p>
-                        <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
-                          <CheckCircle className="w-3 h-3" />
-                          Uploaded successfully
-                        </p>
+                        <a
+                          href={currentImage}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-red-700 hover:underline"
+                        >
+                          View document
+                        </a>
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={removeBackImage}
-                      className="absolute top-2 right-2 p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-                    >
-                      <X className="w-4 h-4 text-gray-600" />
-                    </button>
+                    {idImage && (
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute top-2 right-2 p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+                      >
+                        <X className="w-4 h-4 text-gray-600" />
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
@@ -413,9 +510,10 @@ function CustomerSettingsContent() {
               <div className="flex justify-end pt-2">
                 <button
                   type="submit"
-                  className="bg-red-700 hover:bg-red-800 text-white text-sm font-semibold px-6 py-2.5 rounded-full transition-colors"
+                  disabled={isLoadingCard || isSavingIdCard}
+                  className={submitClass}
                 >
-                  Save ID Information
+                  {isSavingIdCard ? "Saving..." : "Save ID Information"}
                 </button>
               </div>
             </form>

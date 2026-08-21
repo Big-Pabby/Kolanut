@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { useAdminLogin } from "@/app/login/hooks";
@@ -123,10 +124,9 @@ export default function LoginForm() {
             >
               Password
             </label>
-            <Input
+            <PasswordInput
               id="password"
               name="password"
-              type="password"
               value={form.password}
               onChange={handleChange}
               placeholder="Enter password"

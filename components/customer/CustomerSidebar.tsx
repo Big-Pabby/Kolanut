@@ -15,6 +15,7 @@ import {
   Shield,
   Banknote,
   BookOpen,
+  ShieldPlus,
   AlertTriangle,
   X,
 } from "lucide-react";
@@ -27,11 +28,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useUserStore } from "@/lib/store/user-store";
+import { clearSession } from "@/lib/auth";
 import { useCustomer } from "./CustomerContext";
 
 const navItems = [
   { label: "Dashboard", icon: <LayoutGrid />, href: "/customer/dashboard" },
+  // { label: "Get Insured", icon: <ShieldPlus />, href: "/customer/get-insured" },
   {
     label: "Purchased Premiums",
     icon: <Shield />,
@@ -52,7 +54,7 @@ export default function CustomerSidebar() {
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { isMobileMenuOpen, setIsMobileMenuOpen } = useCustomer();
-  const clearUser = useUserStore((state) => state.clearUser);
+
 
   // Check if we're on mobile
   useEffect(() => {
@@ -65,7 +67,7 @@ export default function CustomerSidebar() {
   }, []);
 
   const handleLogout = () => {
-    clearUser();
+    clearSession();
     setIsLogoutDialogOpen(false);
     setIsMobileMenuOpen(false);
     router.push("/login");

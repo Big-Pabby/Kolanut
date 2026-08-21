@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/lib/store/user-store";
 import { toast } from "@/lib/utils/toast";
+import { PasswordInput } from "@/components/ui/password-input";
 
 type Tab = "personal" | "password";
 
@@ -135,13 +136,12 @@ export default function AccountSettingsPage() {
                 >
                   Current Password
                 </label>
-                <input
+                <PasswordInput
                   id="currentPassword"
-                  type="password"
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Enter current password"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  className="w-full h-auto rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
                 />
               </div>
 
@@ -149,13 +149,12 @@ export default function AccountSettingsPage() {
                 <label className="text-sm text-gray-600" htmlFor="newPassword">
                   New Password
                 </label>
-                <input
+                <PasswordInput
                   id="newPassword"
-                  type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="Enter new password"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  className="w-full h-auto rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
                 />
               </div>
 
@@ -166,13 +165,12 @@ export default function AccountSettingsPage() {
                 >
                   Confirm New Password
                 </label>
-                <input
+                <PasswordInput
                   id="confirmPassword"
-                  type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Re-enter new password"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
+                  className="w-full h-auto rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none focus:border-red-400 focus:ring-2 focus:ring-red-100 transition"
                 />
               </div>
 

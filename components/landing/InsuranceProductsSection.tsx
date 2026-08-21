@@ -15,7 +15,8 @@ export type InsuranceProduct = {
   href?: string;
 };
 
-const defaultProducts: InsuranceProduct[] = [
+/** The three products Kolanut sells — shared with the customer dashboard. */
+export const INSURANCE_PRODUCTS: InsuranceProduct[] = [
   {
     icon: "/motor.svg",
     title: "Motor Insurance",
@@ -47,7 +48,7 @@ interface InsuranceProductsSectionProps {
 export default function InsuranceProductsSection({
   title = "Choose Your Insurance Product",
   subtitle = "Choose the insurance that fits your needs and get covered in minutes.",
-  products = defaultProducts,
+  products = INSURANCE_PRODUCTS,
   couponFlow = false,
 }: InsuranceProductsSectionProps = {}) {
   const startCouponFlow = useCouponFlowStore((s) => s.startCouponFlow);

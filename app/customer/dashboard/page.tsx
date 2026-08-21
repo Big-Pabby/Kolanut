@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
 import { Shield, UserLock, FileText, ChevronRight, User } from "lucide-react";
+import PremiumCard from "@/components/customer/PremiumCard";
+import { premiumsByRecency } from "@/lib/data/premiums";
 
 const quickLinks = [
   {
@@ -12,7 +13,7 @@ const quickLinks = [
     description: "Purchase an insurance policy",
     bg: "bg-[#FEF2F2] border border-[#FEE2E2]",
     iconColor: "text-[#AF060D] bg-[#FEE2E2]",
-    href: "/customer/purchased-premium",
+    href: "/customer/get-insured",
   },
   {
     icon: FileText,
@@ -32,26 +33,9 @@ const quickLinks = [
   },
 ];
 
-const recentPremiums = [
-  {
-    policyNumber: "KA-09795170",
-    insuranceType: "Tenant Policy Insurance",
-    premiumPaid: "N10,000",
-    datePurchased: "12/8/2025",
-  },
-  {
-    policyNumber: "KA-09795170",
-    insuranceType: "Landlord’s Policy Insurance",
-    premiumPaid: "N10,000",
-    datePurchased: "12/8/2025",
-  },
-  {
-    policyNumber: "KA-09795170",
-    insuranceType: "Comprehensive Auto Insurance",
-    premiumPaid: "N10,000",
-    datePurchased: "12/8/2025",
-  },
-];
+// The dashboard shows only the newest few, as a compact summary. The full,
+// detailed cards live on /customer/purchased-premium.
+const recentPremiums = premiumsByRecency().slice(0, 3);
 
 export default function DashboardPage() {
   return (
@@ -127,60 +111,18 @@ export default function DashboardPage() {
             <h2 className="text-gray-800 font-semibold text-base font-heading">
               Recent Premium Purchased
             </h2>
-            <button className="flex items-center gap-1 text-[#AF060D] text-base font-semibold hover:text-red-700 transition-colors">
+            <Link
+              href="/customer/purchased-premium"
+              className="flex items-center gap-1 text-[#AF060D] text-base font-semibold hover:text-red-700 transition-colors"
+            >
               See All
               <ChevronRight className="h-5 w-5" />
-            </button>
+            </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {recentPremiums.map((premium, i) => (
-              <Card
-                key={i}
-                className="border border-[#F3F4F6] bg-[#FEFEFE] rounded-[10px] shadow-none hover:shadow-sm transition-shadow"
-              >
-                <CardContent className="p-3 space-y-4">
-                  <div>
-                    <p className="text-[#4B5563] text-sm">Policy Number:</p>
-                    <p className="text-[#AF060D] font-semibold text-sm mt-0.5">
-                      {premium.policyNumber}
-                    </p>
-                  </div>
-
-                  <div className="border-t border-gray-100 pt-3">
-                    <p className="text-[#4B5563] text-sm">Insurance Type:</p>
-                    <p className="text-gray-800 font-semibold text-sm mt-0.5">
-                      {premium.insuranceType}
-                    </p>
-                  </div>
-
-                  <div className="border-t border-gray-100 pt-3">
-                    <p className="text-[#4B5563] text-sm">Premium Paid:</p>
-                    <p className="text-gray-800 font-semibold text-sm mt-0.5">
-                      {premium.premiumPaid}
-                    </p>
-                  </div>
-
-                  <div className="border-t border-gray-100 pt-3">
-                    <p className="text-[#4B5563] text-sm">Date Purchased:</p>
-                    <p className="text-gray-800 font-semibold text-sm mt-0.5">
-                      {premium.datePurchased}
-                    </p>
-                  </div>
-
-                  <Link
-                    href={`/customer/purchased-premium/${premium.policyNumber}`}
-                    passHref
-                  >
-                    <Button
-                      variant="outline"
-                      className="w-full border-[#AF060D] text-[#AF060D] hover:bg-red-50 hover:text-red-700 rounded-full text-sm font-semibold h-10 mt-1"
-                    >
-                      View Details
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+            {recentPremiums.map((premium) => (
+              <PremiumCard key={premium.policyNumber} premium={premium} />
             ))}
           </div>
         </section>

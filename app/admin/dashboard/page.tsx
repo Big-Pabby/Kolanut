@@ -20,6 +20,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  adminPoliciesByRecency,
+  adminStats,
+  formatAdminAmount,
+  formatAdminDate,
+} from "@/lib/data/admin";
+import { PREMIUM_STATUS_CLASS } from "@/lib/data/premiums";
+import { CATEGORY_BADGE_CLASS } from "@/lib/data/transactions";
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -45,36 +53,9 @@ function StatCard({ icon, label, value }: StatCardProps) {
   );
 }
 
-const recentPolicies = [
-  {
-    id: "POL-00125",
-    customer: "Adeleke Mauteen",
-    type: "Comprehensive Motor",
-    date: "12/03/2024",
-    amount: "₦13,567.00",
-  },
-  {
-    id: "POL-00125",
-    customer: "Adeleke Mauteen",
-    type: "Landlord Policy Insurance",
-    date: "12/03/2024",
-    amount: "₦13,567.00",
-  },
-  {
-    id: "POL-00125",
-    customer: "Adeleke Mauteen",
-    type: "Tenant Policy Insurance",
-    date: "12/03/2024",
-    amount: "₦1,313,567.00",
-  },
-  {
-    id: "POL-00125",
-    customer: "Adeleke Mauteen",
-    type: "Home & Property",
-    date: "12/03/2024",
-    amount: "₦1,313,567.00",
-  },
-];
+// The five most recent policies; the full list lives on /admin/policies.
+const recentPolicies = adminPoliciesByRecency().slice(0, 5);
+const stats = adminStats();
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -94,23 +75,23 @@ export default function AdminDashboardPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
               icon={<FileText className="w-5 h-5" />}
-              label="Policy"
-              value="2000"
+              label="Policies"
+              value={String(stats.policies)}
             />
             <StatCard
               icon={<Users className="w-5 h-5" />}
               label="Customers"
-              value="1200"
+              value={String(stats.customers)}
             />
             <StatCard
               icon={<HandCoins className="w-5 h-5" />}
               label="Claims"
-              value="30"
+              value={String(stats.claims)}
             />
             <StatCard
               icon={<Wallet className="w-5 h-5" />}
-              label="Payment"
-              value="30,000,000"
+              label="Premiums Collected"
+              value={formatAdminAmount(stats.collected)}
             />
           </div>
         </CardContent>
@@ -132,65 +113,99 @@ export default function AdminDashboardPage() {
             </Link>
           </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-[#F9FAFB] hover:bg-[#F9FAFB] border-b border-[#F3F4F6]">
-                <TableHead className="text-sm font-medium text-[#6B7280] py-3 pl-5">
-                  Policy Number
-                </TableHead>
-                <TableHead className="text-sm font-medium text-[#6B7280] py-3">
-                  Customer
-                </TableHead>
-                <TableHead className="text-sm font-medium text-[#6B7280] py-3">
-                  Insurance Type
-                </TableHead>
-                <TableHead className="text-sm font-medium text-[#6B7280] py-3">
-                  Date
-                </TableHead>
-                <TableHead className="text-sm font-medium text-[#6B7280] py-3">
-                  Amount
-                </TableHead>
-                <TableHead className="text-sm font-medium text-[#6B7280] py-3 pr-5">
-                  Action
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {recentPolicies.map((row, idx) => (
-                <TableRow
-                  key={idx}
-                  className="hover:bg-gray-50 transition-colors border-b border-[#F3F4F6] last:border-0"
-                >
-                  <TableCell className="py-4 pl-5 text-sm text-[#374151]">
-                    {row.id}
-                  </TableCell>
-                  <TableCell className="py-4 text-sm text-[#374151]">
-                    {row.customer}
-                  </TableCell>
-                  <TableCell className="py-4 text-sm text-[#374151]">
-                    {row.type}
-                  </TableCell>
-                  <TableCell className="py-4 text-sm text-[#374151]">
-                    {row.date}
-                  </TableCell>
-                  <TableCell className="py-4 text-sm text-[#374151]">
-                    {row.amount}
-                  </TableCell>
-                  <TableCell className="py-4 pr-5">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="gap-1.5 text-sm font-medium h-8 px-2 text-[#374151] hover:text-[#AF060D]"
-                      onClick={() => handleViewPolicy(row.id)}
-                    >
-                      <Eye className="w-4 h-4" />
-                      View
-                    </Button>
-                  </TableCell>
+          {/* Scrolls instead of overflowing on small screens */}
+          <div className="overflow-x-auto">
+            <Table className="min-w-[900px]">
+              <TableHeader>
+                <TableRow className="bg-[#F9FAFB] hover:bg-[#F9FAFB] border-b border-[#F3F4F6]">
+                  <TableHead className="text-sm font-medium text-[#6B7280] py-3 pl-5">
+                    Policy Number
+                  </TableHead>
+                  <TableHead className="text-sm font-medium text-[#6B7280] py-3">
+                    Customer
+                  </TableHead>
+                  <TableHead className="text-sm font-medium text-[#6B7280] py-3">
+                    Insurance Type
+                  </TableHead>
+                  <TableHead className="text-sm font-medium text-[#6B7280] py-3">
+                    Date
+                  </TableHead>
+                  <TableHead className="text-sm font-medium text-[#6B7280] py-3">
+                    Amount
+                  </TableHead>
+                  <TableHead className="text-sm font-medium text-[#6B7280] py-3">
+                    Status
+                  </TableHead>
+                  <TableHead className="text-sm font-medium text-[#6B7280] py-3 pr-5">
+                    Action
+                  </TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {recentPolicies.map((row) => (
+                  <TableRow
+                    key={
+                      row.policyNumber ?? `${row.customer}-${row.datePurchased}`
+                    }
+                    className="hover:bg-gray-50 transition-colors border-b border-[#F3F4F6] last:border-0"
+                  >
+                    <TableCell className="py-4 pl-5 text-sm font-semibold text-[#AF060D]">
+                      {row.policyNumber ?? (
+                        <span className="font-normal text-gray-400">
+                          Not issued yet
+                        </span>
+                      )}
+                    </TableCell>
+                    <TableCell className="py-4 text-sm text-[#374151] whitespace-nowrap">
+                      {row.customer}
+                    </TableCell>
+                    <TableCell className="py-4">
+                      <span
+                        className={`inline-block rounded-full border px-2.5 py-0.5 text-xs font-medium ${CATEGORY_BADGE_CLASS[row.category]}`}
+                      >
+                        {row.category}
+                      </span>
+                      <p className="mt-1 text-xs text-gray-500">
+                        {row.product}
+                      </p>
+                    </TableCell>
+                    <TableCell className="py-4 text-sm text-[#374151] whitespace-nowrap">
+                      {formatAdminDate(row.datePurchased)}
+                    </TableCell>
+                    <TableCell className="py-4 text-sm font-semibold text-[#374151] whitespace-nowrap">
+                      {formatAdminAmount(row.premiumPaid)}
+                    </TableCell>
+                    <TableCell className="py-4">
+                      <span
+                        className={`inline-block rounded-full border px-2.5 py-0.5 text-xs font-medium ${PREMIUM_STATUS_CLASS[row.status]}`}
+                      >
+                        {row.status}
+                      </span>
+                    </TableCell>
+                    <TableCell className="py-4 pr-5">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        disabled={!row.policyNumber}
+                        title={
+                          row.policyNumber
+                            ? undefined
+                            : "Available once the policy is issued"
+                        }
+                        className="gap-1.5 text-sm font-medium h-8 px-2 text-[#374151] hover:text-[#AF060D]"
+                        onClick={() =>
+                          handleViewPolicy(row.policyNumber as string)
+                        }
+                      >
+                        <Eye className="w-4 h-4" />
+                        View
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
