@@ -32,7 +32,7 @@ import { clearSession } from "@/lib/auth";
 import { useCustomer } from "./CustomerContext";
 
 const navItems = [
-  { label: "Dashboard", icon: <LayoutGrid />, href: "/customer/dashboard" },
+  { label: "Dashboard", icon: <LayoutGrid />, href: "/" },
   // { label: "Get Insured", icon: <ShieldPlus />, href: "/customer/get-insured" },
   {
     label: "Purchased Premiums",

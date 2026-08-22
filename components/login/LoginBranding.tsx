@@ -28,8 +28,8 @@ export default function LoginBranding() {
               lineHeight: "28px",
             }}
           >
-            Get covered from your phone or laptop—no queues, no heavy paperwork.
-            Protect your home, vehicle, travels, and cargo with ease.
+             Get covered from your phone or laptop—no queues, no heavy
+                paperwork. Protect your home, vehicle, life and family with ease.
           </p>
         </div>
       </div>

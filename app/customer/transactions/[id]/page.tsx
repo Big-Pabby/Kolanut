@@ -129,11 +129,11 @@ export default function TransactionDetailsPage() {
               >
                 {transaction.status}
               </span>
-              <span
+              {/* <span
                 className={`shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-medium ${CATEGORY_BADGE_CLASS[transaction.category]}`}
               >
                 {transaction.category}
-              </span>
+              </span> */}
             </div>
             <p className="text-sm text-stone-500 mt-1">
               Payment ID:{" "}

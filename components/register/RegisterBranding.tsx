@@ -7,7 +7,7 @@ export default function RegisterBranding() {
         </h1>
         <p className="text-white text-base xl:text-lg leading-7">
           Get covered from your phone or laptop—no queues, no heavy paperwork.
-          Protect your home, vehicle, travels, and cargo with ease.
+          Protect your home, vehicle, life and family with ease.
         </p>
       </div>
     </div>

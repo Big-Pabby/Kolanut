@@ -127,11 +127,11 @@ export default function AdminPolicyDetailsPage() {
               >
                 {policy.status}
               </span>
-              <span
+              {/* <span
                 className={`shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-medium ${CATEGORY_BADGE_CLASS[policy.category]}`}
               >
                 {policy.category}
-              </span>
+              </span> */}
             </div>
             <p className="text-sm text-stone-500 mt-1">
               Policy Number:{" "}
