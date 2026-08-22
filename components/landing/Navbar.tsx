@@ -12,7 +12,7 @@ import Image from "next/image";
 const navLinks = [
   { label: "About Us", href: "/about" },
   { label: "Coupon", href: "/coupon" },
-  { label: "Make a Claim", href: "#" },
+  { label: "Make a Claim", href: "/claims" },
   { label: "Resources", href: "/resources" },
   { label: "FAQs", href: "/faq" },
   { label: "Contact Us", href: "/contact" },
