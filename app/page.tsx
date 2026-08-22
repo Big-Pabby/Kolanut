@@ -10,16 +10,16 @@ import FAQSection from "@/components/landing/FAQSection";
 import Footer from "@/components/landing/Footer";
 
 export default function Home() {
-  return (
-    <main className="min-h-screen bg-white">
-      <HeroSection />
-      <FeaturesSection />
-      <WhyChooseSection />
-      <InsuranceProductsSection />
-      <ProcessSection />
-      <KolanutWaySection />
-      <BlogSection />
-      <FAQSection />
-    </main>
-  );
+	return (
+		<main className="min-h-screen bg-white">
+			<HeroSection />
+			<FeaturesSection />
+			<WhyChooseSection />
+			<InsuranceProductsSection />
+			<ProcessSection />
+			<KolanutWaySection />
+			<BlogSection />
+			<FAQSection />
+		</main>
+	);
 }
