@@ -32,7 +32,7 @@ import { clearSession } from "@/lib/auth";
 import { useCustomer } from "./CustomerContext";
 
 const navItems = [
-  { label: "Dashboard", icon: <LayoutGrid />, href: "/" },
+  { label: "Dashboard", icon: <LayoutGrid />, href: "/customer/dashboard" },
   // { label: "Get Insured", icon: <ShieldPlus />, href: "/customer/get-insured" },
   {
     label: "Purchased Premiums",
@@ -237,7 +237,7 @@ export default function CustomerSidebar() {
     >
       {/* Logo */}
       <div className="px-4 py-6">
-        <Link href="/customer/dashboard">
+        <Link href="/">
           <img
             src="/images/LogoFooter.svg"
             alt="Kolanut"

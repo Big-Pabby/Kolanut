@@ -2,46 +2,78 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { ChevronLeft, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import VehicleDetailsFields from "@/components/customer/VehicleDetailsFields";
+import { formatAdminAmount, formatAdminDate } from "@/lib/data/admin";
+import { getAdminCouponById } from "@/lib/data/coupons";
+import { getPremiumByPolicyNumber } from "@/lib/data/premiums";
 
 interface Field {
   label: string;
   value: string;
 }
 
-// Demo data — replace with real coupon lookup by id
-const generatorDetails: Field[] = [
-  { label: "First Name", value: "Mauteen" },
-  { label: "Surname", value: "Adeleke" },
-  { label: "Email Address", value: "mauteen@gmail.com" },
-  { label: "Phone Number", value: "0909090909090" },
-];
-
-const personalDetails: Field[] = [
-  { label: "First Name", value: "Mauteen" },
-  { label: "Surname", value: "Adeleke" },
-  { label: "Email Address", value: "mauteen@gmail.com" },
-  { label: "Phone Number", value: "0909090909090" },
-  { label: "State", value: "Lagos" },
-  { label: "City/LGA", value: "Ikeja" },
-  { label: "Date of Birth", value: "15/05/1880" },
-  { label: "NIN", value: "123456789000" },
-];
-
-const policyOverview: Field[] = [
-  { label: "Policy Number:", value: "KA-09795170" },
-  { label: "Policy Holder:", value: "Mauteen Adeleke" },
-  { label: "Insurance Type:", value: "Home & Property Insurance" },
-  { label: "Product:", value: "Tenant Policy" },
-  { label: "Premium Amount:", value: "N10,000" },
-  { label: "Date Purchased:", value: "12/8/2025" },
-  { label: "Coverage Period:", value: "12 Months" },
-];
-
 export default function AdminCouponDetailPage() {
+  const params = useParams();
+  const couponId = decodeURIComponent((params?.id as string) ?? "");
+  const coupon = getAdminCouponById(couponId);
   const [generatorOpen, setGeneratorOpen] = useState(true);
   const [personalOpen, setPersonalOpen] = useState(true);
+  const premium = coupon?.policyNumber
+    ? getPremiumByPolicyNumber(coupon.policyNumber)
+    : undefined;
+
+  if (!coupon) {
+    return (
+      <div className="mx-auto space-y-6">
+        <Link
+          href="/admin/coupon"
+          className="flex items-center gap-2 w-fit text-[#6B7280] hover:text-gray-900 transition-colors"
+        >
+          <ChevronLeft className="w-5 h-5" />
+          <span className="text-sm">Back to Coupons</span>
+        </Link>
+        <div className="border border-[#F3F4F6] bg-white p-10 rounded-[8px] text-center">
+          <h1 className="text-lg font-semibold text-gray-900">
+            Coupon not found
+          </h1>
+          <p className="mt-1 text-sm text-[#6B7280]">
+            We couldn&apos;t find a coupon with the ID {couponId}.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const [generatorFirstName, ...generatorSurname] = coupon.generator.split(" ");
+  const [customerFirstName, ...customerSurname] = coupon.customer.split(" ");
+  const generatorDetails: Field[] = [
+    { label: "First Name", value: generatorFirstName },
+    { label: "Surname", value: generatorSurname.join(" ") || "—" },
+    { label: "Email Address", value: coupon.generatorEmail },
+    { label: "Phone Number", value: coupon.generatorPhone },
+  ];
+  const personalDetails: Field[] = [
+    { label: "First Name", value: customerFirstName },
+    { label: "Surname", value: customerSurname.join(" ") || "—" },
+    { label: "Email Address", value: coupon.customerEmail },
+    { label: "Phone Number", value: coupon.customerPhone },
+    { label: "State", value: coupon.state },
+    { label: "City/LGA", value: coupon.city },
+    { label: "Date of Birth", value: coupon.dateOfBirth },
+    { label: "NIN", value: coupon.nin },
+  ];
+  const policyOverview: Field[] = [
+    { label: "Policy Number:", value: coupon.policyNumber ?? "Not issued yet" },
+    { label: "Policy Holder:", value: coupon.customer },
+    { label: "Insurance Type:", value: coupon.insuranceType },
+    { label: "Product:", value: coupon.product },
+    { label: "Premium Amount:", value: formatAdminAmount(coupon.amount) },
+    { label: "Date Created:", value: formatAdminDate(coupon.dateCreated) },
+    { label: "Coverage Period:", value: coupon.coveragePeriod },
+  ];
 
   return (
     <div className="mx-auto space-y-6">
@@ -59,15 +91,15 @@ export default function AdminCouponDetailPage() {
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-heading font-bold text-gray-900">
-              Tenant Policy Insurance
+              {coupon.product}
             </h1>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#F0FDF4] text-green-700 border border-[#BBF7D0]">
-              Redeemed
+              {coupon.status === "redeemed" ? "Redeemed" : "Not Redeemed"}
             </span>
           </div>
           <p className="text-sm text-[#6B7280] mt-1">
             Coupon Code:{" "}
-            <span className="text-[#AF060D] font-semibold">COP-E6LAA</span>
+            <span className="text-[#AF060D] font-semibold">{coupon.code}</span>
           </p>
         </div>
 
@@ -99,10 +131,16 @@ export default function AdminCouponDetailPage() {
             open={personalOpen}
             onToggle={() => setPersonalOpen((v) => !v)}
             fields={personalDetails}
-            footer={
-              <FieldItem label="Address" value="08 Johnson Street, Ikeja Lagos State" />
-            }
+            footer={<FieldItem label="Address" value={coupon.address} />}
           />
+          {premium?.vehicle && (
+            <div className="border border-[#F3F4F6] bg-white rounded-[8px] overflow-hidden p-6">
+              <h2 className="text-lg font-heading font-bold text-gray-900 mb-4">
+                Vehicle Details
+              </h2>
+              <VehicleDetailsFields vehicle={premium.vehicle} />
+            </div>
+          )}
         </div>
 
         {/* Right: policy overview */}

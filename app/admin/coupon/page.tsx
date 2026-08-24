@@ -20,62 +20,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-
-type CouponStatus = "redeemed" | "not_redeemed";
-
-interface Coupon {
-  id: string;
-  code: string;
-  generator: string;
-  customer: string;
-  insuranceType: string;
-  amount: string;
-  date: string;
-  status: CouponStatus;
-}
-
-const coupons: Coupon[] = [
-  {
-    id: "1",
-    code: "COP-E6LAA",
-    generator: "Adeleke Mauteen",
-    customer: "Noah Ibrahim",
-    insuranceType: "Comprehensive Motor",
-    amount: "₦13,567.00",
-    date: "12/03/2024",
-    status: "redeemed",
-  },
-  {
-    id: "2",
-    code: "COP-E6LAA",
-    generator: "Adeleke Mauteen",
-    customer: "Noah Ibrahim",
-    insuranceType: "Landlord Policy Insurance",
-    amount: "₦13,567.00",
-    date: "12/03/2024",
-    status: "redeemed",
-  },
-  {
-    id: "3",
-    code: "COP-E6LAA",
-    generator: "Adeleke Mauteen",
-    customer: "Noah Ibrahim",
-    insuranceType: "Tenant Policy Insurance",
-    amount: "₦1,313,567.00",
-    date: "12/03/2024",
-    status: "not_redeemed",
-  },
-  {
-    id: "4",
-    code: "COP-E6LAA",
-    generator: "Adeleke Mauteen",
-    customer: "Noah Ibrahim",
-    insuranceType: "Home & Property",
-    amount: "₦1,313,567.00",
-    date: "12/03/2024",
-    status: "not_redeemed",
-  },
-];
+import { ADMIN_COUPONS } from "@/lib/data/coupons";
+import { formatAdminAmount, formatAdminDate } from "@/lib/data/admin";
 
 const TABS = [
   { value: "all", label: "All Coupon Generated" },
@@ -93,14 +39,15 @@ export default function AdminCouponPage() {
 
   const counts = useMemo(
     () => ({
-      all: coupons.length,
-      redeemed: coupons.filter((c) => c.status === "redeemed").length,
-      not_redeemed: coupons.filter((c) => c.status === "not_redeemed").length,
+      all: ADMIN_COUPONS.length,
+      redeemed: ADMIN_COUPONS.filter((c) => c.status === "redeemed").length,
+      not_redeemed: ADMIN_COUPONS.filter((c) => c.status === "not_redeemed")
+        .length,
     }),
     [],
   );
 
-  const filtered = coupons.filter((c) => {
+  const filtered = ADMIN_COUPONS.filter((c) => {
     const matchesTab = activeTab === "all" || c.status === activeTab;
     const q = search.toLowerCase();
     const matchesSearch =
@@ -281,10 +228,10 @@ export default function AdminCouponPage() {
                       {c.insuranceType}
                     </TableCell>
                     <TableCell className="py-4 text-sm font-semibold text-gray-800">
-                      {c.amount}
+                      {formatAdminAmount(c.amount)}
                     </TableCell>
                     <TableCell className="py-4 text-sm text-gray-600">
-                      {c.date}
+                      {formatAdminDate(c.dateCreated)}
                     </TableCell>
                     <TableCell className="py-4 pr-5">
                       <Button

@@ -139,11 +139,11 @@ export default function AdminPolicyDetailsPage() {
                 {policy.policyNumber}
               </span>
             </p>
-            <p className="text-sm text-stone-500 mt-0.5">
+            {/* <p className="text-sm text-stone-500 mt-0.5">
               Held by {policy.customer} ·{" "}
               {formatAdminDate(policy.datePurchased)} to{" "}
               {formatAdminDate(policy.expiryDate)}
-            </p>
+            </p> */}
           </div>
           <div className="flex gap-3 flex-shrink-0">
             <button

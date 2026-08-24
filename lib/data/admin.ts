@@ -56,16 +56,16 @@ export const ADMIN_POLICIES: AdminPolicy[] = [
     expiryDate: "2026-07-27",
     status: "Active",
   },
-  {
-    policyNumber: null,
-    customer: "Ngozi Eze",
-    product: "Family Benefits Plan",
-    category: "Life & Family",
-    premiumPaid: 18000,
-    datePurchased: "2025-06-21",
-    expiryDate: "2026-06-20",
-    status: "Processing",
-  },
+  // {
+  //   policyNumber: null,
+  //   customer: "Ngozi Eze",
+  //   product: "Family Benefits Plan",
+  //   category: "Life & Family",
+  //   premiumPaid: 18000,
+  //   datePurchased: "2025-06-21",
+  //   expiryDate: "2026-06-20",
+  //   status: "Processing",
+  // },
   {
     policyNumber: "KA-09795226",
     customer: "Mauteen Adeleke",
@@ -169,18 +169,18 @@ export const ADMIN_TRANSACTIONS: AdminTransaction[] = [
     channel: "Bank Transfer",
     kind: "premium",
   },
-  {
-    paymentId: "TRX-100377",
-    policyNumber: null,
-    customer: "Ngozi Eze",
-    product: "Family Benefits Plan",
-    category: "Life & Family",
-    date: "2025-06-21",
-    amount: 18000,
-    status: "Pending",
-    channel: "Card",
-    kind: "premium",
-  },
+  // {
+  //   paymentId: "TRX-100377",
+  //   policyNumber: null,
+  //   customer: "Ngozi Eze",
+  //   product: "Family Benefits Plan",
+  //   category: "Life & Family",
+  //   date: "2025-06-21",
+  //   amount: 18000,
+  //   status: "Pending",
+  //   channel: "Card",
+  //   kind: "premium",
+  // },
   {
     paymentId: "TRX-100341",
     policyNumber: "KA-09795226",
@@ -205,18 +205,18 @@ export const ADMIN_TRANSACTIONS: AdminTransaction[] = [
     channel: "Card",
     kind: "premium",
   },
-  {
-    paymentId: "TRX-100298",
-    policyNumber: "KA-09795241",
-    customer: "Mauteen Adeleke",
-    product: "Third Party Auto Insurance",
-    category: "Motor",
-    date: "2024-11-18",
-    amount: 15110,
-    status: "Failed",
-    channel: "Card",
-    kind: "premium",
-  },
+  // {
+  //   paymentId: "TRX-100298",
+  //   policyNumber: "KA-09795241",
+  //   customer: "Mauteen Adeleke",
+  //   product: "Third Party Auto Insurance",
+  //   category: "Motor",
+  //   date: "2024-11-18",
+  //   amount: 15110,
+  //   status: "Failed",
+  //   channel: "Card",
+  //   kind: "premium",
+  // },
   {
     paymentId: "CLM-004411",
     policyNumber: "KA-09795184",
@@ -458,3 +458,6 @@ export const getAdminPolicyByNumber = (policyNumber: string) =>
 
 export const getAdminCustomerByName = (name: string) =>
   ADMIN_CUSTOMERS.find((customer) => customer.name === name);
+
+export const getAdminTransactionByPaymentId = (paymentId: string) =>
+  ADMIN_TRANSACTIONS.find((transaction) => transaction.paymentId === paymentId);

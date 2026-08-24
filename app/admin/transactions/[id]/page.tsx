@@ -1,8 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ChevronDown, ChevronLeft, Download } from "lucide-react";
+import VehicleDetailsFields from "@/components/customer/VehicleDetailsFields";
+import {
+  formatAdminAmount,
+  formatAdminDate,
+  getAdminCustomerByName,
+  getAdminPolicyByNumber,
+  getAdminTransactionByPaymentId,
+} from "@/lib/data/admin";
+import { getPremiumByPolicyNumber } from "@/lib/data/premiums";
+import { TRANSACTION_STATUS_CLASS } from "@/lib/data/transactions";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -57,51 +67,79 @@ function FieldPair({ label, value }: { label: string; value: string }) {
   );
 }
 
-function OverviewRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex flex-col gap-0.5">
-      <span className="text-xs text-stone-400 font-medium uppercase tracking-widest">
-        {label}
-      </span>
-      <span className="text-sm font-semibold text-stone-800">{value}</span>
-    </div>
-  );
-}
-
 // ── Main Page ────────────────────────────────────────────────────────────────
 
-export default function TransactionDetailsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function TransactionDetailsPage() {
   const router = useRouter();
+  const params = useParams();
+  const paymentId = decodeURIComponent((params?.id as string) ?? "");
+  const transaction = getAdminTransactionByPaymentId(paymentId);
+  const customer = transaction
+    ? getAdminCustomerByName(transaction.customer)
+    : undefined;
+  const policy = transaction?.policyNumber
+    ? getAdminPolicyByNumber(transaction.policyNumber)
+    : undefined;
+  const premium = transaction?.policyNumber
+    ? getPremiumByPolicyNumber(transaction.policyNumber)
+    : undefined;
+
+  const backButton = (
+    <button
+      onClick={() => router.push("/admin/transactions")}
+      className="flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-800 transition-colors font-medium"
+    >
+      <ChevronLeft className="w-4 h-4" />
+      Back to Transactions
+    </button>
+  );
+
+  if (!transaction) {
+    return (
+      <div className="min-h-screen">
+        <div className="pb-4">{backButton}</div>
+        <div className="rounded-[8px] border border-[#F3F4F6] bg-white p-10 text-center">
+          <h1 className="text-lg font-semibold text-stone-800">
+            Transaction not found
+          </h1>
+          <p className="mt-1 text-sm text-stone-500">
+            We couldn&apos;t find a transaction with the ID {paymentId}.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const [firstName, ...rest] = transaction.customer.split(" ");
 
   return (
     <div className="min-h-screen">
       {/* Top Nav */}
-      <div className=" pb-4">
-        <button
-          onClick={() => router.push("/admin/transactions")}
-          className="flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-800 transition-colors font-medium"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          Back to Transactions
-        </button>
-      </div>
+      <div className="pb-4">{backButton}</div>
 
       <div className=" space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 p-4 bg-white border border-[#F3F4F6] rounded-[8px]">
           <div>
-            <h1 className="text-2xl font-bold font-heading tracking-tight">
-              Transaction Details
-            </h1>
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-2xl font-bold font-heading tracking-tight">
+                Transaction Details
+              </h1>
+              <span
+                className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${TRANSACTION_STATUS_CLASS[transaction.status]}`}
+              >
+                {transaction.status}
+              </span>
+            </div>
             <p className="text-sm text-stone-500 mt-1">
               Transaction ID:{" "}
               <span className="text-[#AF060D] font-semibold tracking-wide">
-                KA-09795170
+                {transaction.paymentId}
               </span>
+            </p>
+            <p className="text-sm text-stone-500 mt-1">
+              {transaction.kind === "claim" ? "Claim" : "Premium payment"} via{" "}
+              {transaction.channel}
             </p>
           </div>
           <div className="flex gap-3 flex-shrink-0">
@@ -121,39 +159,70 @@ export default function TransactionDetailsPage({
           {/* Left Column */}
           <div className="space-y-4 bg-white border border-[#F3F4F6] p-4 rounded-[10px]">
             {/* Customer Details */}
-             <AccordionSection title="Personal Details">
+            <AccordionSection title="Personal Details">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
-                <FieldPair label="First Name" value="Mauteen" />
-                <FieldPair label="Last Name" value="Adeleke" />
-                <FieldPair label="Email Address" value="Mauteen11@gmail.com" />
-                
-                <FieldPair label="Phone Number" value="1234567890" />
-                <FieldPair label="State" value="Lagos" />
-                <FieldPair label="City/LGA" value="Ikeja" />
-                <FieldPair label="Date of Birth" value="01/01/1990" />
-                <FieldPair label="NIN Number" value="1234567890" />
-                <FieldPair label="Street" value="45 Motunde street, Odo road" />
+                <FieldPair label="First Name" value={firstName} />
+                <FieldPair label="Last Name" value={rest.join(" ") || "—"} />
+                <FieldPair
+                  label="Email Address"
+                  value={customer?.email ?? "—"}
+                />
+                <FieldPair
+                  label="Phone Number"
+                  value={customer?.phone ?? "—"}
+                />
+                <FieldPair label="State" value={customer?.state ?? "—"} />
+                <FieldPair label="Country" value={customer?.country ?? "—"} />
+                <FieldPair label="NIN Number" value={customer?.nin ?? "—"} />
+                <FieldPair label="Street" value={customer?.street ?? "—"} />
               </div>
             </AccordionSection>
 
-         
-
-          
+            {premium?.vehicle && (
+              <AccordionSection title="Vehicle Details">
+                <VehicleDetailsFields vehicle={premium.vehicle} />
+              </AccordionSection>
+            )}
           </div>
 
           {/* Right Column — Transaction Overview */}
           <div className="space-y-4 bg-white border border-[#F3F4F6] p-4 rounded-[10px]">
             <AccordionSection title="Transaction Overview">
               <div className="grid grid-cols-1 gap-x-8 gap-y-5">
-                <FieldPair label="Policy Holder:" value="Mauteen Adeleke" />
+                <FieldPair label="Payment ID:" value={transaction.paymentId} />
+                <FieldPair
+                  label="Policy Number:"
+                  value={transaction.policyNumber ?? "Not issued yet"}
+                />
+                <FieldPair
+                  label="Policy Holder:"
+                  value={transaction.customer}
+                />
                 <FieldPair
                   label="Insurance Type:"
-                  value="Home & Property Insurance"
+                  value={`${transaction.category} Insurance`}
                 />
-                <FieldPair label="Product:" value="Tenant Policy " />
-                <FieldPair label="Premium Amount:" value="N10,000" />
-                <FieldPair label="Date Purchased:" value="12/8/2025" />
-                <FieldPair label="Coverage Period:" value="12 Months" />
+                <FieldPair label="Product:" value={transaction.product} />
+                <FieldPair
+                  label="Amount:"
+                  value={formatAdminAmount(transaction.amount)}
+                />
+                <FieldPair
+                  label="Payment Channel:"
+                  value={transaction.channel}
+                />
+                <FieldPair
+                  label="Date:"
+                  value={formatAdminDate(transaction.date)}
+                />
+                <FieldPair
+                  label="Coverage Period:"
+                  value={premium?.coveragePeriod ?? "Not applicable"}
+                />
+                <FieldPair label="Status:" value={transaction.status} />
+                {policy && (
+                  <FieldPair label="Policy Status:" value={policy.status} />
+                )}
               </div>
             </AccordionSection>
           </div>
