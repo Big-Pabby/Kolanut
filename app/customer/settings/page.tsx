@@ -47,8 +47,16 @@ function CustomerSettingsContent() {
   // through without having to sync server data into state inside an effect.
   const [fullNameEdit, setFullNameEdit] = useState<string | null>(null);
   const [phoneEdit, setPhoneEdit] = useState<string | null>(null);
+  const [dateOfBirthEdit, setDateOfBirthEdit] = useState<string | null>(null);
+  const [stateEdit, setStateEdit] = useState<string | null>(null);
+  const [cityEdit, setCityEdit] = useState<string | null>(null);
+  const [homeAddressEdit, setHomeAddressEdit] = useState<string | null>(null);
   const fullName = fullNameEdit ?? me?.fullname ?? "";
   const phone = phoneEdit ?? me?.phone_number ?? "";
+  const dateOfBirth = dateOfBirthEdit ?? me?.date_of_birth ?? "";
+  const state = stateEdit ?? me?.state ?? "";
+  const city = cityEdit ?? me?.city ?? "";
+  const homeAddress = homeAddressEdit ?? me?.home_address ?? "";
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -72,6 +80,9 @@ function CustomerSettingsContent() {
 
     const trimmedName = fullName.trim();
     const trimmedPhone = phone.trim();
+    const trimmedState = state.trim();
+    const trimmedCity = city.trim();
+    const trimmedHomeAddress = homeAddress.trim();
 
     if (
       trimmedName.length < FULLNAME_MIN_LENGTH ||
@@ -94,11 +105,19 @@ function CustomerSettingsContent() {
       {
         fullname: trimmedName,
         ...(trimmedPhone ? { phone_number: trimmedPhone } : {}),
+        ...(dateOfBirth ? { date_of_birth: dateOfBirth } : {}),
+        ...(trimmedState ? { state: trimmedState } : {}),
+        ...(trimmedCity ? { city: trimmedCity } : {}),
+        ...(trimmedHomeAddress ? { home_address: trimmedHomeAddress } : {}),
       },
       {
         onSuccess: () => {
           setFullNameEdit(null);
           setPhoneEdit(null);
+          setDateOfBirthEdit(null);
+          setStateEdit(null);
+          setCityEdit(null);
+          setHomeAddressEdit(null);
           toast.success("Personal information saved");
         },
       },
@@ -210,8 +229,7 @@ function CustomerSettingsContent() {
     setIdImagePreview(null);
   };
 
-  const isSavingIdCard =
-    uploadImage.isPending || updateIdentityCard.isPending;
+  const isSavingIdCard = uploadImage.isPending || updateIdentityCard.isPending;
 
   return (
     <div className="min-h-screen">
@@ -297,6 +315,67 @@ function CustomerSettingsContent() {
                   disabled={isLoadingMe}
                   onChange={(e) => setPhoneEdit(e.target.value)}
                   placeholder="e.g. 08123456789"
+                  className={inputClass}
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm text-gray-600" htmlFor="dateOfBirth">
+                  Date of Birth
+                </label>
+                <input
+                  id="dateOfBirth"
+                  type="date"
+                  value={dateOfBirth}
+                  disabled={isLoadingMe}
+                  onChange={(e) => setDateOfBirthEdit(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <label className="text-sm text-gray-600" htmlFor="state">
+                    State
+                  </label>
+                  <input
+                    id="state"
+                    type="text"
+                    value={state}
+                    disabled={isLoadingMe}
+                    onChange={(e) => setStateEdit(e.target.value)}
+                    placeholder="Enter your state"
+                    className={inputClass}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-sm text-gray-600" htmlFor="city">
+                    City
+                  </label>
+                  <input
+                    id="city"
+                    type="text"
+                    value={city}
+                    disabled={isLoadingMe}
+                    onChange={(e) => setCityEdit(e.target.value)}
+                    placeholder="Enter your city"
+                    className={inputClass}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-sm text-gray-600" htmlFor="homeAddress">
+                  Home Address
+                </label>
+                <input
+                  id="homeAddress"
+                  type="text"
+                  value={homeAddress}
+                  disabled={isLoadingMe}
+                  onChange={(e) => setHomeAddressEdit(e.target.value)}
+                  placeholder="Enter your home address"
                   className={inputClass}
                 />
               </div>

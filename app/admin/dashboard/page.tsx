@@ -90,7 +90,7 @@ export default function AdminDashboardPage() {
             />
             <StatCard
               icon={<Wallet className="w-5 h-5" />}
-              label="Premiums Collected"
+              label="Premiums processed"
               value={formatAdminAmount(stats.collected)}
             />
           </div>

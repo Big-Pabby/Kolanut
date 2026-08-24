@@ -127,7 +127,7 @@ export default function AdminCouponDetailPage() {
             fields={generatorDetails}
           />
           <CollapsibleCard
-            title="Personal Details"
+            title="Policy holder details"
             open={personalOpen}
             onToggle={() => setPersonalOpen((v) => !v)}
             fields={personalDetails}

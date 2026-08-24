@@ -46,7 +46,7 @@ export default function PurchasedPremiumsPage() {
                 fontFamily: "var(--font-merriweather), Merriweather, serif",
               }}
             >
-              Purchased Premiums
+              Policies
             </h1>
             <p
               style={{

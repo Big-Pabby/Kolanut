@@ -11,6 +11,10 @@ export const IDENTITY_CARD_QUERY_KEY = ["auth", "me", "identity-card"];
 // GET /v1/auth/me
 export interface MeResponse extends UserData {
   phone_number: string | null;
+  date_of_birth: string | null;
+  state: string | null;
+  city: string | null;
+  home_address: string | null;
 }
 
 // PATCH /v1/auth/me — UpdateUserModel. Every field is optional, so the same
@@ -18,6 +22,10 @@ export interface MeResponse extends UserData {
 export interface UpdateMePayload {
   fullname?: string;
   phone_number?: string;
+  date_of_birth?: string;
+  state?: string;
+  city?: string;
+  home_address?: string;
   old_password?: string;
   new_password?: string;
 }
