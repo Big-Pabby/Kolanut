@@ -9,6 +9,7 @@ import VehicleDetailsFields from "@/components/customer/VehicleDetailsFields";
 import { formatAdminAmount, formatAdminDate } from "@/lib/data/admin";
 import { getAdminCouponById } from "@/lib/data/coupons";
 import { getPremiumByPolicyNumber } from "@/lib/data/premiums";
+import { useAdminAccess } from "@/lib/auth/useAdminAccess";
 
 interface Field {
   label: string;
@@ -19,6 +20,7 @@ export default function AdminCouponDetailPage() {
   const params = useParams();
   const couponId = decodeURIComponent((params?.id as string) ?? "");
   const coupon = getAdminCouponById(couponId);
+  const { canDownload } = useAdminAccess();
   const [generatorOpen, setGeneratorOpen] = useState(true);
   const [personalOpen, setPersonalOpen] = useState(true);
   const premium = coupon?.policyNumber
@@ -106,11 +108,17 @@ export default function AdminCouponDetailPage() {
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
-            className="rounded-full border-[#AF060D] text-[#AF060D] hover:bg-red-50 font-medium px-5"
+            disabled={!canDownload}
+            title={canDownload ? undefined : "Your role cannot download documents"}
+            className="rounded-full border-[#AF060D] text-[#AF060D] hover:bg-red-50 font-medium px-5 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Download Receipt
           </Button>
-          <Button className="rounded-full bg-[#AF060D] hover:bg-[#AF060D]/90 text-white font-medium px-5">
+          <Button
+            disabled={!canDownload}
+            title={canDownload ? undefined : "Your role cannot download documents"}
+            className="rounded-full bg-[#AF060D] hover:bg-[#AF060D]/90 text-white font-medium px-5 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Download Policy
           </Button>
         </div>

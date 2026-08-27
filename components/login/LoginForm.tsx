@@ -8,6 +8,7 @@ import { PasswordInput } from "@/components/ui/password-input";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { useAdminLogin } from "@/app/login/hooks";
+import { firstAllowedPath, resolveAdminRole } from "@/lib/auth/roles";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -29,8 +30,13 @@ export default function LoginForm() {
         password: form.password,
       });
 
-      // Admins land in the admin area, everyone else in the customer dashboard
-      router.push(user?.is_admin ? "/admin/resources" : "/customer/dashboard");
+      // Admins land on the first section their role can access; everyone else
+      // goes to the customer dashboard.
+      router.push(
+        user?.is_admin
+          ? firstAllowedPath(resolveAdminRole(user))
+          : "/customer/dashboard",
+      );
     } catch (error) {
       // Error handling is done in the mutation's onError callback
       console.error("Login failed:", error);

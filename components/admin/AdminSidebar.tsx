@@ -17,23 +17,35 @@ import {
 } from "lucide-react";
 import { useAdminLogout } from "@/app/login/hooks";
 import { useAdminShell } from "./AdminContext";
+import { useAdminAccess } from "@/lib/auth/useAdminAccess";
+import type { AdminSection } from "@/lib/auth/roles";
 
-const navItems = [
-  { label: "Dashboard", icon: <LayoutGrid />, href: "/admin/dashboard" },
-  { label: "Customers", icon: <Users />, href: "/admin/customers" },
-  { label: "Policies", icon: <Shield />, href: "/admin/policies" },
-  { label: "Transactions", icon: <Banknote />, href: "/admin/transactions" },
-  { label: "Claims", icon: <FileKey />, href: "/admin/claims" },
-  { label: "Coupon", icon: <BadgeCheck />, href: "/admin/coupon" },
-  { label: "Resources", icon: <BookOpen />, href: "/admin/resources" },
-  { label: "FAQs", icon: <MessageCircleQuestionMark />, href: "/admin/faqs" },
-  { label: "Settings", icon: <Settings />, href: "/admin/settings" },
+const navItems: {
+  label: string;
+  icon: React.ReactNode;
+  href: string;
+  section: AdminSection;
+}[] = [
+  { label: "Dashboard", icon: <LayoutGrid />, href: "/admin/dashboard", section: "dashboard" },
+  { label: "Customers", icon: <Users />, href: "/admin/customers", section: "customers" },
+  { label: "Policies", icon: <Shield />, href: "/admin/policies", section: "policies" },
+  { label: "Transactions", icon: <Banknote />, href: "/admin/transactions", section: "transactions" },
+  { label: "Claims", icon: <FileKey />, href: "/admin/claims", section: "claims" },
+  { label: "Coupon", icon: <BadgeCheck />, href: "/admin/coupon", section: "coupon" },
+  { label: "Resources", icon: <BookOpen />, href: "/admin/resources", section: "resources" },
+  { label: "FAQs", icon: <MessageCircleQuestionMark />, href: "/admin/faqs", section: "faqs" },
+  { label: "Settings", icon: <Settings />, href: "/admin/settings", section: "settings" },
 ];
 
 export default function AdminSidebar() {
   const pathname = usePathname();
   const logout = useAdminLogout();
   const { isMobileMenuOpen, setIsMobileMenuOpen } = useAdminShell();
+  const { canAccessSection } = useAdminAccess();
+
+  const visibleNavItems = navItems.filter((item) =>
+    canAccessSection(item.section),
+  );
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
@@ -73,7 +85,7 @@ export default function AdminSidebar() {
 
       {/* Nav Items */}
       <nav className="flex flex-col gap-1 flex-1 pb-6">
-        {navItems.map((item) => {
+        {visibleNavItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
           return (

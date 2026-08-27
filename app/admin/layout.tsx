@@ -1,5 +1,6 @@
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
+import AdminAccessGuard from "@/components/admin/AdminAccessGuard";
 import { AdminProvider } from "@/components/admin/AdminContext";
 import "../globals.css";
 
@@ -18,7 +19,9 @@ export default function AdminLayout({
         <div className="flex flex-1 min-w-0 flex-col md:ml-[250px]">
           <AdminHeader />
           <main className="flex-1 min-w-0 overflow-y-auto pt-16">
-            <div className="p-4 md:p-6 lg:p-10">{children}</div>
+            <div className="p-4 md:p-6 lg:p-10">
+              <AdminAccessGuard>{children}</AdminAccessGuard>
+            </div>
           </main>
         </div>
       </div>

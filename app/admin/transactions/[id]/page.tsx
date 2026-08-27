@@ -13,6 +13,7 @@ import {
 } from "@/lib/data/admin";
 import { getPremiumByPolicyNumber } from "@/lib/data/premiums";
 import { TRANSACTION_STATUS_CLASS } from "@/lib/data/transactions";
+import { useAdminAccess } from "@/lib/auth/useAdminAccess";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -72,6 +73,7 @@ function FieldPair({ label, value }: { label: string; value: string }) {
 export default function TransactionDetailsPage() {
   const router = useRouter();
   const params = useParams();
+  const { canDownload } = useAdminAccess();
   const paymentId = decodeURIComponent((params?.id as string) ?? "");
   const transaction = getAdminTransactionByPaymentId(paymentId);
   const customer = transaction
@@ -143,11 +145,23 @@ export default function TransactionDetailsPage() {
             </p>
           </div>
           <div className="flex gap-3 flex-shrink-0">
-            <button className="flex items-center gap-2 px-4 py-2.5 border-1 border-[#AF060D] text-[#AF060D] text-sm font-semibold rounded-full hover:bg-rose-50 transition-colors">
+            <button
+              disabled={!canDownload}
+              title={
+                canDownload ? undefined : "Your role cannot download documents"
+              }
+              className="flex items-center gap-2 px-4 py-2.5 border-1 border-[#AF060D] text-[#AF060D] text-sm font-semibold rounded-full hover:bg-rose-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <Download className="w-4 h-4" />
               Download Receipt
             </button>
-            <button className="flex items-center gap-2 px-4 py-2.5 bg-[#AF060D] text-white text-sm font-semibold rounded-full hover:bg-rose-700 transition-colors shadow-md shadow-rose-200">
+            <button
+              disabled={!canDownload}
+              title={
+                canDownload ? undefined : "Your role cannot download documents"
+              }
+              className="flex items-center gap-2 px-4 py-2.5 bg-[#AF060D] text-white text-sm font-semibold rounded-full hover:bg-rose-700 transition-colors shadow-md shadow-rose-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               <Download className="w-4 h-4" />
               Download Policy
             </button>

@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
-import { ADMIN_COUPONS } from "@/lib/data/coupons";
+import { adminCouponsByRecency, couponStats } from "@/lib/data/coupons";
 import { formatAdminAmount, formatAdminDate } from "@/lib/data/admin";
 
 const TABS = [
@@ -37,17 +37,19 @@ export default function AdminCouponPage() {
   const [tabOpen, setTabOpen] = useState(false);
   const [search, setSearch] = useState("");
 
+  const stats = useMemo(() => couponStats(), []);
+  const coupons = useMemo(() => adminCouponsByRecency(), []);
+
   const counts = useMemo(
     () => ({
-      all: ADMIN_COUPONS.length,
-      redeemed: ADMIN_COUPONS.filter((c) => c.status === "redeemed").length,
-      not_redeemed: ADMIN_COUPONS.filter((c) => c.status === "not_redeemed")
-        .length,
+      all: stats.generated,
+      redeemed: stats.redeemed,
+      not_redeemed: stats.notRedeemed,
     }),
-    [],
+    [stats],
   );
 
-  const filtered = ADMIN_COUPONS.filter((c) => {
+  const filtered = coupons.filter((c) => {
     const matchesTab = activeTab === "all" || c.status === activeTab;
     const q = search.toLowerCase();
     const matchesSearch =
@@ -75,19 +77,19 @@ export default function AdminCouponPage() {
             icon={<BadgePercent className="w-5 h-5 text-red-500" />}
             iconBg="#FEF2F2"
             label="Coupon Generated"
-            value="1000"
+            value={String(stats.generated)}
           />
           <MetricCard
             icon={<CircleCheck className="w-5 h-5 text-green-600" />}
             iconBg="#F0FDF4"
             label="Redeemed Coupons"
-            value="500"
+            value={String(stats.redeemed)}
           />
           <MetricCard
             icon={<CircleCheck className="w-5 h-5 text-green-600" />}
             iconBg="#F0FDF4"
             label="Not Redeemed Coupons"
-            value="500"
+            value={String(stats.notRedeemed)}
           />
         </div>
       </div>

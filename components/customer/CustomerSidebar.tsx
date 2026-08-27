@@ -42,7 +42,7 @@ const navItems = [
   {
     label: "Claims",
     icon: <ShoppingBag />,
-    href: "#",
+    href: "/customer/claims",
   },
   { label: "Transactions", icon: <Banknote />, href: "/customer/transactions" },
   { label: "Resources", icon: <BookOpen />, href: "/customer/resources" },
