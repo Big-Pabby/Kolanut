@@ -18,6 +18,7 @@ const navLinks = [
   { label: "Resources", href: "/resources" },
   { label: "FAQs", href: "/faq" },
   { label: "Contact Us", href: "/contact" },
+  { label: "API", href: "/api" },
 ];
 
 const insuredSubItems = [
