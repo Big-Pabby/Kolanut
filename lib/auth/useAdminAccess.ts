@@ -14,20 +14,21 @@ import {
 export function useAdminAccess() {
   const user = useUserStore((state) => state.user);
   const role = resolveAdminRole(user);
-  const permissions = ROLE_PERMISSIONS[role];
+  const permissions = role ? ROLE_PERMISSIONS[role] : null;
 
   return {
     role,
-    readOnly: permissions.readOnly,
-    canDownload: permissions.canDownload,
-    sections: permissions.sections,
+    readOnly: permissions?.readOnly ?? true,
+    canDownload: permissions?.canDownload ?? false,
+    sections: permissions?.sections ?? [],
     canAccessSection: (section: AdminSection) =>
-      canAccessSection(role, section),
+      role ? canAccessSection(role, section) : false,
     /** Non-sectioned paths (unknown routes) are allowed by default. */
     canAccessPath: (pathname: string) => {
       const section = sectionFromPath(pathname);
+      if (!role) return false;
       return section ? canAccessSection(role, section) : true;
     },
-    firstPath: firstAllowedPath(role),
+    firstPath: role ? firstAllowedPath(role) : "/customer/dashboard",
   };
 }

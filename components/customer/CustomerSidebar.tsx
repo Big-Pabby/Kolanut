@@ -35,7 +35,7 @@ const navItems = [
   { label: "Dashboard", icon: <LayoutGrid />, href: "/customer/dashboard" },
   // { label: "Get Insured", icon: <ShieldPlus />, href: "/customer/get-insured" },
   {
-    label: "Purchased Premiums",
+    label: "Policies",
     icon: <Shield />,
     href: "/customer/purchased-premium",
   },

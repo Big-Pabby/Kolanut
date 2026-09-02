@@ -14,6 +14,7 @@ export type ClaimStatus = (typeof CLAIM_STATUSES)[number];
 export interface ClaimDocument {
   name: string;
   size: string;
+  url?: string;
 }
 
 export interface CustomerClaim {
@@ -33,7 +34,7 @@ export interface CustomerClaim {
   timeOfIncident: string;
   location: string;
   description: string;
-  document?: ClaimDocument;
+  document?: ClaimDocument | ClaimDocument[];
   /** Number of supporting image evidences uploaded. */
   imageCount: number;
 }

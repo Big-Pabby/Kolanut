@@ -15,7 +15,7 @@ import {
   PREMIUM_STATUS_CLASS,
   getPremiumByPolicyNumber,
 } from "@/lib/data/premiums";
-import { CATEGORY_BADGE_CLASS } from "@/lib/data/transactions";
+import { DocumentList } from "@/components/ui/document-list";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -169,7 +169,10 @@ export default function AdminPolicyDetailsPage() {
                   label="Email Address"
                   value={customer?.email ?? "—"}
                 />
-                <FieldPair label="Phone Number" value={customer?.phone ?? "—"} />
+                <FieldPair
+                  label="Phone Number"
+                  value={customer?.phone ?? "—"}
+                />
                 <FieldPair label="NIN Number" value={customer?.nin ?? "—"} />
                 <FieldPair label="State" value={customer?.state ?? "—"} />
                 <FieldPair label="Country" value={customer?.country ?? "—"} />
@@ -182,6 +185,29 @@ export default function AdminPolicyDetailsPage() {
                 <VehicleDetailsFields vehicle={vehicle} />
               </AccordionSection>
             )}
+
+            <AccordionSection title="Policy Documents">
+              <DocumentList
+                documents={[
+                  {
+                    name: "policy_summary.pdf",
+                    size: "412 KB",
+                    url: "/documents/policy_summary.pdf",
+                  },
+                  {
+                    name: "certificate_of_cover.pdf",
+                    size: "640 KB",
+                    url: "/documents/certificate_of_cover.pdf",
+                  },
+                  {
+                    name: "premium_receipt.pdf",
+                    size: "290 KB",
+                    url: "/documents/premium_receipt.pdf",
+                  },
+                ]}
+                emptyMessage="No policy documents available."
+              />
+            </AccordionSection>
           </div>
 
           {/* Right Column — Policy Overview */}

@@ -12,6 +12,7 @@ import {
   getPremiumByPolicyNumber,
   policyHolderName,
 } from "@/lib/data/premiums";
+import { DocumentList } from "@/components/ui/document-list";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -167,13 +168,39 @@ export default function PurchasedPremiumDetailsPage() {
                 <VehicleDetailsFields vehicle={premium.vehicle} />
               </AccordionSection>
             )}
+
+            <AccordionSection title="Policy Documents">
+              <DocumentList
+                documents={[
+                  {
+                    name: "policy_summary.pdf",
+                    size: "412 KB",
+                    url: "/documents/policy_summary.pdf",
+                  },
+                  {
+                    name: "certificate_of_cover.pdf",
+                    size: "640 KB",
+                    url: "/documents/certificate_of_cover.pdf",
+                  },
+                  {
+                    name: "premium_receipt.pdf",
+                    size: "290 KB",
+                    url: "/documents/premium_receipt.pdf",
+                  },
+                ]}
+                emptyMessage="No policy documents available."
+              />
+            </AccordionSection>
           </div>
 
           {/* Right Column — Policy Overview */}
           <div className="space-y-4 bg-white border border-[#F3F4F6] p-4 rounded-[10px]">
             <AccordionSection title="Policy Overview">
               <div className="grid grid-cols-1 gap-x-8 gap-y-5">
-                <FieldPair label="Policy Number:" value={premium.policyNumber} />
+                <FieldPair
+                  label="Policy Number:"
+                  value={premium.policyNumber}
+                />
                 <FieldPair label="Policy Holder:" value={policyHolderName()} />
                 <FieldPair
                   label="Insurance Type:"

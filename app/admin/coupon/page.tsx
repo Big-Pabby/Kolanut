@@ -7,6 +7,7 @@ import {
   Search,
   BadgePercent,
   CircleCheck,
+  XCircle,
   ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -86,8 +87,8 @@ export default function AdminCouponPage() {
             value={String(stats.redeemed)}
           />
           <MetricCard
-            icon={<CircleCheck className="w-5 h-5 text-green-600" />}
-            iconBg="#F0FDF4"
+            icon={<XCircle className="w-5 h-5 text-red-600" />}
+            iconBg="#FEE2E2"
             label="Not Redeemed Coupons"
             value={String(stats.notRedeemed)}
           />

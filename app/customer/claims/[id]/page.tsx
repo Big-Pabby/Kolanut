@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ChevronDown, ChevronLeft, Eye, FileText, ImageIcon } from "lucide-react";
+import { ChevronDown, ChevronLeft, ImageIcon } from "lucide-react";
+import { DocumentList } from "@/components/ui/document-list";
 import {
   buildClaimTimeline,
   claimReference,
@@ -149,42 +150,37 @@ export default function CustomerClaimDetailPage() {
 
             <AccordionSection title="Images/Documents submitted">
               <div className="flex flex-col gap-4">
-                {claim.document && (
-                  <div className="flex items-center justify-between rounded-[10px] border border-[#F3F4F6] px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-gray-100">
-                        <FileText className="w-4 h-4 text-gray-500" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-[#161616]">
-                          {claim.document.name}
-                        </p>
-                        <p className="text-xs text-[#6B7280]">
-                          {claim.document.size}
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      className="text-gray-400 hover:text-gray-700 transition-colors"
-                      title="Preview"
-                    >
-                      <Eye className="w-5 h-5" />
-                    </button>
-                  </div>
-                )}
+                {(() => {
+                  const docs = Array.isArray(claim.document)
+                    ? claim.document
+                    : claim.document
+                      ? [claim.document]
+                      : [];
 
-                {claim.imageCount > 0 && (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {Array.from({ length: claim.imageCount }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center justify-center aspect-square rounded-[10px] bg-gray-100 border border-[#F3F4F6]"
-                      >
-                        <ImageIcon className="w-6 h-6 text-gray-400" />
-                      </div>
-                    ))}
-                  </div>
-                )}
+                  return (
+                    <>
+                      <DocumentList
+                        documents={docs}
+                        emptyMessage="No supporting documents uploaded."
+                      />
+
+                      {claim.imageCount > 0 && (
+                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                          {Array.from({ length: claim.imageCount }).map(
+                            (_, i) => (
+                              <div
+                                key={i}
+                                className="flex aspect-square items-center justify-center rounded-[10px] border border-[#F3F4F6] bg-gray-100"
+                              >
+                                <ImageIcon className="h-6 w-6 text-gray-400" />
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
             </AccordionSection>
           </div>
@@ -259,10 +255,7 @@ export default function CustomerClaimDetailPage() {
                   label="Insurance Type:"
                   value={`${claim.insuranceType} Insurance`}
                 />
-                <Field
-                  label="Product:"
-                  value={premium?.product ?? "—"}
-                />
+                <Field label="Product:" value={premium?.product ?? "—"} />
                 <Field
                   label="Premium Amount:"
                   value={

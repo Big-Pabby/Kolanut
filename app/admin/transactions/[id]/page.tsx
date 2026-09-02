@@ -14,6 +14,7 @@ import {
 import { getPremiumByPolicyNumber } from "@/lib/data/premiums";
 import { TRANSACTION_STATUS_CLASS } from "@/lib/data/transactions";
 import { useAdminAccess } from "@/lib/auth/useAdminAccess";
+import { DocumentList } from "@/components/ui/document-list";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -197,6 +198,24 @@ export default function TransactionDetailsPage() {
                 <VehicleDetailsFields vehicle={premium.vehicle} />
               </AccordionSection>
             )}
+
+            <AccordionSection title="Transaction Documents">
+              <DocumentList
+                documents={[
+                  {
+                    name: "payment_receipt.pdf",
+                    size: "210 KB",
+                    url: "/documents/payment_receipt.pdf",
+                  },
+                  {
+                    name: "transaction_summary.pdf",
+                    size: "326 KB",
+                    url: "/documents/transaction_summary.pdf",
+                  },
+                ]}
+                emptyMessage="No transaction documents available."
+              />
+            </AccordionSection>
           </div>
 
           {/* Right Column — Transaction Overview */}

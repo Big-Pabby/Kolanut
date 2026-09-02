@@ -16,6 +16,7 @@ import {
   displayNameFor,
   initialsFor,
 } from "@/lib/auth";
+import { hasAdminAccess } from "@/lib/auth/roles";
 import { useUserStore } from "@/lib/store/user-store";
 
 interface UserMenuProps {
@@ -55,7 +56,9 @@ export default function UserMenu({
       >
         <span
           className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${
-            isLight ? "bg-white text-brand-red" : "bg-brand-red/10 text-brand-red"
+            isLight
+              ? "bg-white text-brand-red"
+              : "bg-brand-red/10 text-brand-red"
           }`}
         >
           {initials || <User className="h-4 w-4" />}
@@ -91,7 +94,7 @@ export default function UserMenu({
         >
           <Link href={dashboardPath} className="flex w-full items-center gap-2">
             <LayoutGrid className="h-4 w-4" />
-            {user.is_admin ? "Admin dashboard" : "My dashboard"}
+            {hasAdminAccess(user) ? "Admin dashboard" : "My dashboard"}
           </Link>
         </DropdownMenuItem>
 

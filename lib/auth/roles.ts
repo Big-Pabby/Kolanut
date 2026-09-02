@@ -85,10 +85,34 @@ export const ADMIN_ROLE_LABELS: Record<AdminRole, string> = {
   regulator: "Regulator",
 };
 
-/** Reads the role off the signed-in user; defaults to full access. */
+/** Reads the effective admin role off the signed-in user. */
+export const hasAdminAccess = (
+  user?: {
+    role?: string | null;
+    is_admin?: boolean | null;
+    is_operator?: boolean | null;
+    is_regulator?: boolean | null;
+  } | null,
+): boolean => {
+  const role = user?.role;
+  return Boolean(
+    user?.is_admin ||
+    user?.is_operator ||
+    user?.is_regulator ||
+    role === "super_admin" ||
+    role === "operational_officer" ||
+    role === "regulator",
+  );
+};
+
 export const resolveAdminRole = (
-  user?: { role?: string | null } | null,
-): AdminRole => {
+  user?: {
+    role?: string | null;
+    is_admin?: boolean | null;
+    is_operator?: boolean | null;
+    is_regulator?: boolean | null;
+  } | null,
+): AdminRole | null => {
   const role = user?.role;
   if (
     role === "operational_officer" ||
@@ -97,8 +121,11 @@ export const resolveAdminRole = (
   ) {
     return role;
   }
-  // Backwards-compatible default until the API returns a role.
-  return "super_admin";
+  if (user?.is_admin) return "super_admin";
+  if (user?.is_operator) return "operational_officer";
+  if (user?.is_regulator) return "regulator";
+
+  return null;
 };
 
 /** The admin section a URL belongs to, or null if it isn't a sectioned page. */

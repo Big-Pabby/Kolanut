@@ -1,9 +1,10 @@
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/lib/constants";
+import { hasAdminAccess } from "@/lib/auth/roles";
 import { useUserStore, type UserData } from "@/lib/store/user-store";
 
 /** Where a signed-in user's dashboard lives. */
 export const dashboardPathFor = (user?: UserData | null) =>
-  user?.is_admin ? "/admin/resources" : "/customer/dashboard";
+  hasAdminAccess(user) ? "/admin/resources" : "/customer/dashboard";
 
 /** Name to show in menus, falling back to the email when no name is set. */
 export const displayNameFor = (user?: UserData | null) =>

@@ -11,12 +11,12 @@ import {
   policyHolderName,
 } from "@/lib/data/premiums";
 import {
-  CATEGORY_BADGE_CLASS,
   TRANSACTION_STATUS_CLASS,
   formatTransactionAmount,
   formatTransactionDate,
   getTransactionByPaymentId,
 } from "@/lib/data/transactions";
+import { DocumentList } from "@/components/ui/document-list";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -207,6 +207,24 @@ export default function TransactionDetailsPage() {
                 <VehicleDetailsFields vehicle={vehicle} />
               </AccordionSection>
             )}
+
+            <AccordionSection title="Transaction Documents">
+              <DocumentList
+                documents={[
+                  {
+                    name: "payment_receipt.pdf",
+                    size: "210 KB",
+                    url: "/documents/payment_receipt.pdf",
+                  },
+                  {
+                    name: "transaction_summary.pdf",
+                    size: "326 KB",
+                    url: "/documents/transaction_summary.pdf",
+                  },
+                ]}
+                emptyMessage="No transaction documents available."
+              />
+            </AccordionSection>
           </div>
 
           {/* Right Column — Related Policy */}

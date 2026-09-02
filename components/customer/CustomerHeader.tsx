@@ -2,6 +2,7 @@
 
 import { Bell, User, Menu } from "lucide-react";
 import { useCustomer } from "./CustomerContext";
+import { hasAdminAccess } from "@/lib/auth/roles";
 import { useUserStore } from "@/lib/store/user-store";
 
 /** "Mauteen Adeleke" -> "MA", falls back to the first letter of the email. */
@@ -58,7 +59,7 @@ export default function CustomerHeader() {
               {displayName}
             </p>
             <p className="text-xs text-gray-500">
-              {user?.is_admin ? "Admin" : "Customer"}
+              {hasAdminAccess(user) ? "Admin" : "Customer"}
             </p>
           </div>
           <button
