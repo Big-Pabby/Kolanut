@@ -14,7 +14,7 @@ export interface MeResponse extends UserData {
   date_of_birth: string | null;
   state: string | null;
   city: string | null;
-  home_address: string | null;
+  street_address: string | null;
 }
 
 // PATCH /v1/auth/me — UpdateUserModel. Every field is optional, so the same
@@ -25,7 +25,7 @@ export interface UpdateMePayload {
   date_of_birth?: string;
   state?: string;
   city?: string;
-  home_address?: string;
+  street_address?: string;
   old_password?: string;
   new_password?: string;
 }

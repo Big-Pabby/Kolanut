@@ -50,13 +50,15 @@ function CustomerSettingsContent() {
   const [dateOfBirthEdit, setDateOfBirthEdit] = useState<string | null>(null);
   const [stateEdit, setStateEdit] = useState<string | null>(null);
   const [cityEdit, setCityEdit] = useState<string | null>(null);
-  const [homeAddressEdit, setHomeAddressEdit] = useState<string | null>(null);
+  const [streetAddressEdit, setStreetAddressEdit] = useState<string | null>(
+    null,
+  );
   const fullName = fullNameEdit ?? me?.fullname ?? "";
   const phone = phoneEdit ?? me?.phone_number ?? "";
   const dateOfBirth = dateOfBirthEdit ?? me?.date_of_birth ?? "";
   const state = stateEdit ?? me?.state ?? "";
   const city = cityEdit ?? me?.city ?? "";
-  const homeAddress = homeAddressEdit ?? me?.home_address ?? "";
+  const streetAddress = streetAddressEdit ?? me?.street_address ?? "";
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -75,6 +77,14 @@ function CustomerSettingsContent() {
   const [idImagePreview, setIdImagePreview] = useState<string | null>(null);
   const currentImage = idImagePreview ?? identityCard?.image ?? null;
 
+  // A verified identity is locked on the server, so the card fields become
+  // read-only rather than letting the customer edit details that cannot change.
+  const isIdentityVerified = me?.identification_verified === true;
+  const idFieldsDisabled = isLoadingMe || isLoadingCard || isIdentityVerified;
+  const idInputClass = isIdentityVerified
+    ? `${inputClass} bg-gray-50 text-gray-500 cursor-not-allowed`
+    : inputClass;
+
   const handlePersonalSave = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -82,7 +92,7 @@ function CustomerSettingsContent() {
     const trimmedPhone = phone.trim();
     const trimmedState = state.trim();
     const trimmedCity = city.trim();
-    const trimmedHomeAddress = homeAddress.trim();
+    const trimmedStreetAddress = streetAddress.trim();
 
     if (
       trimmedName.length < FULLNAME_MIN_LENGTH ||
@@ -108,7 +118,9 @@ function CustomerSettingsContent() {
         ...(dateOfBirth ? { date_of_birth: dateOfBirth } : {}),
         ...(trimmedState ? { state: trimmedState } : {}),
         ...(trimmedCity ? { city: trimmedCity } : {}),
-        ...(trimmedHomeAddress ? { home_address: trimmedHomeAddress } : {}),
+        ...(trimmedStreetAddress
+          ? { street_address: trimmedStreetAddress }
+          : {}),
       },
       {
         onSuccess: () => {
@@ -117,7 +129,7 @@ function CustomerSettingsContent() {
           setDateOfBirthEdit(null);
           setStateEdit(null);
           setCityEdit(null);
-          setHomeAddressEdit(null);
+          setStreetAddressEdit(null);
           toast.success("Personal information saved");
         },
       },
@@ -163,6 +175,8 @@ function CustomerSettingsContent() {
 
   const handleIdCardSave = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isIdentityVerified) return;
 
     if (!idNumber.trim() || !dateIssued || !expiryDate) {
       toast.error("Missing details", {
@@ -366,16 +380,19 @@ function CustomerSettingsContent() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm text-gray-600" htmlFor="homeAddress">
-                  Home Address
+                <label
+                  className="text-sm text-gray-600"
+                  htmlFor="streetAddress"
+                >
+                  Street Address
                 </label>
                 <input
-                  id="homeAddress"
+                  id="streetAddress"
                   type="text"
-                  value={homeAddress}
+                  value={streetAddress}
                   disabled={isLoadingMe}
-                  onChange={(e) => setHomeAddressEdit(e.target.value)}
-                  placeholder="Enter your home address"
+                  onChange={(e) => setStreetAddressEdit(e.target.value)}
+                  placeholder="Enter your street address"
                   className={inputClass}
                 />
               </div>
@@ -460,11 +477,21 @@ function CustomerSettingsContent() {
 
           {activeTab === "id-card" && (
             <form onSubmit={handleIdCardSave} className="space-y-6">
-              <h2 className="text-base font-heading font-semibold text-gray-800 mb-2">
-                Identification Card
-              </h2>
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <h2 className="text-base font-heading font-semibold text-gray-800">
+                  Identification Card
+                </h2>
+                {isIdentityVerified && (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-green-200 bg-green-50 px-2.5 py-1 text-xs font-semibold text-green-700">
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    Verified
+                  </span>
+                )}
+              </div>
               <p className="text-sm text-gray-500 mb-4">
-                Please upload a valid government-issued identification document.
+                {isIdentityVerified
+                  ? "Your identity has been verified, so these details can no longer be edited. Contact support if anything needs to change."
+                  : "Please upload a valid government-issued identification document."}
               </p>
 
               <div className="space-y-1.5">
@@ -474,9 +501,9 @@ function CustomerSettingsContent() {
                 <select
                   id="idType"
                   value={idType}
-                  disabled={isLoadingCard}
+                  disabled={idFieldsDisabled}
                   onChange={(e) => setIdTypeEdit(e.target.value)}
-                  className={inputClass}
+                  className={idInputClass}
                 >
                   <option value="national-id">National ID</option>
                   <option value="passport">International Passport</option>
@@ -493,10 +520,10 @@ function CustomerSettingsContent() {
                   id="idNumber"
                   type="text"
                   value={idNumber}
-                  disabled={isLoadingCard}
+                  disabled={idFieldsDisabled}
                   onChange={(e) => setIdNumberEdit(e.target.value)}
                   placeholder="Enter your ID number"
-                  className={inputClass}
+                  className={idInputClass}
                 />
               </div>
 
@@ -509,9 +536,9 @@ function CustomerSettingsContent() {
                     id="dateIssued"
                     type="date"
                     value={dateIssued}
-                    disabled={isLoadingCard}
+                    disabled={idFieldsDisabled}
                     onChange={(e) => setDateIssuedEdit(e.target.value)}
-                    className={inputClass}
+                    className={idInputClass}
                   />
                 </div>
 
@@ -523,9 +550,9 @@ function CustomerSettingsContent() {
                     id="expiryDate"
                     type="date"
                     value={expiryDate}
-                    disabled={isLoadingCard}
+                    disabled={idFieldsDisabled}
                     onChange={(e) => setExpiryDateEdit(e.target.value)}
-                    className={inputClass}
+                    className={idInputClass}
                   />
                 </div>
               </div>
@@ -539,12 +566,19 @@ function CustomerSettingsContent() {
                       type="file"
                       accept="image/*,.pdf"
                       onChange={handleImageChange}
+                      disabled={idFieldsDisabled}
                       className="hidden"
                       id="id-image-upload"
                     />
                     <label
-                      htmlFor="id-image-upload"
-                      className="cursor-pointer flex flex-col items-center gap-2"
+                      htmlFor={
+                        isIdentityVerified ? undefined : "id-image-upload"
+                      }
+                      className={`flex flex-col items-center gap-2 ${
+                        isIdentityVerified
+                          ? "cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
                     >
                       <Upload className="w-6 h-6 text-gray-400" />
                       <span className="text-sm text-gray-600">
@@ -586,15 +620,17 @@ function CustomerSettingsContent() {
                 )}
               </div>
 
-              <div className="flex justify-end pt-2">
-                <button
-                  type="submit"
-                  disabled={isLoadingCard || isSavingIdCard}
-                  className={submitClass}
-                >
-                  {isSavingIdCard ? "Saving..." : "Save ID Information"}
-                </button>
-              </div>
+              {!isIdentityVerified && (
+                <div className="flex justify-end pt-2">
+                  <button
+                    type="submit"
+                    disabled={isLoadingCard || isSavingIdCard}
+                    className={submitClass}
+                  >
+                    {isSavingIdCard ? "Saving..." : "Save ID Information"}
+                  </button>
+                </div>
+              )}
             </form>
           )}
         </div>
