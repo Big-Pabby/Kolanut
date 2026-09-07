@@ -1,7 +1,9 @@
 "use client";
 
-import { Menu } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import { useAdminShell } from "./AdminContext";
+import { displayNameFor, initialsFor } from "@/lib/auth";
+import { useUserStore } from "@/lib/store/user-store";
 
 interface AdminHeaderProps {
   userName?: string;
@@ -9,10 +11,16 @@ interface AdminHeaderProps {
 }
 
 export default function AdminHeader({
-  userName = "Mauteen Adeleke",
-  userInitials = "MA",
+  userName,
+  userInitials,
 }: AdminHeaderProps) {
   const { setIsMobileMenuOpen } = useAdminShell();
+  const user = useUserStore((state) => state.user);
+
+  // Both fall back to the signed-in admin's email when their profile has no
+  // name on it, so the header never shows someone else’s name.
+  const displayName = userName ?? displayNameFor(user);
+  const initials = userInitials ?? initialsFor(user);
 
   return (
     <header
@@ -31,12 +39,17 @@ export default function AdminHeader({
 
       {/* Bell icon */}
       <button className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-gray-100 transition-colors">
-        <img src="/icons/admin/bell.svg" alt="Notifications" style={{ width: 16, height: 18, color: "#af060d" }} />
+        <img
+          src="/icons/admin/bell.svg"
+          alt="Notifications"
+          style={{ width: 16, height: 18, color: "#af060d" }}
+        />
       </button>
 
       {/* Avatar + Name */}
       <div className="flex items-center gap-2">
         <div
+          suppressHydrationWarning
           className="flex items-center justify-center rounded-full shrink-0"
           style={{
             width: 36,
@@ -50,14 +63,16 @@ export default function AdminHeader({
               color: "#ffffff",
               fontSize: 14,
               fontWeight: 400,
-              fontFamily: "Gilroy-Medium, HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
+              fontFamily:
+                "Gilroy-Medium, HelveticaNeue, Helvetica Neue, Helvetica, sans-serif",
               letterSpacing: "-0.14px",
             }}
           >
-            {userInitials}
+            {initials || <User className="h-4 w-4" />}
           </span>
         </div>
         <span
+          suppressHydrationWarning
           className="hidden sm:inline max-w-[180px] truncate"
           style={{
             color: "#111827",
@@ -67,7 +82,7 @@ export default function AdminHeader({
             letterSpacing: "-0.14px",
           }}
         >
-          {userName}
+          {displayName}
         </span>
       </div>
     </header>
